@@ -1,0 +1,79 @@
+8
+
+dir
+1
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft/MaxCam/Simulations/v1/runParameters_4sh/alphacalib_4sh_A80334
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft
+
+
+
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+d3d5ed4b-f520-4247-9981-1203ad1f38be
+
+cameraProperties0.example
+file
+
+
+
+
+2014-03-24T16:30:17.000000Z
+1c1517a76d78a6ad1e1d6f619719c18a
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+AlphaRunProperties.example
+file
+
+
+
+
+2014-03-24T16:30:17.000000Z
+229fccaa467b28b20163615bdf58d896
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+chamberProperties.example
+file
+
+
+
+
+2014-03-24T16:30:17.000000Z
+408fbdb653aa61c3f772ba5ae9b2ae37
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+AlphaManager.example
+file
+
+
+
+
+2014-03-24T16:30:17.000000Z
+dbcf41a2264d470fa3ca4f4e3e88f24c
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+CVS
+dir
+

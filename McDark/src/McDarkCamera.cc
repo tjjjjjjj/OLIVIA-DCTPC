@@ -1,0 +1,178 @@
+#include "McDarkCamera.hh"
+
+#include "Randomize.hh"
+#include "globals.hh"
+#include "TH2.h"
+#include "TFile.h"
+
+#include "assert.h"
+
+McDarkCamera::McDarkCamera(G4String camName, G4String chipName, G4double bias, G4double noise, G4int binX, G4int binY) :
+    _origin(0,0,0),
+    _xaxis(0,0,0),
+    _yaxis(0,0,0),
+    _maxAcceptance(0.0),
+    _angularPar(0.0) {
+    
+    _config = new MaxCamConfig(camName, "GEANT camera");
+    
+    if (chipName.contains("KAF1001")) {
+
+        _config->row_width=1024;
+        _config->img_rows=1024;
+        
+        _config->meanForExposedPixels=bias;
+        _config->rmsForExposedPixels=noise;
+
+        _config->hbin=binX;
+        _config->vbin=binY;
+
+        G4int nx=_config->row_width/_config->hbin;
+        G4int ny=_config->img_rows/_config->vbin;
+
+        _config->ul_x=0;
+        _config->ul_y=1024;
+        _config->lr_x=1024;
+        _config->lr_y=0;
+        
+        _image = new TH2F(camName, "", 
+                          nx, _config->ul_x, _config->lr_x,  
+                          ny, _config->lr_y, _config->ul_y);
+        
+        _angularPar = (_config->lr_x*_config->lr_x + _config->ul_y*_config->ul_y);
+    }
+    else assert(0);
+    
+}
+
+
+McDarkCamera::~McDarkCamera() {
+    if (_image) delete _image;
+    if (_config) delete _config;
+}
+
+
+
+void
+McDarkCamera::processHit(G4ThreeVector &hitPos, G4double photons, G4int &chanid, G4double &weight) {
+
+    assert(_image);
+
+    chanid=-1;
+    weight=0.0;
+    
+    
+    // convert to CCD frame
+    G4ThreeVector ccdPos = hitPos-_origin;
+    G4double x = ccdPos*_xaxis.unit();
+    if (x<0 || x>_xaxis.mag()) return;
+    G4double y = ccdPos*_yaxis.unit();
+    if (y<0 || y>_yaxis.mag()) return;
+
+    // convert lenght to pixels
+    x *= _config->lr_x/_xaxis.mag();
+    y *= _config->ul_y/_yaxis.mag();
+
+    // calculate acceptance
+    if (G4UniformRand()>calcAcceptance(x,y)) return;
+    
+    // find channel id, weight and fill image
+    chanid = _image->FindBin( x, y );
+    weight = photons;
+    
+    _image->Fill( x,y, weight);
+
+}
+
+
+void
+McDarkCamera::processWorm(G4ThreeVector &hitPos, G4double qE, G4int &chanid, G4double &weight) {
+
+    assert(_image);
+
+    chanid=-1;
+    weight=0.0;
+    
+    G4double ccdGain=1.1;
+
+    G4double x=hitPos.x() * _config->row_width;
+    G4double y=hitPos.y() * _config->img_rows;
+
+    // find channel id, weight and fill image
+    chanid = _image->FindBin( x, y );
+    weight = qE / (3.6*eV * ccdGain) ;
+    
+    //G4cout << x << "," << y << "    " << chanid << "  " << weight << G4endl;
+
+    _image->Fill( x, y, weight);
+}
+
+
+TH2S*
+McDarkCamera::rawImage()
+{
+
+  G4int xbin = _image->GetNbinsX();
+  G4int ybin = _image->GetNbinsY();
+  G4double xmin = _image->GetXaxis()->GetXmin();
+  G4double xmax = _image->GetXaxis()->GetXmax();
+  G4double ymin = _image->GetYaxis()->GetXmin();
+  G4double ymax = _image->GetYaxis()->GetXmax();
+
+  TH2S* im = new TH2S(_image->GetName(),"",xbin,xmin,xmax,ybin,ymin,ymax);
+
+  std::cout<<xbin<<" "<<xmin<<" "<<xmax<<" "<<ybin<<" "<<ymin<<" "<<ymax<<std::endl;
+
+  for (int i = 1; i<=xbin;i++){
+    for (int j = 1; j<=ybin; j++){
+      im->SetBinContent(i,j,(short)_image->GetBinContent(i,j));
+    } 
+  }
+  return im;
+}
+
+
+G4double
+McDarkCamera::calcAcceptance(G4double x, G4double y) {
+    G4double r2=x*x+y*y;
+    return _maxAcceptance * exp( -0.5 * r2 / _angularPar );
+}
+
+
+
+
+void
+McDarkCamera::setViewfield(G4ThreeVector posInFocalPlane,
+                           G4ThreeVector xaxis,
+                           G4ThreeVector yaxis,
+                           G4double maxAcceptance) {
+
+    _origin = posInFocalPlane;
+    _xaxis = xaxis;
+    _yaxis = yaxis;
+    _maxAcceptance = maxAcceptance;
+}
+
+
+
+void
+McDarkCamera::addNoise() {
+
+
+    G4double bias=_config->meanForExposedPixels;
+    G4double sigma=_config->rmsForExposedPixels;
+    for (int i=1; i<=_image->GetNbinsX(); i++) {
+        for (int j=1; j<=_image->GetNbinsY(); j++) {
+            _image->SetBinContent( i, j,
+                                   CLHEP::RandGaussQ::shoot(CLHEP::HepRandom::getTheEngine(),
+                                                            bias+_image->GetBinContent(i,j),
+                                                            sigma)
+                              );;
+
+        }
+    }
+        
+
+
+    
+}

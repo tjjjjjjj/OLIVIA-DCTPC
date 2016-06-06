@@ -1,0 +1,15 @@
+#!/bin/bash
+
+echo dmtpc_run$1.root > files$1.txt
+echo ./ > keys$1.txt
+
+export skimdir='./skim/'
+export sumdir='./skim/sum/'
+./bin/cleanSkim files$1.txt keys$1.txt $skimdir >> run$1.log 2>&1 &
+wait
+./bin/createSummary dmtpc_run$1 $skimdir $sumdir >> run$1.log 2>&1 &
+wait
+
+rm -f files$1.txt
+rm -f keys$1.txt
+echo "Processing on run $1 Done"

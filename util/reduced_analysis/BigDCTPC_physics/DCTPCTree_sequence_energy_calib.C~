@@ -1,0 +1,110 @@
+#define DCTPCTree_cxx
+#include "DCTPCTree.h"
+#include <TH2.h>
+#include <TStyle.h>
+#include <TCanvas.h>
+
+
+//This macro is used to calibrate the relative energies of different run sequences. Run seqeuences are separated by gas refills and therefore have slightly different energy calibration constants associated with them.
+
+void DCTPCTree::Loop()
+{
+TStopwatch timer;
+  gROOT->SetStyle("Plain");
+  gStyle->SetEndErrorSize(3);
+  gStyle->SetPalette(1,0);
+  gStyle->SetLineWidth(2);
+  gStyle->SetHistLineWidth(2);
+//   gStyle->SetOptStat(kFALSE);
+//   gStyle->SetOptFit(kFALSE);
+  TH1::AddDirectory(false);
+  
+  TFile *outtree = new TFile("hadd_955_3869.root");
+  TTree *dctreepc = (TTree*)outtree->Get("dctpc_eventinfo");
+  DCTPCTree aStep(dctreepc);
+
+  TH1D *hist_energy_trig=new TH1D("Anode energy","Anode energy",20,2000,15000);
+  TH1D *hist_energy_trig2=new TH1D("Anode energy","Anode energy",20,2000,15000);
+  TH1D *hist_energy_trig3=new TH1D("Anode energy","Anode energy",20,2000,15000);
+  TH1D *hist_energy_trig4=new TH1D("Anode energy","Anode energy",20,2000,15000);
+  TH2D *hist_pos=new TH2D("","",200,0,1024,200,0,1024);
+  
+double recalibmesh = 1.;
+double recalibCCD = 1.;
+double recalibanode = 1.;
+double recalibanode_seq1 = 1.;
+double recalibanode_seq2 = 1.1;//1.2
+double recalibanode_seq3 = .91;
+double recalibanode_seq4 = .83;
+double rstart=0.;
+double rend=0.;
+
+//create event loop
+  Long64_t nentries = dctreepc->GetEntries();
+  cout << "Number of Entries: " << nentries << endl;
+ 
+  for (int event = 0; event<nentries; event++)
+    {
+      aStep.GetEntry(event); 
+      
+      if(event%10000==0)
+	  cout<<((double)event/(double)nentries)*100.<<"%"<<endl;	
+ 
+//calculate the start and end positions of a track      
+double TrackXStart_pix = (-8.5/2.) + aStep.TrackX_pix + (0.5*aStep.Rangeccd_mm*(1024./166.6)*cos(aStep.Phi_deg*TMath::Pi()/180.));
+double TrackYStart_pix = (-47.9/2.) + aStep.TrackY_pix + (0.5*aStep.Rangeccd_mm*(1024./166.6)*sin(aStep.Phi_deg*TMath::Pi()/180.));
+double TrackXEnd_pix = (-8.5/2.) + aStep.TrackX_pix - (0.5*aStep.Rangeccd_mm*(1024./166.6)*cos(aStep.Phi_deg*TMath::Pi()/180.));
+double TrackYEnd_pix = (-47.9/2.) + aStep.TrackY_pix - (0.5*aStep.Rangeccd_mm*(1024./166.6)*sin(aStep.Phi_deg*TMath::Pi()/180.));
+
+double rr=sqrt(pow(aStep.TrackX_pix,2)+pow(aStep.TrackY_pix,2));
+
+rstart=sqrt(pow(TrackXStart_pix,2)+pow(TrackYStart_pix,2));
+rend=sqrt(pow(TrackXEnd_pix,2)+pow(TrackYEnd_pix,2));
+ 
+ //these cuts are meant to isolate clean alphas coming from the rings
+     if (
+     aStep.BurnIn==0 && 
+     aStep.Last_spark>10 &&
+     aStep.PassAll == 1 && 
+     aStep.Edge==0  && 
+     aStep.Ntrig <=2 && 
+     abs(TrackXStart_pix)>220 && 
+     abs(TrackYStart_pix)>220 && 
+     rstart>550 && 
+     rstart<600 &&
+     rend<500 
+     )
+	{	
+     //see $BIGDCTPC_SEQLOG for sequence definitions		 
+	 if(aStep.RunNum >= 955 && aStep.RunNum <= 1645)//sequence 1
+	 hist_energy_trig->Fill(aStep.Etrig_kev*recalibanode_seq1); 
+	 
+	 if(aStep.RunNum >= 1646 && aStep.RunNum <= 2205)//sequence 2
+	 hist_energy_trig2->Fill(aStep.Etrig_kev*recalibanode_seq2);
+	 
+	 if(aStep.RunNum >= 2206 && aStep.RunNum <= 2648)//sequence 3
+	 hist_energy_trig3->Fill(aStep.Etrig_kev*recalibanode_seq3);
+	 
+	 if(aStep.RunNum >= 2650 && aStep.RunNum <= 3868)//sequence 4
+	 hist_energy_trig4->Fill(aStep.Etrig_kev*recalibanode_seq4);
+	 
+	 hist_pos->Fill(512+TrackXStart_pix,512+TrackYStart_pix);
+	 
+	}
+    
+}
+     
+     
+new TCanvas;
+hist_energy_trig->DrawNormalized();
+hist_energy_trig2->SetLineColor(2);
+hist_energy_trig2->DrawNormalized("SAME");
+hist_energy_trig3->SetLineColor(4);
+hist_energy_trig3->DrawNormalized("SAME");
+hist_energy_trig4->SetLineColor(3);
+hist_energy_trig4->DrawNormalized("SAME");
+  
+new TCanvas;
+hist_pos->Draw("COLZ");  
+  
+}

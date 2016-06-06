@@ -1,0 +1,1153 @@
+#include "../../../MaxCamENDF.hh"
+#include "../../../MaxCamTwoBodyKinematics.hh"
+#include "../../../DmtpcAstro.hh"
+#include "../../../DmtpcTheory.hh"
+#include "../../../DmtpcTheory.hh"
+
+
+#include "ParticleGenerator.hh"
+#include "SimTools.hh"
+
+#include "TSystem.h"
+#include "TString.h"
+#include "TMath.h"
+#include "TVector3.h"
+#include "TROOT.h"
+#include "TF1.h"
+#include "TCanvas.h"
+#include "TFile.h"
+#include "TTree.h"
+#include "TRandom3.h"
+
+#include <vector>
+#include <iostream>
+
+using std::vector;
+using std::cerr;
+using std::cin;
+using std::cout;
+using std::endl;
+//__________________________________________________
+/* Begin_Html
+<center><h2> The ParticleGenerator Class </h2><center>
+
+The following options are supported:
+<ul>
+  <li>Recoil Type
+  <ul>
+     <li>alpha: Recoil and projectile the same
+     <li>neutron: Nuclear recoils, allows for use of ENDF files
+     <li>wimp:  Nuclear recoils, allows for wimp distribution
+  </ul>
+  <li>Energy Options
+  <ul>
+     <li>random: Randomly generated within given limits
+     <li>fixed: Use only a particular set energy
+     <li>gaussian: Generate from a Gaussian with given center and sigma 
+     <li>chain: Use a particular decay chain 
+  </ul>
+  <li>Position Options
+  <ul>
+     <li>random: Randomly generated within rectangular window
+     <li>fixed: use pre-set position only
+     <li>ring: use a ring. set zmin, zmax, rmin, rmax, x0, y0
+  <\ul>
+  <li>Direction Options
+  <ul>
+     <li>isotropic: projectiles generated isotropically
+     <li>fixed: projectiles generated along pre-set direction
+     <li>source: direction generated from given source position and recoil position
+     <li>collimated: direction generated along set source direction but collimated to a known number of degrees
+  <\ul>
+  <li>Time Options
+  <ul>
+     <li>random: Times generated randomly between limits
+     <li>fixed: Recoil time set to fixed time
+     <li>current: Use current times
+     <li>serial: Sequential times
+  <\ul>
+  <li>Special Options
+  <ul>
+     <li>wimp: Use wimp distribution (from Spergel paper)
+     <li>endf: Use ENDF files (names must be entered) to create a neutron run
+  <\ul>
+</ul>
+
+End_Html */
+//__________________________________________________
+
+ClassImp(ParticleGenerator);
+ParticleGenerator::ParticleGenerator()
+{
+  //===================Default constructor==================
+  fRecoilMass = 19e6;
+  fRecoilA = 19;
+  fProjMass = 1e6;
+  fRandom = new TRandom3(0);
+  fXMin = 0;
+  fYMin = 0;
+  fZMin = 0;
+  fXMax = 0.179*1024;
+  fYMax = 0.179*1024;
+  fZMax = 250;
+  fThetaMax = 5;
+  fRecoilEn = 0;
+  fProjEn = 1;
+  fProjEn2 = 1;
+  fProjGaussianEn = 1;
+  fProjGaussianEnSpread = 0;
+  fCosCygnus=0;
+  fMinEn = 0;
+  fMaxEn = 20000; 
+  fMinTime = 365*10+3;//2010
+  fMaxTime = 365*11+3;//2011
+  fTime = fRandom->Rndm()*(fMaxTime - fMinTime) + fMinTime;
+  fTimeStep = 1;
+  fSeq=-1;
+  fSourcePos = new TVector3(1,0,0);
+  fRecoilPos = new TVector3(1,0,0);
+  fProjVector = new TVector3(1,0,0);
+  fRecVector = new TVector3(1,0,0);
+  fRecVector1 = new TVector3(1,0,0);
+  fRecVector2 = new TVector3(1,0,0);
+  fRecoilParticle = "fluorine";
+  fProjParticle = "neutron";
+  fEnOption = "random";
+  fPosOption = "random";
+  fDirOption = "isotropic";
+  fTimeOption = "random";
+  fSpecialOption = "";
+  fSpecName = "ENDF_Cf-252_n_spectrum";
+  fScatDCSname = "ENDF_DCS_n_on_19F";
+  fScatCSname = "ENDF_CS_n_on_19F";
+  fRotationAngle = 0; //y-axis faces north
+  fTopBottom = 1;//Top TPC, z-axis is up
+  setLocation("MIT");
+  setRunType("BigDCTPC_near");
+  setConfigType("normal");
+  fDecay = 0; 
+
+  fSourceDir = 0;
+  fEnSpec = 0;
+  fSpectrum = 0;
+  fScatteringDCS = 0;
+  fScatteringCS = 0;
+  fdRdEInf = 0;
+  fdRdEVesc = 0;
+  fdRdTh = 0;
+  
+
+  
+}
+
+ParticleGenerator::~ParticleGenerator()
+{
+  //=========================Destructor=========================
+  delete fRandom;
+  delete fSourcePos;
+  delete fRecoilPos;
+  delete fProjVector;
+  delete fRecVector;
+  delete fRecVector1;
+  delete fRecVector2;
+  // delete f;
+  if (fSourceDir) delete fSourceDir;
+  if (fEnSpec) delete fEnSpec;
+  if (fSpectrum) delete fSpectrum;
+  if (fScatteringDCS) delete fScatteringDCS;
+  if (fScatteringCS) delete fScatteringCS;
+  if (fdRdEInf) delete fdRdEInf;
+  if (fdRdEVesc) delete fdRdEVesc;
+  if (fdRdTh) delete fdRdTh;
+  if (fDecay) delete fDecay; 
+  if (fRing) delete fRing; 
+}
+
+TVector3 
+ParticleGenerator::sourcePosition()
+{
+  //====================Return TVector3========================
+  TVector3 vect(fSourcePos->X(),fSourcePos->Y(),fSourcePos->Z());
+  return vect;
+}
+
+TVector3 
+ParticleGenerator::recoilPosition()
+{
+  //====================Return TVector3========================
+  TVector3 vect(fRecoilPos->X(),fRecoilPos->Y(),fRecoilPos->Z());
+  return vect;
+}
+
+void 
+ParticleGenerator::setPositionMaxValues(Double_t x, Double_t y, Double_t z)
+{
+  //====================Set Max values for random position=================
+  fXMax = x;
+  fYMax = y;
+  fZMax = z;
+}
+
+
+
+void 
+ParticleGenerator::setRingValues(int n, Double_t x0, Double_t y0, Double_t rmin, Double_t rmax, Double_t zMin, Double_t zMax, Double_t dz, Double_t zTop, Double_t fracTop, Double_t zBottom, Double_t fracBottom) 
+{
+  if (fRing) delete fRing; 
+  fRing = new SimRings(n,x0,y0,rmin,rmax,zMin,zMax,dz, zTop, fracTop, zBottom, fracBottom); 
+}
+
+
+void 
+ParticleGenerator::setPositionMinValues(Double_t x, Double_t y, Double_t z)
+{
+  //===================Set min values for random position===================
+  fXMin = x;
+  fYMin = y;
+  fZMin = z;
+}
+
+void
+ParticleGenerator::setProjectileVector(TVector3 *vect)
+{
+  //====================Set projectile vector using TVector3*=====================
+  vect->SetMag(1);
+  fProjVector = vect;
+}
+
+void 
+ParticleGenerator::setProjectileVector(Double_t x, Double_t y, Double_t z)
+{
+  //====================Set projectile vector using xyz coordinates=================
+  fProjVector->SetXYZ(x,y,z);
+  fProjVector->SetMag(1);
+}
+
+TVector3 
+ParticleGenerator::projectileVector()
+{
+  //===================Return TVector3==========================
+  TVector3 vect(fProjVector->X(),fProjVector->Y(),fProjVector->Z());
+  return vect;
+}
+
+void
+ParticleGenerator::setRecoilVector(TVector3 *vect)
+{
+  //====================Set recoil vector using TVector3*=======================
+  vect->SetMag(1);
+  fRecVector = vect;
+}
+
+void
+ParticleGenerator::setRecoilVector(Double_t x, Double_t y, Double_t z)
+{//=====================Set recoil vector using xyz coordinates======================
+  fRecVector->SetXYZ(x,y,z);
+  fRecVector->SetMag(1);
+}
+
+TVector3 
+ParticleGenerator::recoilVector()
+{
+  //=====================Return TVector3====================================
+  TVector3 vect(fRecVector->X(),fRecVector->Y(),fRecVector->Z());
+  return vect;
+}
+
+TVector3 
+ParticleGenerator::recoilVector2()
+{
+  //=====================Return TVector3====================================
+  TVector3 vect(fRecVector2->X(),fRecVector2->Y(),fRecVector2->Z());
+  return vect;
+}
+
+void
+ParticleGenerator::setSourceDir(TVector3 *vect)
+{
+  //======================Set source direction using TVector3*===============
+  vect->SetMag(1);
+  fSourceDir = vect;
+}
+void
+ParticleGenerator::setSourceDir(Double_t x, Double_t y, Double_t z)
+{
+  //=====================Set source direction using xyz coordinates==============
+  fSourceDir = new TVector3(x,y,z);
+  fSourceDir->SetMag(1);
+}
+TVector3
+ParticleGenerator::sourceDir()
+{
+  //====================Return TVector3================================
+  TVector3 vect(fSourceDir->X(),fSourceDir->Y(),fSourceDir->Z());
+  return vect;
+}
+
+void
+ParticleGenerator::setBeginTime(Int_t year,Int_t month,Int_t day,Int_t hour, Int_t minute, Int_t sec)
+{
+  //===================Set earliest time for random time runs====================
+  TDatime datime(year,month,day,hour,minute,sec);
+  fMinTime = SimTools::getTimeDouble(&datime);
+}
+void
+ParticleGenerator::setEndTime(Int_t year,Int_t month, Int_t day, Int_t hour, Int_t minute, Int_t sec)
+{
+  //===================Set latest time for random time runs======================
+  TDatime datime(year,month,day,hour,minute,sec);
+  fMaxTime = SimTools::getTimeDouble(&datime);
+}
+
+void
+ParticleGenerator::setLocation(TString loc)
+{
+  //===================Set location latitude/longitude to one of several locations=======
+  loc.ToLower();
+  if (loc == "wipp" || loc == "carlsbad"){
+    fLat = 32+24/60.+43/3600.;
+    fLong = -104 - 14/60.-11/3600.;
+  }
+  else if (loc == "dusel" || loc =="susel" || loc =="homestake"){
+    fLat = 44.355;
+    fLong = -103.772;
+  }
+  else if (loc == "soudan"){
+    fLat = 47+48/60.+25/3600.;
+    fLong = -92-16/60.-46/3600.;
+  }
+  else if (loc =="gran sasso" || loc == "gransasso"){
+    fLat = 42+28/60.;
+    fLong = 13+33/60.;
+  }
+  else if (loc =="snolab" || loc == "sno" || loc =="sudbury"){
+    fLat = 46+29/60.+24/3600.;
+    fLong = -81 - 36/3600.;
+  }
+  else if (loc =="kamioka"){
+    fLat = 36+14/60.;
+    fLong = 137+11/60.;
+  }
+  else if (loc == "boulby"){
+    fLat = 54.56059;
+    fLong = 0.827;
+  }
+  else if (loc == "fermilab" || loc == "batavia" || loc == "fnal"){
+    fLat = 41+49/60.+55/3600.;
+    fLong = -88 - 15/60.-26/3600.;
+  }
+  else {
+    if (!(loc =="cambridge" || loc =="mit")) cout<<"Location not found, setting to MIT."<<endl;
+    fLat = 42+22/60.+25/3600.;
+    fLong = -71-6/60.-38/3600.;
+  }
+}
+
+
+void
+ParticleGenerator::setENDFfiles()
+{
+  //==================Set ENDF files from saved file names====================
+  //Quits if a file is not found
+  Bool_t quit = false;
+  TString tables = gSystem->Getenv("MCTABLES");
+  if(gSystem->AccessPathName(tables +"/"+ fSpecName)){
+    cout <<"Fission table " << tables +"/"+ fSpecName <<" not found."<<endl;
+    quit = true;
+  }
+  if (gSystem->AccessPathName(tables+"/"+fScatDCSname)){
+    cout <<"Elastic scattering table "<<tables+"/" + fScatDCSname<<" not found."<<endl;
+    quit = true;
+  }
+  if (gSystem->AccessPathName(tables+"/"+fScatCSname)){
+    cout<<"Cross section table "<<tables +"/"+ fScatCSname<<" not found."<<endl;
+    quit = true;
+  }
+  if (quit) gROOT->ProcessLine(".q");  
+  fSpectrum = new MaxCamENDF(fSpecName,"fission");
+  fScatteringDCS = new MaxCamENDF(fScatDCSname,"elastic scattering");
+  fScatteringCS = new MaxCamENDF(fScatCSname,"cs");
+}
+
+TVector3 
+ParticleGenerator::getWimpWindDirection()
+{
+  //=================Get Direction of wimp wind in lab frame============
+  //Mostly Copied from Albert's McWimp.hh file
+  Double_t lat = fLat;
+  Double_t lon = fLong;
+
+  TVector3 vS(9,242,7); // Sun's velocity relative to WIMPs
+  //// Set constants to calculate Earth's velocity
+
+  Double_t
+    sE_avg = 29.79, // Earth's average orbital speed
+    e = 0.016722,   // ellipticity of Earth's orbit
+    L0 = 13 *TMath::Pi()/180,  // longitude of orbit's minor axis, +- 1 degree uncertainty
+    
+    Bx = -5.5303 *TMath::Pi()/180,  //lat & lon of ecliptic's xyz axes - from Lewin-Smith
+    Lx = 266.141 *TMath::Pi()/180,
+    By = 59.575 *TMath::Pi()/180,
+    Ly = -13.3485 *TMath::Pi()/180,
+    Bz = 29.812 *TMath::Pi()/180,
+    Lz = 179.3212 *TMath::Pi()/180;
+
+
+  Double_t l = 280.460 + 0.9856474*fTime;
+  Double_t g = (357.528 + 0.9856003*fTime)*TMath::Pi()/180;
+
+  Double_t L = ( l + 1.915*sin(g) + 0.020*sin(2*g) ) *TMath::Pi()/180;
+  Double_t sE = sE_avg*( 1-e*sin(L-L0) ); // Earth's speed at position L
+
+
+  Double_t vE_x = sE * cos(Bx) * sin(L-Lx);
+  Double_t vE_y = sE * cos(By) * sin(L-Ly);
+  Double_t vE_z = sE * cos(Bz) * sin(L-Lz);
+
+  TVector3 vE(vE_x, vE_y, vE_z); // Earth's velocity relative to Sun
+  TVector3 vT( vS + vE); // Earth's velocity relative to WIMP wind
+
+  Double_t lgal = atan2(vT.Y(),vT.X())*180.0/TMath::Pi();
+  Double_t bgal =  asin(vT.Z()/vT.Mag())*180/TMath::Pi();
+  
+
+//   //    if (opt=="g") {return vT;} //galactic
+//   // If do not want galactic coord, convert to equatorial
+//   // More accurate numbers may be available - check to update soon
+//   vT.Rotate(62.8716639*TMath::Pi()/180, TVector3(.83867,.54464, 0));
+//   vT.RotateZ(249.75*TMath::Pi()/180);
+//   //    if (opt=="e") {return vT;} //equatorial
+
+//   Double_t side = 1.00273790935;    // Number of sidereal days per day
+//   Double_t t0 = (lon + 10.0)*TMath::Pi()/180; // Relative global long. to eq. long. set to 0 at t=0
+//   vT.RotateZ(-(fTime*side)*2.0*TMath::Pi() - t0);
+//   vT.RotateX((lat-90)*TMath::Pi()/180);
+  //    if (opt=="lv") {return vT;} //lab, oriented vertically
+
+  TDatime* time = SimTools::makeTDatime(fTime);
+
+  Double_t az = DmtpcAstro::getAzfromGal(lgal,bgal,lat,lon,time->GetYear(),
+					 time->GetMonth(),time->GetDay(),
+					 DmtpcAstro::hmsToDecimalHours(time->GetHour(),
+								       time->GetMinute(),
+								       time->GetSecond()));
+  Double_t alt = DmtpcAstro::getAltfromGal(lgal,bgal,lat,lon,time->GetYear(),
+					   time->GetMonth(),time->GetDay(),
+					   DmtpcAstro::hmsToDecimalHours(time->GetHour(),
+									 time->GetMinute(),
+									 time->GetSecond()));
+  
+  Double_t phi = (90-az)*TMath::Pi()/180.0;
+  Double_t theta = (90-alt)*TMath::Pi()/180.0;
+  
+  
+  vT.SetMagThetaPhi(vT.Mag(),theta,phi);
+  
+
+  //Rotate clockwise by the rotation angle to account for detector orientation.  Without this, +y = North, +x = East
+  if (fTopBottom)  vT.RotateZ(-TMath::Pi()/180.*fRotationAngle);
+  else {
+    vT.RotateY(TMath::Pi());//Keep y-axis, rotate 180 degrees
+    vT.RotateZ(TMath::Pi()/180.*fRotationAngle);  //Rotation angle now changes sign
+  }
+  return vT;
+  //    vT.RotateX(90*TMath::Pi()/180);
+  //    if (opt=="lh") {return vT;} //lab, oriented horizontally    
+}
+
+
+
+void
+ParticleGenerator::generateTime()
+{
+  //=============Generate time from time option and other parameters==============
+  fTimeOption.ToLower();
+  if (fTimeOption.Contains("fix")){}//Do nothing: time stays fixed
+  else if (fTimeOption.Contains("rand")){
+    Double_t minTime = (fMinTime < fMaxTime) ? fMinTime : fMaxTime;
+    Double_t maxTime = (fMaxTime > fMinTime) ? fMaxTime : fMinTime;
+    fTime = fRandom->Rndm()*(maxTime - minTime) + minTime;
+
+  }
+  else if(fTimeOption.Contains("cur") || fTimeOption.Contains("now")){
+    TTimeStamp stamp = TTimeStamp();
+    fTime = SimTools::getTimeDouble(&stamp);
+  }
+  else if(fTimeOption.Contains("ser")){
+    fTime += fTimeStep / (24*3600);
+  }
+  else{
+    cerr <<"Time Option Not Recognized.  Using Current Time." << endl;
+    TTimeStamp stamp = TTimeStamp();
+    fTime = SimTools::getTimeDouble(&stamp);
+  }
+}
+
+void
+ParticleGenerator::generatePosition()
+{
+  //============Generate position from position option and related parameters===========
+  fPosOption.ToLower();
+  if (fPosOption.Contains("fix")){return;}//Do nothing: already set
+  else if (fPosOption.Contains("ring"))
+  {
+  
+    double v[3]; 
+    double p[3]; 
+    fRing->generateDecay(v,p); 
+    fRecoilPos->SetXYZ(v[0],v[1],v[2]);
+    fProjVector->SetXYZ(p[0],p[1],p[2]);
+    return; 
+  }
+  else if (!fPosOption.Contains("rand")){
+      cerr<<"Position Option Not Recognized.  Generating Random Positions"<<endl;
+    }
+ 
+ 
+    if(getConfigType()=="ring_alphas")
+    {
+    fXMin= -176,5;//-200
+    fXMax= -99.3;//200
+    }
+    
+    Double_t xmin = (fXMin < fXMax) ? fXMin : fXMax;
+    Double_t ymin = (fYMin < fYMax) ? fYMin : fYMax;
+    Double_t zmin = (fZMin < fZMax) ? fZMin : fZMax;
+    Double_t xmax = (fXMin < fXMax) ? fXMax : fXMin;
+    Double_t ymax = (fYMin < fYMax) ? fYMax : fYMin;
+    Double_t zmax = (fZMin < fZMax) ? fZMax : fZMin;
+
+    Double_t x = fRandom->Rndm()*(xmax - xmin) + xmin;
+    Double_t y = fRandom->Rndm()*(ymax - ymin) + ymin;
+  
+    if(getConfigType()=="ring_alphas")
+    {
+    y=sqrt(pow(200,2)-pow(x,2));
+    if(fRandom->Rndm()<0.5)
+    y=-y;
+    if(fRandom->Rndm()<0.5)
+    x=-x;
+    }
+    
+    //cout<<512+(x/.3447)<<" "<<512+(y/.3447)<<endl;
+    Double_t z = fRandom->Rndm()*(zmax - zmin) + zmin;
+    fRecoilPos->SetXYZ(x,y,z);
+}
+
+void 
+ParticleGenerator::generateDirection()
+{
+  //===============Generate direction from direction option and other parameters===========
+  fDirOption.ToLower();
+  if(fDirOption.Contains("fix")){setProjectileVector(fSourceDir);}
+
+  /*~~~~~v
+
+  else if (fDirOption.Contains("TJ")){ //I made this for calibrating the waveform reconstruction
+    Double_t phi = 0;
+    Double_t theta = (1-2*fRandom->Rndm());
+    fProjVector->SetMagThetaPhi(1,theta,phi);
+  }
+
+  ^~~~~~*/
+
+  else if (fDirOption.Contains("iso")){//isotropic
+    Double_t phi = fRandom->Rndm()*2*TMath::Pi();
+    Double_t theta = 2.0*asin(sqrt(fRandom->Rndm()));
+    fProjVector->SetMagThetaPhi(1,theta,phi);
+  }
+  else if (fDirOption.Contains("sou")){
+    TVector3 projVec(fRecoilPos->X() - fSourcePos->X(),
+		     fRecoilPos->Y() - fSourcePos->Y(),
+		     fRecoilPos->Z() - fSourcePos->Z());
+    projVec = projVec.Unit();
+    setProjectileVector(projVec);
+  }
+  else if (fDirOption.Contains("ring")) // the direction and position must be generated at the same time, so this does nothing
+  {
+    return;  
+  }
+
+  else if (fDirOption.Contains("coll")){
+    Bool_t done = false;
+    Int_t count = 0;
+    while (!done && count < 100){
+      count++;
+      Double_t phi = fRandom->Rndm()*2*TMath::Pi();
+      Double_t theta = 2*asin(sin(TMath::Pi()/180*fThetaMax/2)*sqrt(fRandom->Rndm()));
+      TVector3 sourcedir = sourceDir();
+      TVector3 orth = sourcedir.Orthogonal();
+      orth.Rotate(phi,sourcedir);
+      TVector3 projVec = sourcedir*cos(theta)+orth*sin(theta);
+      projVec = projVec.Unit();
+      setProjectileVector(projVec);
+      fPosOption.ToLower();
+      //if the position option is for a random recoil position
+      //then we must find a random point in the field of view along
+      //the line segment at _projVector direction coming from
+      //the source position.
+      if (fPosOption.Contains("rand")){
+	//Parameterize path by x(t) = x0 +posVect*t
+	//Find points where this line reaches xmin, xmax, ymin,ymax,zmin,zmax
+	vector<Double_t> tlimits;
+	//Our region is a rectangular prism, so we are trying to find the two points where 
+	//the line crosses the boundary of the rectangle.
+	if (projVec.X() != 0){ 
+	  //xmin
+	  Double_t t = (fXMin - fSourcePos->X())/projVec.X();
+	  Double_t y = fSourcePos->Y()+projVec.Y()*t;
+	  Double_t z = fSourcePos->Z()+projVec.Z()*t;
+	  if (y <= fYMax && y >= fYMin && z <= fZMax && z >= fZMin && t>=0) tlimits.push_back(t);
+	  //xmax
+	  t = (fXMax - fSourcePos->X())/projVec.X();
+	  y = fSourcePos->Y()+projVec.Y()*t;
+	  z = fSourcePos->Z()+projVec.Z()*t;
+	  if (y <= fYMax && y >= fYMin && z <= fZMax && z >= fZMin && t>=0) tlimits.push_back(t);
+	}
+	if (projVec.Y() != 0){
+	  //ymin
+	  Double_t t = (fYMin - fSourcePos->Y())/projVec.Y();
+	  Double_t x = fSourcePos->X()+projVec.X()*t;
+	  Double_t z = fSourcePos->Z()+projVec.Z()*t;
+	  if (x <= fXMax && x >= fXMin && z <= fZMax && z >= fZMin && t>=0) tlimits.push_back(t);
+	  //ymax
+	  t = (fYMax - fSourcePos->Y())/projVec.Y();
+	  x = fSourcePos->X()+projVec.X()*t;
+	  z = fSourcePos->Z()+projVec.Z()*t;
+	  if (x <= fXMax && x >= fXMin && z <= fZMax && z >= fZMin && t>=0) tlimits.push_back(t);
+	}
+	if (projVec.Z() != 0){
+	  //zmin
+	  Double_t t = (fZMin - fSourcePos->Z())/projVec.Z();
+	  Double_t x = fSourcePos->X()+projVec.X()*t;
+	  Double_t y = fSourcePos->Y()+projVec.Y()*t;
+	  if (x <= fXMax && x >= fXMin && y <= fYMax && y >= fYMin && t>=0) tlimits.push_back(t);
+	  //zmax
+	  t = (fZMax - fSourcePos->Z())/projVec.Z();
+	  x = fSourcePos->X()+projVec.X()*t;
+	  y = fSourcePos->Y()+projVec.Y()*t;
+	  if (x <= fXMax && x >= fXMin && y <= fYMax && y >= fYMin && t>=0) tlimits.push_back(t);
+	}
+	Int_t size = tlimits.size();
+	if (size > 0){
+	  done = true;
+	  Double_t min = tlimits[0];
+	  Double_t max = tlimits[0];
+	  for (Int_t i = 1; i < size; i++){
+	    min = (tlimits[i] < min) ? tlimits[i] : min;
+	    max = (tlimits[i] > max) ? tlimits[i] : max;
+	  }
+	  Double_t trand = fRandom->Rndm()*(max - min) + min;
+	  Double_t x = fSourcePos->X()+trand*projVec.X();
+	  Double_t y = fSourcePos->Y()+trand*projVec.Y();
+	  Double_t z = fSourcePos->Y()+trand*projVec.Z();
+	  fRecoilPos->SetXYZ(x,y,z);
+	}
+      }else done = true;
+    }
+    if (done == false){
+      cout<<"Could not generate event inside spatial limits. Check source direction.  Quitting."<<endl;
+      gROOT->ProcessLine(".q");
+    }
+  }//if collimate option and random position set
+}//end generateDirection()
+
+void
+ParticleGenerator::generateEnergy()
+{
+  //================Generate energy from energy option and related parameters==================
+  if (fEnOption.Contains("fix")){
+    Double_t cosmin = MaxCamTwoBodyKinematics::
+      calcCosRecoilFromRecoilEnergy(fMinEn,fProjEn,fRecoilMass,fProjMass);
+    if (cosmin > 1) {
+      cerr<<"Source energy too high to generate recoil in desired range."<<endl;
+      gROOT->ProcessLine(".q");
+    }
+  }//energy already set
+  else if(fEnOption.Contains("spec")){
+  //retrieve projectile energy from a TH1
+    Bool_t done = false;
+    while(!done){
+      fProjEn = fEnSpec->GetRandom();
+      if (fProjEn > fMaxEn || fProjEn < fMinEn) continue;
+      Double_t cosmin = MaxCamTwoBodyKinematics::
+        calcCosRecoilFromRecoilEnergy(fMinEn,fProjEn,fRecoilMass,fProjMass);
+      if (cosmin >= -1 && cosmin <= 1) done = true;
+    }
+
+  }
+  else if (fEnOption.Contains("endf")){
+  //retrieve projectile energy from ENDF file
+    Bool_t done = false;
+    while(!done){
+      fProjEn = fSpectrum->generateEnergy(fMinEn,fMaxEn);
+      if(!fScatteringCS->acceptEnergy(fProjEn))continue;
+      Double_t cosmin = MaxCamTwoBodyKinematics::
+        calcCosRecoilFromRecoilEnergy(fMinEn,fProjEn,fRecoilMass,fProjMass);
+      if (cosmin>=-1 && cosmin <=1) done = true;
+    }
+
+  }
+  else if(fEnOption.Contains("randomrec")){
+  //Random recoil energy
+    fProjEn = fRandom->Rndm()*(fMaxEn-fMinEn) + fMinEn;
+  }
+  else if (fEnOption.Contains("decay"))
+  {
+    if (!fDecay)
+    {
+      cerr << "No decay chain object :(" <<endl;  
+    }
+    else 
+    {
+      double t = (fTime - fTimeSet) * (24. * 3600); 
+      fProjEn=fDecay->getRandomEnergy(t); 
+    }
+  }
+
+  else if (fEnOption.Contains("gauss"))
+  {
+    fProjEn = fRandom->Gaus(fProjGaussianEn,fProjGaussianEnSpread); 
+  }
+  
+
+  else{
+  //Random projectile energy
+    if (!fEnOption.Contains("rand")) cerr<<"Energy option not recognized.  Setting to random." <<endl;
+
+    Double_t cosmin = MaxCamTwoBodyKinematics::
+      calcCosRecoilFromRecoilEnergy(fMinEn,fMaxEn,fRecoilMass,fProjMass);
+    if (cosmin > 1){
+      cerr<<"Improper energy limits.  Check if min is too high or max is too low."<<endl;
+      gROOT->ProcessLine(".q");
+    }
+    Bool_t done = false;
+    while (!done){
+      fProjEn = fRandom->Rndm()*(fMaxEn - fMinEn)+fMinEn;
+      
+//       if(fRandom->Rndm()<0.5)
+//       fProjEn=5400.;
+//       else
+//     fProjEn=7687.;
+      
+      
+      //check if this can give a recoil in the correct range
+      Double_t cosmin = MaxCamTwoBodyKinematics::
+	calcCosRecoilFromRecoilEnergy(fMinEn,fProjEn,fRecoilMass,fProjMass);
+      if (cosmin >= -1 && cosmin <= 1) done = true;
+    }//while
+  }//option is random projectile or unknown
+}
+
+void
+ParticleGenerator::generateDirectionAndEnergyDoubleAlpha()
+{
+
+
+
+
+double Four_Vectors[25];
+
+
+  TFile *fff = new TFile("/net/hisrv0001/home/spitzj/DCTPC_soft/MaxCam/tables/Simulation_Trees_v17.root");
+TTree *t1 = (TTree*)gROOT->FindObject("Simulation_Tree");
+t1->SetBranchAddress("Four_Vectors",&Four_Vectors);
+  
+  
+nentries= (Int_t)t1->GetEntries();
+t1->GetEntry((int)fRandom->Uniform(1,nentries-1));
+
+while(Four_Vectors[25]!=1)
+{
+t1->GetEntry((int)fRandom->Uniform(1,nentries-1));
+}
+
+
+//a1_0 = 0
+//a2_0 = 4
+//cos_ev = 24
+//term = 25
+
+
+
+fProjEn=(Four_Vectors[0]-3727379.508);
+fProjEn2=(Four_Vectors[4]-3727379.508);
+
+cout<<fProjEn<<" "<<fProjEn2<<endl;
+
+fRecVector->SetXYZ(Four_Vectors[1],Four_Vectors[2],Four_Vectors[3]);
+fRecVector->SetMag(1);
+fRecVector2->SetXYZ(Four_Vectors[5],Four_Vectors[6],Four_Vectors[7]);
+fRecVector2->SetMag(1);
+
+
+
+t1->ResetBranchAddresses();
+t1->Reset();
+t1->Delete();
+fff->Close();
+fff->Delete();
+delete fff;
+
+}
+
+
+
+void
+ParticleGenerator::generateWimpProjectile()
+{
+  //=============Generate wimp according to wimp distribution found in Spergel paper==============
+  Double_t c = 3e5;//in km/s
+  TVector3 vEarth = getWimpWindDirection();
+  Double_t vx, vy, vz;
+  TVector3 wimpVLab;
+  Double_t vEsc = 600*10;//max wimp velocity
+  Double_t v0 = 230;//average WIMP velocity
+  Double_t projEn = 0;
+  Bool_t done = false;
+  while(!done){
+
+    vx = (fRandom->Rndm()-0.5)*vEsc;
+    vy = (fRandom->Rndm()-0.5)*vEsc;
+    vz = (fRandom->Rndm()-0.5)*vEsc;
+    wimpVLab = TVector3(vx,vy,vz);
+
+    Double_t rnd = fRandom->Rndm();
+    Double_t fmax = exp(-(vEarth+wimpVLab).Mag2()/(v0*v0));
+    if (fmax < rnd) continue;
+    projEn = 0.5 * fProjMass*wimpVLab.Mag2()/(c*c);
+    //    Double_t mRatio = _recoilMass / _projMass;
+    Double_t cosMax = MaxCamTwoBodyKinematics::
+                    calcCosRecoilFromRecoilEnergy(fMinEn,projEn,fRecoilMass,fProjMass);
+    if (cosMax <= 1 && cosMax>=-1 ) done = true;
+  
+  }
+  //  Double_t testcos = MaxCamTwoBodyKinematics::calcCosScatterCMSFromRecoilEnergy(_minEn,projEn,_recoilMass,_projMass);
+  fProjEn = projEn;
+  fProjVector->SetXYZ(vx,vy,vz);
+  fProjVector->SetMag(1);
+}
+
+void ParticleGenerator::generateWimpRecoil()
+{
+   double pi = TMath::Pi();
+   double c = 3.E8;
+   double v0 = 230.E3/c;
+   TVector3 v_earth_vec = getWimpWindDirection();
+   v_earth_vec*=-1; //we head into wind, but reverse so wind blows by us.
+   double v_earth = v_earth_vec.Mag()*1.E3/c;
+   double phi_cyg = v_earth_vec.Phi();
+   double theta_cyg = v_earth_vec.Theta();
+   double v_esc = 600.E3/c;
+
+   if(!fdRdTh)
+   {
+      cout << "Creating dRdTh!" << endl;
+
+      fdRdTh = new TF1("Recoil in Theta",DmtpcTheory::dRdTh,-1,1,8);
+      fdRdTh->SetParameters(fProjMass/1.E6,fRecoilA,fRecoilMass/1.E6,v0,v_earth,
+			    1.E-41,0.4,100.0);
+      fdRdTh->SetNpx(500);
+      
+      TCanvas* c0 = new TCanvas("c0","c0",0,0,600,600);
+      c0->cd();
+      fdRdTh->Draw();
+      c0->Update();
+      c0->SaveAs("dRdTh.ps");
+
+   }
+
+   double coscyg=-2;
+   if (fTheoryEnergyOption.Contains("flat"))
+   {
+      fRecoilEn = fRandom->Uniform(fMinEn,fMaxEn);
+      if(v_earth != fdRdTh->GetParameter(4))
+	 fdRdTh->SetParameter(4,v_earth);
+      fdRdTh->SetParameter(7,fRecoilEn);
+      coscyg = fdRdTh->GetRandom();
+   }
+   else if(fTheoryEnergyOption.Contains("vesc"))
+   {
+      if(!fdRdEVesc)
+      {
+	 fdRdEVesc = new TF1("Recoil in E to Vesc",
+			     DmtpcTheory::dRdERbetweenVearthandVesc1D,
+			     fMinEn,fMaxEn,8);
+	 fdRdEVesc->SetParameters(fProjMass/1.E6,fRecoilA,fRecoilMass/1.E6,v0,v_earth,
+				  1.E-41,0.4,v_esc);
+	 fdRdEVesc->SetNpx(500);
+      }
+      if(v_earth != fdRdEVesc->GetParameter(4))
+	 fdRdEVesc->SetParameter(4,v_earth);
+      fRecoilEn=fdRdEVesc->GetRandom();
+
+      if(v_earth != fdRdTh->GetParameter(4))
+	 fdRdTh->SetParameter(4,v_earth);
+      fdRdTh->SetParameter(7,fRecoilEn);
+      coscyg = fdRdTh->GetRandom();
+   }
+   else if(fTheoryEnergyOption.Contains("infinity"))
+   {
+      
+      if(!fdRdEInf)
+      {
+	 cout << "Creating dRdEInf!" << endl;
+	 
+	 fdRdEInf = new TF1("Recoil in E to Inf",
+			    DmtpcTheory::dRdERbetweenVearthandInfinity1D,
+			    fMinEn,fMaxEn,7);
+	 fdRdEInf->SetParameters(fProjMass/1.E6,fRecoilA,fRecoilMass/1.E6,
+				 v0,v_earth,1.E-41,0.4);
+	 fdRdEInf->SetNpx(500);
+      }
+      if (v_earth != fdRdEInf->GetParameter(4))
+	 fdRdEInf->SetParameter(4,v_earth);
+      fRecoilEn = fdRdEInf->GetRandom();
+
+      if(v_earth != fdRdTh->GetParameter(4))
+	 fdRdTh->SetParameter(4,v_earth);
+      fdRdTh->SetParameter(7,fRecoilEn);
+      coscyg = fdRdTh->GetRandom();
+   }
+   else
+   {
+      cerr <<"WARNING: Energy Type not recognized!! Running WIMP Projectile"<<endl;  
+      generateWimpProjectile();
+      generateRandomRecoil();
+   }
+   
+   fCosCygnus=coscyg;
+   
+   if(coscyg >= -1)
+   {
+      TVector3 center(1,0,0);
+      center.SetPhi(phi_cyg);
+      center.SetTheta(theta_cyg);
+      center.SetMag(coscyg);
+
+      double sincyg = sin(acos(coscyg));
+
+      TVector3 u(1,0,0);   
+      u.SetPhi(phi_cyg);
+      u.SetTheta(theta_cyg-acos(coscyg));
+      u-=center;
+      u.SetMag(1);
+
+      TVector3 v(1,0,0);
+      v=u.Cross(center);
+      v.SetMag(1);
+
+      TVector3 p(0,0,0);
+      double xi = fRandom->Uniform(0,TMath::Pi()*2);
+            
+      p.SetX(sincyg*cos(xi)*u.X()+sincyg*sin(xi)*v.X()+center.X());
+      p.SetY(sincyg*cos(xi)*u.Y()+sincyg*sin(xi)*v.Y()+center.Y());
+      p.SetZ(sincyg*cos(xi)*u.Z()+sincyg*sin(xi)*v.Z()+center.Z());
+
+      fRecVector->SetPhi(p.Phi());
+      fRecVector->SetTheta(p.Theta());
+      fRecVector->SetMag(1);
+
+      fProjVector->SetPhi(phi_cyg);
+      fProjVector->SetTheta(theta_cyg);
+      fProjVector->SetMag(1);
+      
+   }
+}
+
+void
+ParticleGenerator::generateRandomRecoil()
+{
+  //=========If energy option is "RandomRecoil", use projectile energy as the recoil energy.
+  if (fEnOption.Contains("randomrec")){
+    setRecoilVector(fProjVector);
+    fRecoilEn = fRandom->Rndm()*(fMaxEn-fMinEn) +fMinEn;
+    if (fSpecialOption.Contains("w")){
+      Double_t minEnTemp =fMinEn;
+      //cout << "Min: " <<fMinEn << "Max: " <<fMaxEn<<endl;
+      fMinEn = fRecoilEn;
+      //cout << "Recoil En: " <<fRecoilEn<<endl;
+      generateWimpProjectile();
+      fMinEn = minEnTemp;
+    }
+  }
+  if(!fEnOption.Contains("randomrec")||fSpecialOption.Contains("w")){
+
+  //=========Generate recoil direction and energy assuming no angular dependence of cross section==============
+  TVector3 projVector = projectileVector().Unit();
+  TVector3 orthoVector = projVector.Orthogonal().Unit();
+  //Assume isotropic cross section, generate random angle in center of mass frame
+  //cross section goes like sin(theta), so theta = 2asin(sqrt(P))
+  Bool_t done = false;
+  Double_t cosRecoilCM;
+  while(!done){
+    cosRecoilCM = cos(2*asin(sqrt(fRandom->Rndm())));
+    fRecoilEn = MaxCamTwoBodyKinematics::
+      calcRecoilEnergyFromCosScatterCMS(cosRecoilCM,fProjEn,fRecoilMass,fProjMass);
+    if (fRecoilEn > fMinEn && fRecoilEn < fMaxEn) done = true;
+  }
+  Double_t cosRecoil = MaxCamTwoBodyKinematics::
+    calcCosRecoilFromRecoilEnergy(fRecoilEn,fProjEn,fRecoilMass,fProjMass);
+  Double_t sinRecoil = sqrt(1.- cosRecoil*cosRecoil);
+  Double_t phi = 2.*TMath::Pi()*fRandom->Rndm();//azimuthal symmetry
+  orthoVector.Rotate(phi,projVector);
+  TVector3 recVector = cosRecoil*projVector + sinRecoil*orthoVector;
+  recVector = recVector.Unit();
+  setRecoilVector(recVector);
+  }
+}
+
+void
+ParticleGenerator::generateENDF()
+{
+  //==============Generate neutron recoil from ENDF files================
+  //Use spectrum to get energy, cross sections to get recoil directions and energies
+
+  if (fEnOption.Contains("randomrec")){
+    fRecoilEn = fProjEn;
+    setRecoilVector(fProjVector);
+  }
+  else{
+    Double_t cosmin = MaxCamTwoBodyKinematics::
+      calcCosRecoilFromRecoilEnergy(fMinEn,fMaxEn,fRecoilMass,fProjMass);
+    //Check if any recoil is possible within the given energy limits.
+    if (cosmin > 1) {
+      cout <<"Improper energy limits.  Check if min is too high or max too low."<<endl;
+      gROOT->ProcessLine(".q");
+    }
+    //Generate energy using the ENDF files
+    Bool_t done = false;
+
+    done = false;
+    //Generate angle cosine from given ENDF distribution
+    //check if corresponding energy is valid.
+    while(!done){
+      Double_t cosscatterCMS = fScatteringDCS->generateCosAngleCMS(fProjEn);
+      fRecoilEn = MaxCamTwoBodyKinematics::
+        calcRecoilEnergyFromCosScatterCMS(cosscatterCMS,fProjEn,fRecoilMass,fProjMass);
+      if(fRecoilEn >= fMinEn && fRecoilEn <= fMaxEn)done = true;
+    }
+
+    Double_t cosRecoil = MaxCamTwoBodyKinematics::calcCosRecoilFromRecoilEnergy(fRecoilEn,fProjEn,fRecoilMass,fProjMass);
+    Double_t sinRecoil = sqrt(1.-cosRecoil*cosRecoil);
+    Double_t phi = 2*TMath::Pi()*fRandom->Rndm();
+    TVector3 projVect = projectileVector();
+    TVector3 orthoVect = projVect.Orthogonal().Unit();
+    orthoVect.Rotate(phi,projVect);
+    TVector3 recVect = cosRecoil*projVect.Unit()+sinRecoil*orthoVect.Unit();
+    recVect = recVect.Unit();
+    setRecoilVector(recVect);
+  }
+}
+//Nuclear recoils
+void
+ParticleGenerator::generateNeutronType()
+{
+  //=============Generate a neutron type event================
+  fSpecialOption.ToLower();
+  generateTime();
+  generatePosition();
+  generateDirection();
+  generateEnergy();
+  if (fSpecialOption.Contains("endf")) generateENDF();
+  else  generateRandomRecoil();
+
+}
+//Alpha type event: recoil and projectile particles are the same
+void
+ParticleGenerator::generateAlphaType()
+{
+  //============Generate an alpha type event=================
+  generateTime();
+  generatePosition();
+  generateDirection();
+  fRecoilParticle = fProjParticle;
+  fRecoilMass = fProjMass;
+  generateEnergy();
+  fRecoilEn = fProjEn;
+  fRecVector = fProjVector;
+}
+
+void
+ParticleGenerator::generateDoubleAlphaType()
+{
+  //============Generate an alpha type event=================
+  generateTime();
+  generatePosition();
+  generateDirectionAndEnergyDoubleAlpha();
+  fRecoilParticle = fProjParticle;
+  fRecoilMass = fProjMass;
+
+  fRecoilEn = fProjEn;
+  fRecoilEn2 = fProjEn2;
+  
+  // cout<<"in generatedoublealpha type: "<<fRecoilEn<<endl;
+  
+  // fRecVector = fProjVector;
+  
+  
+  
+}
+
+
+void
+ParticleGenerator::generateWIMP()
+{
+  //=============Generate a WIMP event=================
+  fSpecialOption.ToLower();
+  generateTime();
+  generatePosition();
+  if (fSpecialOption.Contains("w") && !fEnOption.Contains("randomrecoil")){
+    generateWimpProjectile();
+    generateRandomRecoil();
+    
+  }
+  else if(fSpecialOption.Contains("theory"))
+  {
+     generateWimpRecoil();
+  }
+  else{
+    generateDirection();
+    generateEnergy();
+    generateRandomRecoil();
+  
+  }
+}
+
+void 
+ParticleGenerator::setDecayChain(TString a, TString b)
+{
+  cout << "Reading decay chain file " << a << endl; 
+  if (fDecay) delete fDecay; 
+  TFile f(a); 
+  gROOT->cd(); 
+  fDecay = (DmtpcDecayChain*) f.Get(b)->Clone("mc_decay"); 
+  f.Close(); 
+}
+
+void
+ParticleGenerator::generateRecoil()
+{
+  //=============Choose the proper event type and generate event=================
+  fRecoilType.ToLower();
+ 
+  if (fRecoilType == "alpha"){
+    generateAlphaType();
+  
+  }
+  else if (fRecoilType == "nuclear" || fRecoilType =="neutron"){
+    generateNeutronType();
+  }
+  else if (fRecoilType == "wimp"){
+    generateWIMP();
+  }
+    else if (fRecoilType == "doublealpha"){
+    generateDoubleAlphaType();
+  }
+  
+  else {
+    cerr <<"WARNING: Recoil Type not recognized!!"<<endl;
+    gROOT->ProcessLine(".q");
+  }
+}
+

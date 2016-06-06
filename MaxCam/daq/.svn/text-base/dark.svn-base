@@ -1,0 +1,36 @@
+#!/bin/bash
+
+#Arguments are as follows:
+#$1 = number of runs 
+#$2 = number of events per run
+#$3 = exposure time in milliseconds
+#$4 = comment
+#$5 = keyword
+#$6 = location
+#$7 = detid
+
+echo number of arguments is $#
+
+mysql DM_SLOWCONTROL -u dmatter -pseedark -h mitdm004.mit.edu -e "update busy set daq=1"
+echo $0
+echo $1
+echo $2
+echo $3
+echo $4
+echo $5
+echo $6
+echo $7
+
+
+COUNTER=0
+while [  $COUNTER -lt $1 ]; do
+  echo The WIMP run counter is $COUNTER
+  root -b -c "dark.cxx($2,$3,\"$4\",\"$5\",\"$6\",\"$7\")" 2>&1 > dark.log
+  let COUNTER=COUNTER+1 
+done
+
+if [ $8 ]; then echo run completed | /usr/bin/Mail -s "run completed" $8; fi
+
+mysql DM_SLOWCONTROL -u dmatter -pseedark -h mitdm004.mit.edu -e "update busy set daq=0"
+echo "--- RUN SCRIPT FINISHED ---"
+

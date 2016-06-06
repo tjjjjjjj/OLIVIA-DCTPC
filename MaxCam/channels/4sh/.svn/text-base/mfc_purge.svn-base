@@ -1,0 +1,8 @@
+# Used to set the MFC to "open" to get teh fastest possible flow
+# This is a digital I/O channel, set to write
+
+# need to add a key that specifies that this channel should be 
+# a digital output channel
+writeChannel = 0
+writeSubdev  = 2
+dioDirection = output

@@ -1,0 +1,3 @@
+readChannel = 3
+ref = ground
+calibrationMethod = softcal

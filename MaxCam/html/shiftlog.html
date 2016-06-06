@@ -1,0 +1,74 @@
+
+<html>
+	<head>
+	<title> DMTPC - Mission Control </title>
+
+	<script type="text/javascript" src="jquery.js"></script>
+  <script type="text/javascript" src="jquery.form.js"></script>
+	<script>
+	
+  function hide_form()
+  {
+    $('#formdiv').hide(); 
+    $('#detname').load('../cgi-bin/getdet'); 
+  }
+	
+	$(document).ready(function()
+	{
+    $('#detname').load('../cgi-bin/getdet'); 
+    $('#menu').load('../cgi-bin/makemenu',function(){$('#li_shiftlog').addClass("active");});   
+
+
+    var formopts = {
+                    target: '#formresp', 
+                    success: hide_form
+                   };
+
+    $('#login').ajaxForm(formopts); 
+   }); 
+
+
+	
+	</script>
+
+  <link rel="stylesheet" href="styles.css" type="text/css"/>
+
+	</head>
+
+  <body>
+    <div id="all">
+
+  <img src="gfx/webpageheader.png" alt="DMTPC - Mission Control" />
+  <div id="detname">
+   </div>
+  <div id="menu">
+  </div>
+
+  <div id="main">
+
+  <div style="width:100%;">
+  <h2>Shift log in </h2>
+  <p>Will log out the previous person on shift</p>
+  
+    <div id="formresp">
+    </div>
+    <div id="formdiv" style="width:100%; margin-left:auto; margin-right:auto;">
+
+    <form action = "../cgi-bin/shift" method="POST" id="login">	
+      <input type="hidden" name="what" value="login"> 
+       <table>
+       <tr><td>Login: </td><td><input name="login"></td></tr>
+       <tr><td>Password: </td><td><input name="pw" type="password"></td></tr>
+       <tr><td><input type="submit" value="Login"></td><td>or <a href="shift_register.html">register</a></td></tr>
+       </table>
+    </form>
+    </div>
+  </div>
+  <div>
+  <h2>Log: </h2>
+  <iframe width="900" height="400" src="http://mitdm004.mit.edu:8080/10LShift/">
+</div>
+   </div>
+ </div>
+ </body>
+ <html>

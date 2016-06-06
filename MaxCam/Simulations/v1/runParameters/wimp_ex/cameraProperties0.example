@@ -1,0 +1,11 @@
+Properties of Camera 0
+CameraPosition		0	0
+CameraBins		256	256
+ImageWidths		146.432	146.432
+PixelsPerBin		4
+ReadNoise		7.3
+Bias			0
+Gain			9.3
+NoiseFactor		1
+DarkCurrent		0
+EMGain			1

@@ -1,0 +1,96 @@
+
+<html>
+	<head>
+	<title> DMTPC - Mission Control </title>
+
+	<script type="text/javascript" src="jquery.js"></script>
+  <script type="text/javascript" src="jquery.form.js"></script>
+	<script>
+	
+	$(document).ready(function()
+	{
+	  var refId = setInterval(function()
+    {
+      $('#slowControl').load('../cgi-bin/testing/printpars_test.pl');
+    },1000); 
+
+    $('#setter').ajaxForm(function() {
+    });
+
+    $('#detname').load('../cgi-bin/getdet'); 
+    $('#menu').load('../cgi-bin/makemenu',function(){$('#li_help').addClass('active')}); 
+
+
+   }); 
+
+
+	
+	</script>
+
+  <link rel="stylesheet" href="styles.css" type="text/css"/>
+
+	</head>
+
+  <body>
+ <div id="all">
+  <img src="gfx/webpageheader.png" alt="DMTPC - Mission Control" />
+  <div id="detname">
+   </div>
+  <div id="menu">
+  </div>
+
+  <div id="main">
+
+  ALL INSTRUCTIONS ASSUME YOU ARE LOGGED IN AS: dmatter ON mitdm03.mit.edu
+  <p>
+
+  <b>SWITCH ON CAMERA</b>
+  <p>
+  1) Switch on cameras from synop tab.<br>
+  2) run ./ccdinit in ~/work/<br>
+  3) The camera will start cooling down.It takes around 1/2h to reach -20C.
+  <p>
+
+
+  <b>FILL GAS</b>
+  <p>
+  1) Set desired pressure <br>
+  2) Click on 'Adjust' or 'Refill' buttons to start filling process<p>
+  
+  <b> RAMP VOLTAGE</b>
+  <p>
+  1) Use web inteface to choose voltages for anode (typically 0.72 kV) and cathode (typically 5 kV).<br>
+  2) Click 'Ramp UP HV' to bring up voltages.<br>
+  3) to confirm that HV has been ramped<br>
+  - check HV plots<br>
+  - printout of messages in xterm (nohup.out)<br>
+  - display on Spellman power-supply<br>
+  4) to ramp down, click 'Ramp DN HV'
+  <p>
+
+  <b>DAILY GAS REFILL</b>
+  <p>
+  1) Ramp down HV<br>
+  2) Click 'Refill'<p>
+
+  <b>PUMP DOWN AFTER OPENING TO AIR</b>
+  <p>
+  1) Open pump valve and gas valve from SynOp. DO NOT open bottle valve.<br>
+  2) Allow rough pump to take pressure to ~500 mTorr<br>
+  3) Hit the Start/Stop button on the front of the Turbo Controller<br>
+  4) Wait awhile<br>
+  5) Stop Turbo. This is <big>EXTREMELY IMPORTANT</big>.<br>
+  6) Input desired pressure on Slow Control page and click 'Adjust'
+  <p>
+  <b>RUNNING THE CAMERAS FOR DATA TAKING</b>
+  <p>
+  1) Make sure you have run ccdinit and the cameras are at -20C<br>
+  2) In /home/dmatter/work/ run <code>./run [nruns] [nevents] [exposuretime] [comment] [keyword] [location] [detector id]</code> <br>
+  3) Exposure time is in milliseconds. Comment, keyword and location should be in quotes, e.g. <code>./run 5 1000 1000 "Alpha Calibration Run" "ALPHA" "NW13-020" "10L"</code> asks for five runs of 1000 events each, with 5s exposure, is an alpha calibration run with keyword ALPHA for the 10L detector and is running in NW13-020 <br>
+  4) Wait.
+ 
+  </div>
+
+</div>
+</body></html>
+

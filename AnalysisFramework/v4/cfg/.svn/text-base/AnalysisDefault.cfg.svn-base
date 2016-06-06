@@ -1,0 +1,8 @@
+tree = skim
+
+rangecal = 081264:0.137, 100439:0.168, A80334:0.171, A80333:0.137
+energycal = 081264:18.6, 100439:17.5, A80334:12, A80333:15
+wormfilename =  081264:081264_under_6000, 100439:100439_under_6000, A80334:100439_under_6000, A80333:A80333_worms
+wormcutval =  081264:0.4, 100439:0.4, A80334:0, A80333:0
+
+rangefilename = cfg/range27Sept.root

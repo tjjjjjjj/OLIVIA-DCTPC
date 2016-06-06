@@ -1,0 +1,113 @@
+from rubin;
+
+mysql> show create table run_desc;
++----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table    | Create Table                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
++----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| run_desc | CREATE TABLE `run_desc` (
+  `id` int(11) NOT NULL auto_increment,
+  `file` varchar(100) NOT NULL,
+  `keyword` varchar(16) NOT NULL,
+  `location` varchar(16) default NULL,
+  `description` varchar(256) default NULL,
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `userid` varchar(16) default NULL,
+  `detId` varchar(10) NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `timestamp_idx` (`timestamp`)
+) ENGINE=MyISAM AUTO_INCREMENT=10422 DEFAULT CHARSET=latin1 | 
++----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> select * from run_desc order by timestamp asc limit 3;
++------+----------------------+------------------+----------+----------------------------+---------------------+---------+-------+
+| id   | file                 | keyword          | location | description                | timestamp           | userid  | detId |
++------+----------------------+------------------+----------+----------------------------+---------------------+---------+-------+
+| 2087 | dmtpc_4sh_00000.root | 4SHOOTER         | 24-036   | 4SHOOTER run, testing DAQ. | 2010-04-08 11:05:19 | dmatter | 4sh   | 
+| 2088 | dmtpc_4sh_00001.root | 4-SHOOTER KEYWOR | 24-036   | 4-SHOOTER COMMENT TEST     | 2010-04-11 13:26:55 | dmatter | 4sh   | 
+| 2089 | dmtpc_4sh_00002.root | 4-SHOOTER KEYWOR | 24-036   | 4-SHOOTER COMMENT TEST     | 2010-04-11 13:39:59 | dmatter | 4sh   | 
++------+----------------------+------------------+----------+----------------------------+---------------------+---------+-------+
+3 rows in set (0.00 sec)
+
+
+CREATE TABLE `run_desc` (
+  `id` int(11) NOT NULL auto_increment,
+  `description` varchar(256) default NULL,
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `userid` varchar(16) default NULL,
+  `detId` varchar(10) NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `timestamp_idx` (`timestamp`)
+) ENGINE=MyISAM AUTO_INCREMENT=10422 DEFAULT CHARSET=latin1
+
+# to open database
+>sqlite3 alphacalib.db
+
+# to see everything in database;
+sqlite> select * from sqlite_master;
+
+# ORDER MATTERS!!!!!!!!!
+# cam MUST BE THE FIRST NON-alphacalibcfgdb_* ROW
+
+CREATE TABLE `alphacalibcfg` (
+  `alphacalibcfgdb_id` integer primary key,
+  `alphacalibcfgdb_firstrun` integer NOT NULL,
+  `alphacalibcfgdb_lastrun` integer NOT NULL,
+  `alphacalibcfgdb_detId` text NOT NULL default `4sh`,
+  `alphacalibcfgdb_timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `alphacalibcfgdb_userid` text NOT NULL,
+  `cam` TEXT NOT NULL,
+  `start_x` INTEGER NOT NULL,
+  `start_y` INTEGER NOT NULL,
+  `phi` REAL NOT NULL,
+  `phi_tol` REAL NOT NULL DEFAULT 0.03,
+  `mc_gain` REAL NOT NULL DEFAULT 20,
+  `residual_cut_distance` REAL NOT NULL DEFAULT 20,
+  `residual_cut_sigma` REAL NOT NULL DEFAULT 3,
+  `n_after_spark` INTEGER NOT NULL DEFAULT 4,
+  `length_cal` REAL NOT NULL DEFAULT 0.160,
+  `min_range` REAL NOT NULL DEFAULT 250,
+  `max_range` REAL NOT NULL DEFAULT 700,
+  `min_E` REAL NOT NULL DEFAULT 5000,
+  `max_E` REAL NOT NULL DEFAULT 1e99,
+  `max_E_factor` REAL NOT NULL DEFAULT 1.5,
+  `min_bound` REAL NOT NULL DEFAULT 0,
+  `max_bound` REAL NOT NULL DEFAULT 300,
+  `reverse` INTEGER NOT NULL DEFAULT 1,
+  `mc_file` TEXT NOT NULL,
+  `n_segments` INTEGER NOT NULL DEFAULT 25,
+  `normalize_gainmap` INTEGER NOT NULL DEFAULT 1,
+  `stitch_file` TEXT 
+);
+
+#ALTER TABLE {tableName} ADD COLUMN COLNew {type};
+
+insert into alphacalibcfg (runnum,userid,cam,min_E,max_E) values (8285,"shawnh","A80333",25000,40000);
+
+cam A80333
+start_x  838
+start_y  648
+phi  0.07358
+mc_file /net/zwicky/esata01/dmtpc/production/mc/dmtpc_mc_0000Xskim.root
+mc_gain 35.2357
+min_range 400 
+max_range 800
+min_bound 50
+max_bound 300
+min_E 20000
+# the gainmaps are already normalized
+normalize_gainmap 0
+stitch_file  /net/eeyore/data01/shawnh/projects/DarkMatter/Calibration/stitch.root
+reverse 1
+end 
+
+insert into alphacalibcfg (alphacalibcfgdb_userid,alphacalibcfgdb_firstrun,alphacalibcfgdb_lastrun,cam,start_x,start_y,phi,mc_file,mc_gain,min_range,max_range,min_bound,max_bound,min_E,normalize_gainmap,stitch_file,reverse) values ("shawnh",8285,8285,"A80333",838,648,0.07358,"/net/zwicky/esata01/dmtpc/production/mc/dmtpc_mc_0000Xskim.root",35.2357,400,800,50,300,20000,0,"/net/eeyore/data01/shawnh/projects/DarkMatter/Calibration/stitch.root",1);
+
+
+
+RunProperties.MinimumMatchingDataRunNumber
+RunProperties.MaximumMatchingDataRunNumber
+update mccfg set "RunProperties.MinimumMatchingDataRunNumber"=8313 where mccfgdb_id=89;
+select * from mccfg order by mccfgdb_id desc limit 4;
+
+sqlite3 -line mccfg.db "select * from mccfg where \"CameraProperties.SerialNumber\"=\"0 100534\" and \"RunProperties.MinimumMatchingDataRunNumber\"=8313 order by mccfgdb_timestamp"

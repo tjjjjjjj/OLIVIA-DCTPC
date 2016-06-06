@@ -1,0 +1,24 @@
+# Properties of Camera 0
+SerialNumber		0	110121
+CameraPosition		0	0
+CameraBins		0	256	256
+# this is ( 0.169 mm/px )x1024
+#ImageWidths            0       173.4 173.4
+# this is ( 0.179 mm/px )x1024
+#ImageWidths            0       183.3 183.3
+# this is ( 0.160 mm/px )x1024 SWH-08232012
+ImageWidths             0       163.84  163.84
+PixelsPerBin		0	4
+ReadNoise		0	11.82
+Bias			0 	1000	
+#Gain			0	20
+##110121: GAIN MAP GAIN: 39.6833+/-0.252538
+Gain			0	39.6833
+NoiseFactor		0	1
+DarkCurrent		0	0
+EMGain			0	1
+# right now, pixels (ccd hardware pixels) or mm
+ActiveRegionUnits	0	pixels
+# npts (x0 y0) (x1 y1) ... (xnpts ynpts)
+ActiveRegion 		0 	9 0 1024 0 106.104 242.441 130.922 469.571 219.27 665.06 364.795 814.852 557.033 908.177 782.164 938.325 1024 0 1024
+

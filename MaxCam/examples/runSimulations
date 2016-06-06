@@ -1,0 +1,64 @@
+#!/bin/bash
+#Simple script to run makeSimulations.cc
+#Use nohup to run in background
+#Inputs:
+#Number : Description                            : Defaults
+### $1  : Type of events                         : anw
+### $2  : Number of events of each type          : 500
+### $3  : Wimp Mass                              : 100e6 GeV
+### $4  : Gain (count / keV)                     : 15
+### $5  : Noise (count / bin)                    : 7.0
+### $6  : Number of pixels per side (square ccd) : 1024
+### $7  : Number of bins per side                : 256
+### $8  : Width of ccd image (mm)                : 0.143*1024
+### $9  : Pressure (torr)                        : 75.0
+### $10 : Spacer diameter (mm)                   : 2.5
+### $11 : Spacer spacing (mm)                    : 20.0
+### $12 : Diffusion constant term (mm^2)         : 0.25
+### $13 : Diffusion dz term (mm)^2/cm drift      : 0.0419
+#Outputs:
+# I. dmtpc_runYYMMDD_runN_sim.root
+###Holds:
+### A. DmtpcDataset "dmtpc"
+### B. Tree holding input parameters "params" 
+### C. Tree holding simulated data "Simulation"
+# II. dmtpc_runYYMMDD_runN_sim.txt
+### A. Text file showing input parameters to quickly review
+###    what was done in each run
+# III. simrunYYMMDD.log
+### A. Output log file (one per day)
+###Number of events
+if [[ -n $4 && $4 -gt 0 ]]; then
+    export NEVENTS=$4
+else 
+    export NEVENTS=500
+fi
+###Wimp Mass
+    export WIMPMASS=100000000
+###Gain
+    export GAIN=15
+###Noise
+    export NOISE=7
+###Number of pixels per side
+    export NPIX=1024
+###Bins per side
+    export NBINS=256
+###Width of region of interest
+    export WIDTH=146.432
+###Pressure
+    export PRESSURE=75
+###Spacer diameter
+    export SPACER_DIAMETER=2.5
+###Spacer spacing\
+    export SPACER_SPACING=20.0
+###Diffusion constant term
+    export DIFF_CONST_TERM=0.25
+###Diffusion Dz term
+    export DIFF_DZ_TERM=0.0419 #CF-4
+    ##export DIFF_DZ_TERM=0.08 #pure xenon
+
+root -l -b -q "makeSimulations.cc++($NEVENTS,\"$(date +%y%m%d)\",\"$1\",\"$2\",\"$3\",$GAIN,$NOISE,$WIMPMASS,$NPIX,$NBINS,$WIDTH,$PRESSURE,$SPACER_DIAMETER,$SPACER_SPACING,$DIFF_CONST_TERM,$DIFF_DZ_TERM)" >> simruns$(date +%y%m%d).log 2>&1 &
+
+wait
+
+echo "Run Finished!"

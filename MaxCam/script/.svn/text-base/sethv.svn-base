@@ -1,0 +1,54 @@
+#!/usr/bin/perl
+
+use DM;
+
+use CGI ':standard';
+use CGI::Carp qw(fatalsToBrowser);
+
+$|=1;
+
+print "Content-type:text/html\n\n";
+
+if (!param("type")) {
+  die "Unknown HV type \n";
+}
+my $type = param("type");
+
+if (!param("value")) {
+  die "Unknown value \n";
+}
+my $value = param("value");
+
+
+
+if ( $value>5000 && $type eq "wire_hv") {
+  die "Voltage too large";
+}
+
+$db_handle = DM->connect
+    or die("Could not connect! \n");
+
+
+
+my $table = $type;
+
+print $table;
+
+$sql = "SELECT * FROM $table ORDER BY timestamp DESC LIMIT 1";
+$statement = $db_handle->prepare($sql) or die "Couldn't prepare query '$sql': $DBI::errstr\n";
+$statement->execute() or die "Couldn't execute query '$sql': $DBI::errstr\n";
+my $row_ref = $statement->fetchrow_hashref();
+
+$sql = "INSERT INTO $table (value, rms, setval) values ( $row_ref->{value}, $row_ref->{rms}, $value )";
+$statement = $db_handle->prepare($sql) or die "Couldn't prepare query '$sql': $DBI::errstr\n";
+$statement->execute() or die "Couldn't execute query '$sql': $DBI::errstr\n";
+
+print "$row_ref->{timestamp}  value=$row_ref->{setval}";
+
+$db_handle->disconnect();
+
+print <<EOF;
+<META HTTP-EQUIV="Refresh"  CONTENT="0;
+URL=http://mitdm10.mit.edu">
+EOF
+

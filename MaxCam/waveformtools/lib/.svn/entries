@@ -1,0 +1,41 @@
+8
+
+dir
+1
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft/MaxCam/waveformtools/lib
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft
+
+
+
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+d3d5ed4b-f520-4247-9981-1203ad1f38be
+
+.nfs0000000008528049000002b5
+file
+
+
+
+
+2014-03-24T16:30:13.000000Z
+fb038f9882a7c7c289f8ee5075249431
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+has-props
+

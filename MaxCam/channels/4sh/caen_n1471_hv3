@@ -1,0 +1,7 @@
+serial = /dev/ttyUSB0
+hvType = caen
+readChannel = 3
+writeChannel = 3
+
+
+

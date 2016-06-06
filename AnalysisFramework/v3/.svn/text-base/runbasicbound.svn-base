@@ -1,0 +1,24 @@
+#!/bin/bash
+
+#takes an upper and lower bound and runs cleanData and quickRecon 
+#on all runs bounded by those numbers, inclusive.
+#Usage, e.g.: ./runbasicbound 00040 00045 will run over runs 
+#40,41,42,43,44, and 45
+
+export skimdir='./skim/'
+export sumdir='./skim/sum/'
+
+for i in `jot -w %05d - $1 $2 1`
+do
+    echo dmtpc_run$i.root > files$i.txt
+    echo ./ > keys$i.txt
+    
+    ./bin/cleanSkim files$i.txt keys$i.txt $skimdir >> run$i.log 2>&1 &
+    wait
+    ./bin/createSummary dmtpc_run$i $skimdir $sumdir >>run$i.log 2>&1 &
+    wait 
+
+    rm -f files$i.txt
+    rm -f keys$i.txt
+    echo "Processing on run $i Done"
+done

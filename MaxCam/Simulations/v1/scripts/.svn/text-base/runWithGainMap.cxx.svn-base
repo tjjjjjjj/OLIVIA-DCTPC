@@ -1,0 +1,44 @@
+//Root files
+#include "TSystem.h"
+#include "TROOT.h"
+#include "TString.h"
+
+//MC files
+#ifdef EXEC
+#include "RunGenerator.hh"
+#else
+#include "code/RunGenerator.hh"
+#endif
+#include <iostream>
+
+
+#ifdef EXEC
+int main(int nargs, char* argv[])
+{
+  if (nargs < 4) {
+    cout << "Usage: filename, map file, map name"<<endl;
+    return 1;
+  }
+  TString filename = argv[1];
+  TString mapfile = argv[2];
+  TString mapname = argv[3];
+
+#else
+int runWithGainMap(TString filename, TString mapfile, TString mapname)
+{
+#endif
+  using std::cout;
+  using std::endl;
+  cout <<"Starting run"<<endl;
+  RunGenerator rungen;
+
+  rungen.readParametersFromFile(filename);
+  rungen.findFileNames();
+  rungen.initialize();
+  rungen.runWithGainMap(false,mapfile,mapname);
+  rungen.outputTextFile(true,filename);
+  cout <<"Finished!"<<endl;
+  return 0;
+}
+
+

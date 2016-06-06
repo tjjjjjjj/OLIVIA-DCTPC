@@ -1,0 +1,7 @@
+#!/bin/bash
+touch files.txt && rm files.txt
+touch keys.txt && rm keys.txt
+echo dmtpc_run$1.root > files.txt
+echo $2  > keys.txt
+rm -f skim/dmtpc_run${1}skim.root
+

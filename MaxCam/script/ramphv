@@ -1,0 +1,31 @@
+#!/usr/bin/perl
+
+use lib "/usr/local/apache2/cgi-bin";
+use DM;
+
+
+use CGI qw(:standard *table);
+use CGI::Carp qw(fatalsToBrowser);
+
+print "Content-type:text/html\n\n";
+
+
+my $status = param("status");
+
+
+if(int(DM->check_hold())==1)
+{
+  die "hold in place"; 
+}
+
+$db = DM->connect;
+
+
+$sql = "INSERT INTO hvstatus (setval) values ( $status )";
+print "$sql\n";
+$statement = $db->prepare($sql) or die "Couldn't prepare query '$sql': $DBI::errstr\n";
+$statement->execute() or die "Couldn't execute query '$sql': $DBI::errstr\n";
+
+
+$db->disconnect();
+

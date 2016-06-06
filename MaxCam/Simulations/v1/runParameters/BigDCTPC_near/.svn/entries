@@ -1,0 +1,64 @@
+8
+
+dir
+229
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft/MaxCam/Simulations/v1/runParameters/BigDCTPC_near
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft
+
+
+
+2015-04-10T19:23:33.502729Z
+229
+dctpc
+
+
+svn:special svn:externals svn:needs-lock
+
+chamberProperties.temp
+file
+230
+
+
+
+2015-04-10T20:08:48.000000Z
+f56f00187bc92108829f7e0284771ed5
+2015-04-10T20:21:01.839268Z
+230
+dctpc
+
+runProperties.temp
+file
+230
+
+
+
+2015-04-10T20:10:06.000000Z
+3a9f6127d16be4bfff80542e7da0849d
+2015-04-10T20:21:01.839268Z
+230
+dctpc
+
+cameraProperties0.temp
+file
+230
+
+
+
+2015-04-10T20:07:20.000000Z
+38a691f8e45095483fb48e9c7d96fc7e
+2015-04-10T20:21:01.839268Z
+230
+dctpc
+
+fileManager.temp
+file
+
+
+
+
+2015-04-10T19:40:33.000000Z
+8ddd04ea8e19c9b039c93baf8367848e
+2015-04-10T19:23:33.502729Z
+229
+dctpc
+

@@ -1,0 +1,79 @@
+8
+
+dir
+1
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft/MaxCam/waveformtools
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft
+
+
+
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+d3d5ed4b-f520-4247-9981-1203ad1f38be
+
+include
+dir
+
+DmtpcWaveformTools.cc
+file
+
+
+
+
+2014-03-24T16:30:13.000000Z
+fad402f142809fa2979034b0fb50de9f
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+gui
+dir
+
+lib
+dir
+
+src
+dir
+
+CVS
+dir
+
+DmtpcWaveformTools.hh
+file
+
+
+
+
+2014-03-24T16:30:13.000000Z
+bc962fdf0661fd83386d42605ada1ee1
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+Makefile
+file
+
+
+
+
+2014-03-24T16:30:13.000000Z
+d3aa013b284495e77d2ce6d618401e8c
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+

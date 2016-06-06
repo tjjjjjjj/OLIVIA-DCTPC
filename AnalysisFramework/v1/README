@@ -1,0 +1,93 @@
+**********************************
+***                            ***
+***  DMTPC Analysis Verson 1   ***
+***                            ***
+**********************************
+
+The basic principle of this analysis framework is that each task of
+analysis should be a module that can be swapped out and exchanged with
+another module to test the efficacy of each module. To that end, in this
+directory the user will find a number of ROOT scripts (".C" files). Each
+of these scripts accomplishes one task, e.g. cleaning the images or
+performing a fast reconstruction. Each script is given a "key", a single
+string that is uniquely linked to that task. This allows the scripts
+(with the exception of a data selection script) to share a common
+structure.
+
+
+SYSTEM REQUIREMENTS:
+This framework depends on the DMTPC MaxCam software. There is a
+rootlogon.C file in the directory, please insert the correct path to
+MaxCam.so for your system. This software should be compatible with ROOT
+5.14+.  
+* Note:  we see problems with ROOT 5.20 and above.  We recommend that you
+use 5.14, though the code has been mildly tested with 5.14 to 5.18.
+
+
+INPUTS: 
+Each module script takes three inputs: a list of the raw data root files
+to analyse, a list of keys, and a directory name. The directory name
+should be the directory into which the current script stores its
+output. The directories must exist before running the script.
+
+OUTPUTS:
+Each module creates a root tree with the name of the tree being the key
+of that module. It outputs this tree into a file whose name is the same
+as the input raw data file, with ".root" being replaced by
+"[key].root". Additionally, the module should add to the end of the key
+file the output directory and the key.
+
+LOOPS:
+Each module has two loops; first over the files passed to it, and then
+over each event in the tree in the file. The output is stored file by
+file, so that each input ROOT file has one output ROOT file associated
+with it. Note that IN NO CASE should events be deleted from the tree. If
+no analyzed data is to be saved for that event, the user should simply
+store a 0 or a null pointer.
+
+KEY FILE FORMAT: 
+The key file should be in the following format. On the first line should
+be the directory that contains the raw data files. On each subsequent
+line, there should be two entries separated by a tab. The first is a
+directory, the second a key. The directory should be the directory where
+the script associated with that key outputs. 
+
+ROOT FILE LIST FORMAT:
+The files should be listed one to a line, with no associated directory
+info. (see KEY FILE FORMAT)
+
+RUNNING:
+Each module can be run individually in root by typing, for example,
+'.L cleanSkim.C+' and then 'cleanSkim()'. There are three scripts that
+will run cleanSkim over several runs: runbasic, runbasiclist, and
+runbasicbound. runbasic takes one argument, the five digit run number of
+a run. runbasiclist takes several five digit run numbers. The total
+number of runs does not need to be specified. runbasicbound takes two
+arguments and loops over all the runs indicated by those bounds,
+inclusive. 
+
+CLEANSKIM:
+Input variables: file with run list, file with keys, output directory
+
+This module takes the raw images, creates a background image out of
+empty images from the run, subtracts the background and kills any hot
+pixels. It also checks for sparks. Then a loose pattern recognition
+algorithm is run over the images, and any images with interesting
+features are skimmed out into a separate file, including 1/100 blank
+images as a prescale.  The module also puts out a file ending in
+bias.root which contains the background image.
+
+SKIMMING:
+Any module after cleanSkim (that is, all of them) should have keys that
+start with 'sk'. For example, a sorting module might have the key
+'sksort'. This is to indicate that the module should be run over the
+skimmed file and not the raw data.
+
+
+SOME INSTALLATION/RUNNING NOTES
+* Need to create the ./skim directory in order for cleanSkim.C to 
+  save the output skim files.  If ./skim does not exist then
+  cleanSkim() fails.
+
+
+Questions? Comments? Offers of cookies? akaboth@mit.edu

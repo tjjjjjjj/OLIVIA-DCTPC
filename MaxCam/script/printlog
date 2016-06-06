@@ -1,0 +1,29 @@
+#!/usr/bin/perl
+
+use CGI ':standard';
+use CGI::Carp qw(fatalsToBrowser);
+print "Content-type:text/html\n\n";
+
+my $which = param("which"); 
+my $bytes = param("bytes"); 
+
+my $cmd = "cat"; 
+if (int($bytes) > 0)
+{
+  $cmd = "tail -c $bytes"; 
+}
+
+print("<pre>"); 
+if ($which eq "slow")
+{
+  exec("tail -c 10000 ../html/tmp/nohup.out");
+}
+elsif ($which eq "press")
+{
+  exec("tail -c 10000 ../html/tmp/presscontrol.out"); 
+}
+elsif ($which eq "daq")
+{
+  exec("tail -c 10000 ../html/tmp/daq.out");
+}
+print("</pre>"); 

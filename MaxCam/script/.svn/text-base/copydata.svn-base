@@ -1,0 +1,24 @@
+#!/usr/bin/perl
+
+
+print "Content-type:text/html\n\n";
+	    
+print "Coping files:\n";
+
+
+my @files = ();
+opendir(DIR, "/data");
+@files = grep(/\.root$/, readdir(DIR));
+closedir(DIR);
+
+foreach $file (@files) {
+   $filecopy="/mnt/dmtpcdata01/data/$file";
+   unless (-e $filecopy) {
+     print "<p> $file </p>";
+     system("cp -p /data/$file $filecopy &");
+   }
+}
+
+    
+print "<p>DATA BEING COPIED TO /export/dmtpcdata01/data - DO NOT RELOAD THIS PAGE!!</p>";
+

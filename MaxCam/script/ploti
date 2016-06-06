@@ -1,0 +1,60 @@
+#!/usr/bin/perl
+
+use DM;
+use GetTime;
+use CGI ':standard';
+use CGI::Carp qw(fatalsToBrowser);
+use Chart::Graph::Gnuplot qw(&gnuplot);
+
+$|=1;
+
+print "Content-type:text/html\n\n";
+$Chart::Graph::Gnuplot::gnuplot  = "/usr/bin/gnuplot";
+$Chart::Graph::Gnuplot::ppmtogif = "/usr/bin/ppmtogif";
+
+
+$db_handle = DM->connect
+    or die("Could not connect! \n");
+
+$tmpdir="$DM::APACHE_ROOT/$DM::HTMLDIR/tmp";
+$url="/tmp";
+my $minTime= GetTime->getTime(6);
+
+my @pdata;
+my @perrdata;
+my @pset;
+my @tsdata;
+
+
+$sql = "SELECT * FROM wire_i WHERE timestamp>'$minTime' ORDER by timestamp ASC";
+$statement = $db_handle->prepare($sql) or die "Couldn't prepare query '$sql': $DBI::errstr\n";
+$statement->execute() or die "Couldn't execute query '$sql': $DBI::errstr\n";
+while ($row_ref = $statement->fetchrow_hashref())
+{
+  push( @tsdata,   $row_ref->{timestamp});
+  push( @pdata,    $row_ref->{value});
+  push( @pset,     $row_ref->{setval});
+  push( @perrdata, $row_ref->{rms});
+}
+my $count = @pdata;
+
+my $imagename = "i_tmp"; 
+$imagename.=time(); 
+
+if ($count >0){
+gnuplot({"title"=>"Chamber Current Monitor", "output file"=>"$tmpdir/$imagename.gif", "output type"=>"gif",
+	 "x-axis label"=>"Time Stamp", "y-axis label"=>"Anode current (mA)",
+	 "xdata"=>"time", "timefmt"=>"%Y-%m-%d %H:%M:%S",
+	 "extra_opts"=>join("\n","set grid")  },
+	 [{"title"=>"anode current", "style"=>"yerrorbars", "type"=>"columns", "using"=>"1:3:4"}, \@tsdata, \@pdata, \@perrdata  ]
+       );
+
+print "$url/$imagename.gif";
+}else{
+
+print "gfx/norecent.png";
+}
+
+$db_handle->disconnect();
+
+

@@ -1,0 +1,52 @@
+8
+
+dir
+1
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft/MaxCam/channels
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft
+
+
+
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+d3d5ed4b-f520-4247-9981-1203ad1f38be
+
+OWL
+dir
+
+CVS
+dir
+
+10L
+dir
+
+README
+file
+
+
+
+
+2014-03-24T16:30:32.000000Z
+02fdc7b352d17cd8441df90facdfbf98
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+4sh
+dir
+

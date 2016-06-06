@@ -1,0 +1,10 @@
+#!/bin/csh -v
+
+rm /temp/*
+rm /short/*
+
+#cat files.txt >>& /logs/quickSkim.log 
+#/home/raytheon/work/code/v4/bin/convert_skim -d 0 -c seed_580_28mm.cfg >>& /logs/convert_skim.log
+
+
+/home/raytheon/work/code/v4/bin/convert_skim -d 0 >>& /logs/convert_skim.log

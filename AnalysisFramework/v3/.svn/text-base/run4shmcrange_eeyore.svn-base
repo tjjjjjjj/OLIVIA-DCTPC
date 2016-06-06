@@ -1,0 +1,33 @@
+#!/usr/bin/python
+
+# take a min and a max run
+#takes a list of five-digit run number and runs cleanData and quickRecon 
+#on all of them.
+#Usage: ./runbasiclist aaaaa bbbbb ccccc [...] nnnnn
+
+import sys
+import os
+
+print "len(sys.argv) = ", len(sys.argv)
+if len(sys.argv) < 3:
+    print "error, must provide a min and max run number"
+    sys.exit()
+    
+minnum = int(sys.argv[1])
+maxnum = int(sys.argv[2])
+
+print "min, max = ", minnum, ", ", maxnum
+
+for ii in range(minnum,maxnum+1):
+   runstr = "%05d" % ii
+   #print runstr
+   cmd = "./run4shmc_eeyore "+runstr
+   print cmd
+   os.system(cmd)
+
+#until [ -z $1 ]
+#do
+#  ./run4shmc_eeyore $1
+#  echo "Processing on run $1 Done"
+#  shift
+#done

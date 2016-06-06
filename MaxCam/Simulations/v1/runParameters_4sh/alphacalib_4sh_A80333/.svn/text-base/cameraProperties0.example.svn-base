@@ -1,0 +1,22 @@
+# Properties of Camera 0
+SerialNumber            0       A80333
+CameraPosition		0	0
+CameraBins		0	256	256
+# this is ( 0.169 mm/px )x1024
+#ImageWidths            0       173.4 173.4
+# this is ( 0.179 mm/px )x1024
+#ImageWidths            0       183.3 183.3
+# this is ( 0.160 mm/px )x1024 SWH-08232012
+ImageWidths             0       163.84  163.84
+PixelsPerBin		0	4
+ReadNoise		0 	13.23	
+Bias			0 	1000	
+#Gain			0	20
+##A80333: GAIN MAP GAIN: 35.2357+/-0.21819
+Gain			0	35.2357
+NoiseFactor		0	1
+DarkCurrent		0	0
+EMGain			0	1
+ActiveRegionUnits	0	pixels
+ActiveRegion		0	9 0 1024 0 84.8489 243.628 113.23 470.822 205.659 665.07 355.419 812.254 551.625 901.677 780.019 926.841 1024 0 1024
+

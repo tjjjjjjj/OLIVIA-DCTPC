@@ -1,0 +1,15 @@
+#! /usr/bin/perl
+
+use DM;
+use CGI ':standard'; 
+use CGI::Carp qw(fatalsToBrowser); 
+use Socket; 
+
+print "Content-type:text/html\n\n";
+
+$packed_ip = gethostbyname($DM::HOST); 
+
+if ($ENV{'REMOTE_ADDR'} eq inet_ntoa($packed_ip))
+{
+  print "<a href='#' onClick='\$.get(\"../cgi-bin/togglehold\");'><img name='hold' onmouseover=\"document.hold.src='gfx/hold_lit.png'\" onmouseout=\"document.hold.src='gfx/hold.png'\" src='gfx/hold.png'></a>";
+}

@@ -1,0 +1,152 @@
+#! /usr/bin/perl
+use DM;
+use Digest::MD5 qw(md5_hex); 
+use CGI ':standard';
+use CGI::Carp qw(fatalsToBrowser);
+use Shift; 
+
+sub login_error
+{
+  my $msg = @_[0]; 
+  print header(); 
+  print "<b>$msg</b>";
+  print "<br><a href='shiftlog.html'>Try Again</a>";
+  exit; 
+}
+sub register_error
+{
+  my $msg = @_[0]; 
+  print header(); 
+  print "<b>$msg</b>";
+  print "<br><a href='shift_register.html'>Try Again</a>";
+  exit; 
+}
+
+#this perl script implements the dmtpc shift system
+
+
+my $salt = $Shift::SALT; 
+
+if (!param("what")){login_error "no action";}
+
+$what = param("what");
+
+
+if ($what eq "register")
+{
+	if (!param("login")){register_error "no login";}
+	if (!param("pw0")){register_error "no password";}
+	if (!param("pw1")){register_error "no confirm password";}
+	if (!param("email")){register_error "no email";}
+	if (!param("cellphone")){register_error "no cellphone";}
+	if (!param("name")){register_error "no name";}
+
+	my $login = param("login"); 
+
+	if (length($login) == 0 )
+	{
+	  register_error("Trivial Login"); 
+	}
+	$db = DM->connect or die ("could not connect!\n"); 
+
+	$sql = "SELECT COUNT(1) as 'N' FROM shifters WHERE login='$login'";
+	$stmt = $db->prepare($sql) or die {"fail: $sql\n"}; 
+	$stmt->execute() or die {" fail exec $sql\n"};
+	my $row = $stmt->fetchrow_hashref(); 
+	if (int($row->{N})>0)
+	{
+	  register_error {"Duplicate login!!!"}; 
+	}
+
+	my $pw0 = param("pw0"); 
+	my $pw1 = param("pw1"); 
+
+	if (not($pw0 eq $pw1)) { register_error "passwords don't match"};
+
+	my $hash = md5_hex($pw0.$salt); 
+	my $email = param("email"); 
+
+	if (index($email,"@") == -1) { register_error "email address looks invalid"};
+
+	$cell = param("cellphone"); 
+	if (int($cell) != $cell) {register_error "use only numbers in cell phone field";}
+	if (length($cell)!=10) {register_error "cell phone number must be 10 digits"; } 
+
+	my $provider=param("cellprovider"); 
+
+	my $smsemail = $cell.'@'.$provider;
+	my $name = param("name"); 
+
+	$sql = "INSERT INTO shifters (name,email,sms_email,pwd_hash,cellnum,login) VALUES ('$name','$email','$smsemail','$hash','$cell','$login')"; 
+	$stmt = $db->prepare($sql) or die ("fail: $sql\n"); 
+	$stmt->execute(); 
+
+	print "Content-type:text/html\n\n";
+	print "Great Success";
+}
+elsif ($what eq "login")
+{
+
+	if (!param("login")) { login_error "no login";}
+	if (!param("pw")) { login_error "no password";}
+
+	$db = DM->connect or die ("could not connect!\n"); 
+
+	my $login = param("login"); 
+
+	#Figure out current person on shift... don't do anything if it's the same person
+
+	$sql = "SELECT shifter FROM shifts ORDER BY idx DESC LIMIT 1"; 
+	$stmt = $db->prepare($sql) or die "fail: $sql\n"; 
+	$stmt->execute() or die "fail exec $sql\n"; 
+	my $row = $stmt->fetchrow_hashref(); 
+
+	$sql = "SELECT login FROM shifters WHERE idx = ".$row->{shifter} ;
+	$stmt = $db->prepare($sql) or die "fail: $sql\n"; 
+	$stmt->execute() or die "fail exec $sql\n"; 
+	my $row = $stmt->fetchrow_hashref(); 
+	if ($row->{login} eq $login) { login_error "Already on shift." } ; 
+
+	my $pw = param("pw"); 
+
+	$sql = "SELECT COUNT(1) as 'N' FROM shifters WHERE login='$login'";
+	$stmt = $db->prepare($sql) or die {"fail: $sql\n"}; 
+	$stmt->execute() or die {" fail exec $sql\n"};
+	my $row = $stmt->fetchrow_hashref(); 
+	if (int($row->{N})==0)
+	{
+	  login_error "Invalid user or password. Contact admin to change password or register if you haven't done so."; 
+	}
+	$sql = "SELECT pwd_hash,idx FROM shifters WHERE login='$login'"; 
+	$stmt = $db->prepare($sql) or die "fail: $sql\n"; 
+	$stmt->execute() or die "fail exec $sql\n"; 
+
+	my $row = $stmt->fetchrow_hashref(); 
+
+	if (not ($row->{pwd_hash} eq md5_hex($pw.$salt)))
+	{
+	  login_error "Invalid user or password. Contact admin to change password or register if you haven't done so."; 
+	}
+
+
+	#sign last person out
+	$sql = "UPDATE shifts SET timeout = NOW() ORDER by idx DESC LIMIT 1"; 
+	$stmt = $db->prepare($sql) or die "fail: $sql\n"; 
+	$stmt->execute() or die "fail exec $sql\n"; 
+
+	#sign new person in 
+	$sql = "INSERT INTO shifts (shifter,timein) VALUES(".$row->{idx}." , NOW())"; 
+	$stmt = $db->prepare($sql) or die "fail: $sql\n"; 
+	$stmt->execute() or die "fail exec $sql\n"; 
+
+	print "Content-type:text/html\n\n";
+	print "Login Successful";
+}
+
+elsif ($what eq "get")
+{
+	if (!param("query")){die "no query\n" }; 
+	$q = param("query"); 
+	print "Content-type: text/html\n\n"; 
+	print current_shifter_get $q; 
+}

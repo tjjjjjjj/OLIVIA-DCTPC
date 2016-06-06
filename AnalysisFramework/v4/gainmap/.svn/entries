@@ -1,0 +1,57 @@
+8
+
+dir
+1
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft/AnalysisFramework/v4/gainmap
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft
+
+
+
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+d3d5ed4b-f520-4247-9981-1203ad1f38be
+
+CVS
+dir
+
+gainMap18May.root
+file
+
+
+
+
+2014-03-24T16:30:08.000000Z
+b9cad7ab7a00688d5ad5e39c19ab234e
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+has-props
+
+wr5_gainmaps.root
+file
+
+
+
+
+2014-03-24T16:30:08.000000Z
+67e72e75130ada550a3b61c26a6a1499
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+has-props
+

@@ -1,0 +1,44 @@
+#!/usr/bin/python
+
+import os, sys
+import numpy
+
+# Alpha energy
+minE = 3500. # keV
+maxE = 5000.
+nE   = 4
+alphaE = numpy.linspace(minE, maxE, nE)
+
+# Read noise
+minReadNoise = 8. # ADU/pix (rms)
+maxReadNoise = 12.
+nReadNoise   = 5
+readnoise = numpy.linspace(minReadNoise, maxReadNoise, nReadNoise)
+
+# ccdgain
+minCcdGain = 5.  # ADU/keV
+maxCcdGain = 10.
+nCcdGain   = 6
+ccdgain    = numpy.linspace(minCcdGain, maxCcdGain, nCcdGain)
+
+print alphaE
+print readnoise
+print ccdgain
+
+type = "alpha"
+nevt = 1000
+pressure = 75
+
+cmd_template = "./scripts/SimDriver --type ?TYPE --nevt ?NEVT --pressure ?PRESSURE --fixenergy ?FIXENERGY --gain ?GAIN --readnoise ?READNOISE"
+
+for ee in alphaE:
+    for rn in readnoise:
+        for cg in ccdgain:
+            cmd = cmd_template.replace("?TYPE", type)
+            cmd = cmd.replace("?NEVT", str(nevt))
+            cmd = cmd.replace("?FIXENERGY", str(ee))
+            cmd = cmd.replace("?PRESSURE", str(pressure))
+            cmd = cmd.replace("?READNOISE", str(rn))
+            cmd = cmd.replace("?GAIN", str(cg))
+            print cmd
+            os.system(cmd)

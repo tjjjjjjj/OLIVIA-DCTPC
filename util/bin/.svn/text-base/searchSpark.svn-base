@@ -1,0 +1,171 @@
+#!/usr/bin/python
+import sys,os,__main__,commands
+tmp_argv=sys.argv
+sys.argv=[]
+from ROOT import gSystem
+sys.argv=tmp_argv
+gSystem.Load("libMaxCam")
+gSystem.Load("libWaveformTools")
+from ROOT import DmtpcSkimDataset,TCanvas,gErrorIgnoreLevel
+gErrorIgnoreLevel=8000
+
+VIEWER=False
+LOG='%s/spark_list.txt' % os.environ['PWD']
+LOG_RUN='%s/run_list.txt' % os.environ['PWD']
+
+def singleProcess(nprocs=1):
+    # Only 1 session be running. Die if found one already running.
+    out=commands.getoutput("ps aux | grep %s" % __main__.__dict__['__file__'])
+    if len(out.split('\n'))>=int(nprocs):
+        print "Process already running... exit!"
+        print out
+        return  False
+    else:
+        return True
+
+
+def main(run=0):
+
+    fname1="%s/skim/dmtpc_DC_%05dskim.root" % (os.environ['DCTPC_DATA_DIR'],run)
+    fname2="%s/data/dmtpc_DC_%05d.root" % (os.environ['DCTPC_DATA_DIR'],run)
+    for fname in [fname1,fname2]:
+        if not os.path.isfile(fname):
+            sys.stderr.write('Error: input file missing %s\n' % fname)
+            return False
+
+    fViewer=TCanvas("fViewer","",600,500)
+    finished_runs=[]
+    if os.path.isfile(LOG_RUN):
+        finished_runs=[int(x) for x in open(LOG_RUN,'r').read().split(None) if x.isdigit()]
+        if run in finished_runs:
+            print 'Run %d already searched! Skipping...' % run
+            return False
+    finished_runs.append(run)
+
+    print 'Analyzing run=%d...' % run
+    event_list={}
+    if os.path.isfile(LOG):
+        contents=open(LOG,'r').read().split('\n')
+        for line in contents:
+            if not len(line.split(None))==2:
+                continue
+            run_id=int(line.split(None)[0])
+            event_id=int(line.split(None)[1])
+            if not run_id in event_list.keys():
+                event_list[run_id]=[]
+            event_list[run_id].append(event_id)    
+
+    d=DmtpcSkimDataset()
+    d.openRootFile(fname1)
+    d.loadDmtpcEvent(True,fname2)
+    d.getEvent(0)
+
+    if not d.tree():
+        print 'Error: file empty!'
+        del d
+        return False
+
+    num_events=d.tree().GetEntries()
+    fraction=num_events/100.
+    fraction_counter=0
+    flusher=[' | ',' \\ ','---',' / ',' | ',' \\ ','---',' / ']
+    num_track=0
+    for x in xrange(d.tree().GetEntries()):
+        
+        if (x-fraction_counter*fraction)>=0:
+            sys.stdout.write('Searching... %3s (%3d%% done)\r' % (flusher[fraction_counter%(len(flusher))],fraction_counter))
+            fraction_counter+=1
+            sys.stdout.flush()
+
+        d.getEvent(x)
+        fEventID=d.event().eventNumber()
+        fRunNumber=d.event().runNumber()
+        fNumTracks=d.event().ntracks(0)
+        fSpark=d.event().spark(0)
+        fNumWFs=d.orig_event().scopeData().GetEntries()
+        
+        if fSpark:        
+            num_track+=1
+            if not fRunNumber in event_list.keys():
+                event_list[fRunNumber]=[]
+            if not fEventID in event_list[fRunNumber]:
+                event_list[fRunNumber].append(fEventID)
+                print '%-30s' % 'Found a new spark!'
+
+        if not VIEWER:
+            continue
+
+        fViewer.cd()
+        fImageCCD=d.event().getImage()
+        fImageCCD.Draw("COLZ")
+        fViewer.Modified()
+        fViewer.Update()
+
+        out=sys.stdin.readline().replace('\n','')
+        if out.lower() in ['n','no','exit','quit']:
+            break
+    print 'Finished ... found %d sparks.\n' % num_track
+    del fViewer
+    del d
+    fout=open(LOG,'w')
+    runs=event_list.keys()
+    runs.sort()
+    for r in runs:
+        events=event_list[r]
+        events.sort()
+        for event in events:
+            fout.write('%5d %d\n' % (r,event))
+    fout.close()
+    if commands.getoutput('ls -l %s' % LOG).find(os.environ['USER'])>=0:
+        os.system('chmod 664 %s' % LOG)
+
+    fout=open(LOG_RUN,'w')
+    finished_runs.sort()
+    for r in finished_runs:
+        fout.write('%d\n' % r)
+    fout.close()
+    if commands.getoutput('ls -l %s' % LOG_RUN).find(os.environ['USER'])>=0:
+        os.system('chmod 664 %s' % LOG_RUN)    
+    return True
+
+if __name__=="__main__":
+
+    if not singleProcess(4):
+        sys.exit(1)
+
+    run_start=0
+    run_end=0
+    if not len(sys.argv)<4:
+        sys.stderr.write('Usage: %s [$RUN_START $RUN_END]\n\n' % __main__.__file__)
+        sys.exit(1)
+    elif len(sys.argv)==1:
+        runs=[int(x.replace('dmtpc_DC_','').replace('skim.root','')) for x in os.listdir('%s/skim/' % os.environ['DCTPC_DATA_DIR']) if x.endswith('skim.root')]
+        runs.sort()
+        runs.reverse()
+        for r in runs:
+            if main(r):
+                break
+
+    elif len(sys.argv)==2:
+        try:
+            run_start=int(sys.argv[1])
+            run_end=int(sys.argv[1])
+            for x in xrange(run_end-run_start+1):
+                main(x+run_start)
+        except ValueError:
+            sys.stderr.write('Usage: %s $RUN_START [$RUN_END]\n\n' % __main__.__file__)
+            sys.exit(1)
+
+    elif len(sys.argv)==3:
+        try:
+            run_start=int(sys.argv[1])
+            run_end=int(sys.argv[2])
+            for x in xrange(run_end-run_start+1):
+                main(x+run_start)
+        except ValueError:
+            sys.stderr.write('Usage: %s $RUN_START [$RUN_END]\n\n' % __main__.__file__)
+            sys.exit(1)
+    else:
+        sys.stderr.write('Usage: %s $RUN_START [$RUN_END]\n\n' % __main__.__file__)
+        sys.exit(1)
+    sys.exit(0)

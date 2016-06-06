@@ -1,0 +1,52 @@
+Notes on Processing DMTPC Data through Condor
+April 14, 2009
+Jocelyn Monroe
+jmonroe@mit.edu
+
+condor processing location:
+code is set up to submit condor jobs from cockroach.lns.mit.edu
+at /net/cockroach/data02/jocelyn/data_processing_14April2009
+
+directories beneath this / notes:
+projects/DarkMatter/MaxCam
+     contains source code, nb had to modify makefile w.r.t. CVS to 
+     point to correct location of fitsio.h on cockroach (/usr/include 
+     instead of /usr/local/include as on mitbbr00.lns.mit.edu)
+     nb2: MaxCam_linux.so has to be successfully compiled to run the
+     AnalysisFramework code.
+projects/DarkMatter/AnalysisFramework/v1
+     contains data processing code, cleanSkim.C and sortTracks.C,
+     and rootlogon.C to set up root environment.
+     nb: rootlogon.C has to point to version of MaxCam_linux.so 
+     available on /net, and hardcoded paths to MaxCam libraries
+     in .C files also need to point to /net location (set up for
+     cockroach here, this should be fine for most linux machines)
+projects/DarkMatter/AnalysisFramework/v1/scripts
+     contains condor submission scripts, more on this below, start
+     condor jobs from here by running ./submit_condor_jobs.sh run1 run2
+     where run1 and run2 are the first and last run numbers to process
+skim
+     contains skimmed output files, after condor job completes
+sort
+     contains sorted output files after condor job completes
+condor_err
+     contains sterr output of each condor job (title = runnumber.log)
+condor_out
+     contains stout output of each condor job (title = runnumber.out)
+condor_log
+     contains condor log info (e.g. condor job #, run machine IP)
+     (title = runnumber.log)
+
+
+to run:
+1) cd /nt/cockroach/data02/jocelyn/data_processing_14April2009/projects/DarkMatter/AnalysisFramework/v1/scripts
+2) ./submit_condor_jobs.sh run1 run2 
+     -run1 and run2 are the first and last run numbers to process
+     -this script calls make_condor_job.py, which sets up the enviroment
+     and writes the condor job submission file to job_files/condor_spec_runnumber
+     -this script submits the job submission file to condor (condor_submit)
+     with optional user arguments (e.g. Machine != "qweak.lns.mit.edu")
+     nb. all johs doe on qweak for lack of libCint5.14.so
+3) to check on them: condor_q where jmonroe
+4) to check on the cluster: condor_status
+5) output files get moved to the skim/ and sort/ directories when jobs finish

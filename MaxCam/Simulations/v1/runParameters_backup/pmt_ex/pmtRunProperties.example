@@ -1,0 +1,33 @@
+Run Parameters
+===================================
+NumberOfEvents		2
+EventType		alpha
+ProjectileParticle	alpha
+ProjectileMass		4001506
+RecoilParticle		alpha
+RecoilMass		4001506
+SRIMfile		SRIM_He_in_CF4_100Torr
+EnergyOption		fixed
+MinEnergy		100.0
+#MinEnergy		0.0
+MaxEnergy		20000.0
+FixEnergy		4900.0
+PositionOption		fixed
+MinPositionLimits	-73.216	-73.216	0
+MaxPositionLimits	73.216	73.216	200
+FixPosition		0.0	-65.0	75.0
+TimeOption		random
+MinTime			2009	1	1	0	0	0
+MaxTime			2009	12	31	23	59	59
+FixTime			2009	6	1	12	0	0
+DirectionOption		collimated
+SourcePosition		0.0	0.0	0.0
+SourceDirection		0.0	0.5	0.5
+ThetaMax		5
+SpecialOption		none
+FissionSpectrumENDF	none
+TotalCS_ENDF		none
+ElastScatterDCS_ENDF	none
+TimeResolution		15
+#deprecated... use ClockRate in a Scope parameter file (e.g. Scope0.example)
+#TimeResolutionPMT	4  

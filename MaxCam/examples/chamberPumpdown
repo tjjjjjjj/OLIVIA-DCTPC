@@ -1,0 +1,3 @@
+#!/bin/bash
+
+nohup root -l -b -q "vgc402Analog.cxx+()" >> chamberPumpdown.log 2>&1 &

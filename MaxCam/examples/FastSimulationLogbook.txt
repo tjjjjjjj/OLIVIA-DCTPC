@@ -1,0 +1,73 @@
+====================================================
+This logbook is used to document the progress in 
+the Fast Simulation project to be used to 
+optimize the 1 m3 detector design 
+=======================================================
+
+Goal: "one-click" (one shell script command) from simulation 
+      of physics event to production of sensitivity plot, 
+      including reconstruction. 
+
+=======================
+Sub-Projects
+========================
+
+1) Cosmic DM gun 
+   =============
+   Given the detector geometry, generate nuclear recoils inside that volume 
+   uniformly in x, y and z, and taking into account the effects of 
+   daily asymmetry and Maxwell-Bolzman distribution 
+
+   Person Responsible: 
+   Status: 
+
+2) Diffusion
+   =========
+   In reconstruction, parametrize as a function of z the lateral dispersion 
+   of the recoil image seen by the camera 
+
+   Person Responsible: 
+   Status: 
+   Hint: use measurement published in 
+   Observation of the 'head-tail' effect in nuclear recoils of low-energy neutrons, D. Dujmic et al. Aug 2007, Published in Nucl.Instrum.Meth.A584:327-333,2008.
+   and work with Timur: he is doing something similar for his package. 
+
+   Person Responsible: 
+   Status: 
+
+
+3) Intruduce CCD camera in reconstruction. 
+   =======================================
+   Depending on where the recoil is imaged on the mesh, it will be in 
+   one or another camera's filed of view. Start with one camera and 
+   then grow from there to a tyling concept. 
+   For each camera, introduce the fact that light efficiency depends on R 
+   See for example Hermann's presentation in 
+       http://dmtpc.mit.edu/MaKaC/conferenceDisplay.py?confId=38
+   page 7 or 9 (relative illumination)
+   Later on we will have to introduce some distorsions too 
+
+   Person Responsible: 
+   Status: 
+
+4) Background simulation 
+   ======================   
+   The limits we will be able to place on physics depend very much on 
+   the level of background in the chamber. 
+   The following backgrounds will have to be implemented: 
+
+   a) alpha particles 
+   b) electrons 
+
+   For each background we will have to specify: 
+   - where the particle was generated (usually randomly on the surface of some detector component)
+   - probability of being generated (some normalization wrt DM recoils) 
+
+   Person Responsible: 
+   Status: 
+    
+5) Your ideas go here
+   ==================
+
+   Person Responsible: 
+   Status: 

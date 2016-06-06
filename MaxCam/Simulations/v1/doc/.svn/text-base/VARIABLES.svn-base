@@ -1,0 +1,9 @@
+// a very incomplete list of mc variables
+// please add as you see fit
+
+=== "Simulation" Tree ===
+projPhi:  angle of the projectile
+phi:      recoil angle (purely kinematic)
+trackPhi: recoil angle including the effect of straggling 
+          This is the axis along which the cluster is generated
+phi = 0 points along the +x axis and increases counter-clockwise

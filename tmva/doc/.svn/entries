@@ -1,0 +1,82 @@
+8
+
+dir
+1
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft/tmva/doc
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft
+
+
+
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+d3d5ed4b-f520-4247-9981-1203ad1f38be
+
+v524
+dir
+
+v526
+dir
+
+LICENSE
+file
+
+
+
+
+2014-03-24T16:30:39.000000Z
+7489a3b7b59f3c27f403bdee3daf62e3
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+v528
+dir
+
+index.txt
+file
+
+
+
+
+2014-03-24T16:30:39.000000Z
+15f5df89c33fc0e7704bc84e4e80a798
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+v520
+dir
+
+v530
+dir
+
+README
+file
+
+
+
+
+2014-03-24T16:30:39.000000Z
+a9e24ca44c16907c2e671c464c10f9be
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+v522
+dir
+

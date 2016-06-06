@@ -1,0 +1,21 @@
+* Add button/keyboard shortcut (spacebar?) to append the current event to a playlist file 
+  (as a way to log interesting events while scanning).
+  (similar to how you log data points in xyscan)
+* view all waveforms from a *single* trigger group.
+* for overlays, specify a directory that contains an overlay file for each camera
+  overlay filename contains the ccd SN.  then when an image loads, and overlays are active, 
+  the correct overlay file from that directory is displayed.  
+  In other words, "smart" overlay-to-ccd matching based on serial number
+* Specify overlays from the command line when launching the viewer
+* Implement overlays in the mosaic image (auto-match by serial number and overlay filename?)
+* Display found clusters in mosaic window not just in main window
+* A "help" page that lists all available keyboard shortcuts
+* Keyboard shortcuts appear not to work with X11 on a mac?
+* On "next event", update the waveforms in the "Show All" window
+* By default, on "next event" display the trigger with the highest amplitude (not trigger 0) for the selected Channel.
+* Option for colz to be fixed (as it is now) or dynamic (set on an image-by-image basis -- either with all cameras tied together or each camera allowed to have its own range)
+* show image mosaic in the main frame (with reconstruction info as well)
+* Add timestamp to the image info frame
+
+DONE
+* preserve size of Mosaic window on next event.

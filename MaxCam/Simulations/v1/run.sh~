@@ -1,0 +1,2 @@
+rm output/data/*
+./scripts/runFromFile runParameters/fileManager.temp

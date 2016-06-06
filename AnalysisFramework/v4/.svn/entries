@@ -1,0 +1,222 @@
+8
+
+dir
+1
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft/AnalysisFramework/v4
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft
+
+
+
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+d3d5ed4b-f520-4247-9981-1203ad1f38be
+
+skimstream
+file
+
+
+
+
+2014-03-24T16:30:08.000000Z
+f0b5c79b5df20121baa58c10201a9b96
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+has-props
+
+keys_fresh.txt
+file
+
+
+
+
+2014-03-24T16:30:08.000000Z
+5ab71b9c447739877f90c3ef43601955
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+files.txt
+file
+
+
+
+
+2014-03-24T16:30:08.000000Z
+cd895d55d07032a6dab51ea2619a8de7
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+macros
+dir
+
+src
+dir
+
+keys.txt
+file
+
+
+
+
+2014-03-24T16:30:08.000000Z
+a34bda0ddb5dd3238b6331718ba34442
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+CVS
+dir
+
+stitch
+dir
+
+dmtpc_production_env.sh
+file
+
+
+
+
+2014-03-24T16:30:08.000000Z
+e1c6f57681aba875aa9a635248240030
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+cfg
+dir
+
+skimlist
+file
+
+
+
+
+2014-03-24T16:30:08.000000Z
+c27f9d899d84415f5ffa0f530bb3c869
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+SurfaceRunSensitivityCF.cxx
+file
+
+
+
+
+2014-03-24T16:30:08.000000Z
+d477742b9f8955853ead82df0577f0d2
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+skim
+dir
+
+rootlogon.C
+file
+
+
+
+
+2014-03-24T16:30:08.000000Z
+ebf2be9cbce11e6b2bea95cce3aa0602
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+has-props
+
+doc
+dir
+
+myquickSkim
+file
+
+
+
+
+2014-03-24T16:30:08.000000Z
+f998e1744a9e7e0906089bfb9f7828ff
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+has-props
+
+bin
+dir
+
+weights
+dir
+
+myconvertSkim
+file
+
+
+
+
+2014-03-24T16:30:08.000000Z
+4497154d004bb71ac56f7839acd71686
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+has-props
+
+gainmap
+dir
+
+mycleanSkim
+file
+
+
+
+
+2014-03-24T16:30:08.000000Z
+bf265f7d68b5e5af990f36fc7d1fdaa4
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+has-props
+
+Makefile
+file
+
+
+
+
+2014-03-24T16:30:08.000000Z
+f52c42882bc6555a883ad8779de58efb
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+seed_cf4_28mm.cfg
+file
+
+
+
+
+2014-03-24T16:30:08.000000Z
+d362851ed74152fc1071907b8f7bfe18
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+rates
+dir
+

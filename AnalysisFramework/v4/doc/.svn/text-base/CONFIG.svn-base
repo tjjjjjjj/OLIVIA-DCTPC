@@ -1,0 +1,337 @@
+()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()
+()()                                                                        ()()
+()()     CleanSkim Configuration Options                                    ()()
+()()                                                                        ()()
+()()          This file describes all the configuration options available   ()()
+()()          for cleanSkim.                                                ()()
+()()                                                                        ()()
+()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()
+
+
+
+blur_amount
+  VALID VALUES: positive double
+  DEFAULT: 0.8
+  DESCRIPTION: 
+    Blur strength for old style blur (used in ci)
+
+bottom_cameras
+  VALID VALUES: comma separated list of camera id's
+  DEFAULT: 100439 
+  DESCRIPTION:
+    Which cameras are on "bottom" (i.e. pointing up)
+
+burnin_distance_thresh
+  VALID VALUES: positive int
+  DEFAULT: 12
+  DESCRIPTION:
+    This sets the size of the region to check for tracks 
+    in the same location  
+
+
+burnin_method
+  VALID VALUES: square, cross, circle 
+  DEFAULT: square
+  DESCRIPTION:
+    The rbi algorithm checks an area of the provided shape forwards
+    and backwards for tracks in the same position. 
+
+
+burnin_num_events
+  VALID VALUES: positive int
+  DEFAULT: 1000 
+  DESCRIPTION: 
+    The rbi algorithm checks this many events ahead or behind 
+    for tracks in the same location
+  
+cluster_find_ad_gradient_blur
+  VALID VALUES: positive double
+  DEFAULT: 2.5
+  DESCRIPTION: 
+    The amount of gaussian blurring applied when creating the gradient
+    for the ad algorithm 
+
+cluster_find_ad_high_thresh
+  VALID VALUES: positive double
+  DEFAULT: 8.5 
+  DESCRIPTION: 
+    The high threshold for the ad algorithm 
+
+cluster_find_ad_k 
+  VALID VALUES: positive double
+  DEFAULT: 25
+  DESCRIPTION: 
+    The edge factor for anisotropic diffusion
+
+cluster_find_ad_lambda 
+  VALID VALUES: double between 0 and 1 
+  DEFAULT: 
+  DESCRIPTION: 
+    The weight factor for anisotropic diffusion
+
+cluster_find_ad_low_thresh
+  VALID VALUES: positive double
+  DEFAULT: 4 
+  DESCRIPTION: 
+    The low threshold for the ad algorithm 
+
+cluster_find_ad_niter
+  VALID VALUES: positive int
+  DEFAULT: 30
+  DESCRIPTION: 
+     The number of iterations of diffusion for the ad algorithm
+
+cluster_find_ad_zero_neg
+  VALID VALUES: 0,1
+  DEFAULT: 1
+  DESCRIPTION: 
+    If this is true, all negatives are 0 before diffusion starts for
+    the ad cluster finding algorithm 
+
+cluster_find_algo
+  VALID VALUES: ci, seed, ad (not enforced)
+  DEFAULT: ci 
+  DESCRIPTION: 
+     List of cluster finding algorithms to use. 
+
+cluster_find_ci_use_gain_map_for_merging
+  VALID VALUES: 0,1
+  DEFAULT: 0
+  DESCRIPTION: 
+    If true and the gain map is available, it will be used for merging for
+    findClustersCI 
+
+cluster_find_seed_blur_radius
+  VALID VALUES: positive int
+  DEFAULT: 4
+  DESCRIPTION:
+    If a gaussian blur is used, this is the radius of the convolu7tion
+
+cluster_find_seed_max_wrong_prob
+  VALID VALUES: positive double
+  DEFAULT: 1e-33
+  DESCRIPTION: 
+    For the seed algorithm, cutoff based on 
+    chisq_cdf of \chi^2 = \Sigma (pixel - image_mean) / image_rms in the unblurred image
+
+cluster_find_seed_min_threshold 
+  VALID VALUES: positive double 
+  DEFAULT: 0.75
+  DESCRIPTION: 
+    The minimum threshold allowed (for seed algorithm)
+
+
+cluster_find_seed_seed_treshold
+  VALID VALUES: positive double
+  DEFAULT: 5.2 
+  DESCRIPTION: 
+    Seed pixel threshold for seed algorithm 
+
+cluster_find_seed_thresh_ring_ratio
+  VALID VALUES: double between 0 and 1 (not enforced) 
+  DEFAULT: 0.75
+  DESCRIPTION:
+    If the seed algorithm is used, this defines the threshold stepping
+
+cluster_join_least_squares_weight
+  VALID VALUES: double
+  DEFAULT: 2
+  DESCRIPTION: 
+    In calculating least squares fits for merging, this is the exponent applied 
+    to the pixel value to compute the weight. 
+
+cluster_join_max_join_residual
+  VALID VALUES: positive double
+  DEFAULT: 5
+  DESCRIPTION: 
+    Used in merging. If one of the two clusters to examine is "linear"
+    then the centroid of the other can't be farther than this away. 
+    If both are, geometric average of both residuals can't be higher 
+    than this value. 
+
+cluster_join_min_rxy_cluster
+  VALID VALUES: double between 0 and 1 
+  DEFAULT: 0.8
+  DESCRIPTION: 
+    Used in newer cluster merging algorithm. A cluster is considered
+    to be "linear" if it has |rxy| > this value. If a cluster is linear
+    its line fit parameters are used to determine if it should be merged 
+    with another cluster. 
+
+cluster_join_min_rxy_global
+  VALID VALUES: double between 0 and 1 
+  DEFAULT: 0.65
+  DESCRIPTION: 
+    Used in cluster merging
+    If neither cluster is "linear", then the combined line fit of the two
+    clusters must have |rxy| > this for merging. 
+
+cluster_join_spacer_width
+   VALID VALUES: positive double
+   DEFAULT: 2
+   DESCRIPTION: 
+      The width of a spacer in sigma. Used in merging to figure out if a spacer
+      is being touched or not. 
+
+cluster_max_sigma
+  VALID VALUES: positive double
+  DEFAULT: 300 
+  DESCRIPTION:
+     Used in findClustersCI to determine maximum threshold for a track
+
+cluster_min_dist
+  VALID VALUES: positive double
+  DEFAULT: 3600 
+  DESCRIPTION: 
+     Actually distance squared; minimum distance to merge 
+     or consider merging, depending on algorithm. 
+
+cluster_min_neighbors_to_keep_pixel
+   VALID VALUES: positive int
+   DEFAULT: 2 
+   DESCRIPTION: 
+      For seed algo, a pixel that's part of the cluster must have at least this many neighbors also part of the cluster
+
+cluster_min_sigma
+  VALID VALUES: positive double
+  DEFAULT: 1.25
+  DESCRIPTION:
+     Used in findClustersCI to determine minimum threshold for a track
+
+cluster_min_size
+  VALID VALUES: positive int
+  DEFAULT: 5
+  DESCRIPTION: 
+    The minimum size of a cluster to be not be vetoed in the ci algorithm. This is 
+    in units of rebinned bins. 
+
+cluster_min_size_unbinned
+  VALID VALUES: positive int
+  DEFAULT: 16
+  DESCRIPTION: 
+    The minimum size of a cluster to be not be vetoed in algorithms that don't rebin (seed, ad)
+
+cluster_neighbors_threshold_for_filling
+  VALID VALUES: positive int 
+  DEFAULT: 4
+  DESCRIPTION: 
+    If a pixel has at least this many neighbors that are part of the cluster, it becomes part of the cluster
+
+cluster_red_threshold:
+  VALID VALUES: positive double 
+  DEFAULT: 3.7
+  DESCRIPTION: 
+    Threshold (in terms of raw image RMS) for the reduced cluster 
+
+fallback_camera_ids:
+  VALID VALUES: comma separated list of camera id's
+  DEFAULT: ""
+  DESCRIPTION:
+    If no camera id is defined in the ccd config, this list is consulted by index to get a camera id. 
+    If no camera id is given here for an index, then the camera id will be "" as before. 
+
+gaussian_blur_amount:
+  VALID VALUES: positive double
+  DEFAULT: 2
+  DESCRIPTION:
+    Sigma for gaussian blur used in algorithms with a gaussian blur
+
+latitude 
+  VALID VALUES: double
+  DEFAULT: 42.373611
+  DESCRIPTION:
+    Latitude of detector (used for cygnus_angle)
+
+longitude 
+  VALID VALUES: double
+  DEFAULT: -71.110556
+  DESCRIPTION:
+    Longitude of detector (used for cygnus_angle)
+
+mc
+  VALID_VALUES: 0,1
+  DEFAULT: 0 
+  DESCRIPTION:
+    Enable this for monte carlo runs 
+
+nokill
+  VALID VALUES: 0, 1
+  DEFAULT: 0 
+  DESCRIPTION:
+    Enable this to turn off hot pixel killer
+
+north_angle
+  VALID VALUES: double 
+  DEFAULT: 240 
+  DESCRIPTION:
+    Angle in degrees that image top differs from North 
+    (used for cygnus_angle)
+
+outlier_factor
+  VALID VALUES: positive double
+  DEFAULT 1.25
+  DESCRIPTION: 
+    Used to determine and kill hot pixels
+
+overscan
+  VALID VALUES: 0,1  
+  DEFAULT: 1
+  DESCRIPTION: 
+    Determines whether or not the overscan is used for normalization. 
+    Even if this is set to true, the preprocessor will disable the
+    overscan if it encounters a run with no overscan saved. 
+
+overscan_spark_cut
+  VALID VALUES: comma separated list of serial-number:value pairs
+  DEFAULT: 081264:-1, 100439:-7.5
+  DESCRIPTION: 
+    Per ccd overscan spark cut values
+   
+spark_cut
+  VALID VALUES: comma separated list of serial-number:value pairs
+  DEFAULT: 1.01 
+  DESCRIPTION: 
+    Per ccd spark cut values; if the ratio of the current image mean
+    to the previous image mean is greater than this value, than the 
+    image is identified as a spark.
+ 
+phi_algorithm
+  VALID VALUES: 1, 2, 3, 4 
+  DEFAULT: 2
+  DESCRIPTION: 
+    Selects the phi algorithm defined in MaxCamClusterImage
+
+range_algorithm
+  VALID VALUES: 1, 2
+  DEFAULT: 1 
+  DESCRIPTION: 
+    Selects the range algorithm defined in MaxCamClusterImage
+
+satThresh
+  VALID VALUES: positive double 
+  DEFAULT: 55000
+  DESCRIPTION:
+    The threshold for the sparkref to kill the pixels for the rest of the run
+
+top_cameras
+  VALID VALUES: comma separated list of camera id's
+  DEFAULT: 081264
+  DESCRIPTION:
+    Which cameras are on "top" (i.e. pointing down)
+
+channel_ids
+  VALID VALUES: comma separated list of scope channel id's
+  DEFAULT: top,bottom,mesh_bottom,mesh_top
+  DESCRIPTION:
+    The names of the scope channels.
+
+channel_types  
+  VALID VALUES: comma separated list of waveform analysis classes to use
+		when analyzing this scope channel's waveforms; the valid 
+		types are:
+			csp - charge sensitive preamplifier analysis
+			fast - voltage amplifier analysis
+  DEFAULT: csp,csp,fast,fast
+  DESCRIPTION:
+    The names of the scope channels.
+

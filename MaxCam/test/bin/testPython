@@ -1,0 +1,6 @@
+#! /usr/bin/env python
+
+# Scripts may be executed from this directoy as well
+import sys
+
+sys.exit(0); 

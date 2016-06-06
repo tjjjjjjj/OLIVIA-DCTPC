@@ -1,0 +1,83 @@
+
+<html>
+	<head>
+	<title> DMTPC - Mission Control </title>
+
+	<script type="text/javascript" src="jquery.js"></script>
+  <script type="text/javascript" src="jquery.form.js"></script>
+	<script>
+  function hide_form()
+  {
+    $('#formdiv').hide(); 
+  }
+	
+	$(document).ready(function()
+	{
+	  var refId = setInterval(function()
+    {
+      $('#slowControl').load('../cgi-bin/testing/printpars_test.pl');
+    },1000);
+
+    var formopts = {
+                    target: '#formresp', 
+                    success: hide_form
+                   };
+
+    $('#reg').ajaxForm(formopts); 
+
+    $('#detname').load('../cgi-bin/getdet'); 
+    $('#menu').load('../cgi-bin/makemenu',function(){$('#li_shift').addClass('active')}); 
+
+
+   }); 
+
+
+	
+	</script>
+
+  <link rel="stylesheet" href="styles.css" type="text/css"/>
+
+	</head>
+
+  <body>
+ <div id="all">
+  <img src="gfx/webpageheader.png" alt="DMTPC - Mission Control" />
+  <div id="detname">
+   </div>
+  <div id="menu">
+  </div>
+
+  <div id="main">
+
+    <h1>Register as a DMTPC shifter</h1> 
+
+    <div id="formresp">
+
+     </div>
+    <div id="formdiv">
+    <form action="../cgi-bin/shift" method="POST" id="reg">
+      <input type="hidden" name="what" value="register">
+     <table>
+       <tr><td>Login: </td><td><input name="login"></td></tr>
+       <tr><td>Password: </td><td><input name="pw0" type="password"></td></tr>
+       <tr><td>Confirm: </td><td><input name="pw1" type="password"></td></tr>
+       <tr><td>Full Name: </td><td><input name="name"></td></tr>
+       <tr><td>E-mail: </td><td><input name="email"></td></tr>
+       <tr><td>Mobile #(nnnnnnnnnn): </td><td><input name="cellphone"></td></tr>
+       <tr><td>Mobile Provider: </td><td><select name="cellprovider">
+             <option value="txt.att.net">AT&amp;T</option> 
+             <option value="messaging.sprintpcs.com">Sprint</option> 
+             <option value="tmomail.net">T-Mobile</option> 
+             <option value="vtext.com">Verizon</option> 
+             <option value="vmobl.com">Virgin Mobile</option> 
+       </td></tr>
+       <tr><td></td><td><input name="register" type="submit" vaue="Register"></td></tr>
+       </table>
+      
+     </form>
+    </div>
+  </div>
+
+</div>
+</body></html>
+

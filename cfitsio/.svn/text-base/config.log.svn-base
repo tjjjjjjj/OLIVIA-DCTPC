@@ -1,0 +1,78 @@
+This file contains any messages produced by compilers while
+running configure, to aid debugging if configure makes a mistake.
+
+configure:565: checking for uname
+configure:608: checking for cc
+configure:641: checking for gcc
+configure:754: checking whether the C compiler (cc  ) works
+configure:770: cc -o conftest    conftest.c  1>&5
+configure:796: checking whether the C compiler (cc  ) is a cross-compiler
+configure:801: checking whether we are using GNU C
+configure:829: checking whether cc accepts -g
+configure:866: checking for f77
+configure:925: checking for ranlib
+configure:954: checking how to run the C preprocessor
+configure:1037: checking for stdlib.h
+configure:1037: checking for string.h
+configure:1037: checking for math.h
+configure:1037: checking for limits.h
+configure:1082: cc -c -g -O2  conftest.c 1>&5
+configure:1287: checking whether ftruncate works
+configure:1299: cc -o conftest -O -O2 -Dg77Fortran -fPIC   conftest.c  1>&5
+configure:1321: checking whether long long is defined
+configure:1333: cc -c -O -O2 -Dg77Fortran -fPIC  conftest.c 1>&5
+configure:1363: checking whether system V style IPC services are supported
+configure:1380: cc -o conftest -O -O2 -Dg77Fortran -fPIC   conftest.c  1>&5
+configure:1405: checking do we have flock_t defined in sys/fcntl.h
+configure:1417: cc -c -O -O2 -Dg77Fortran -fPIC  conftest.c 1>&5
+configure: In function 'main':
+configure:1412: error: 'flock_t' undeclared (first use in this function)
+configure:1412: error: (Each undeclared identifier is reported only once
+configure:1412: error: for each function it appears in.)
+configure:1412: error: expected ';' before 'filler'
+configure: failed program was:
+#line 1407 "configure"
+#include "confdefs.h"
+#include <sys/fcntl.h>
+
+int main() {
+
+flock_t filler;
+
+; return 0; }
+configure:1436: checking do we have flock_t defined in sys/flock.h
+configure:1448: cc -c -O -O2 -Dg77Fortran -fPIC  conftest.c 1>&5
+configure:1439:23: error: sys/flock.h: No such file or directory
+configure: In function 'main':
+configure:1443: error: 'flock_t' undeclared (first use in this function)
+configure:1443: error: (Each undeclared identifier is reported only once
+configure:1443: error: for each function it appears in.)
+configure:1443: error: expected ';' before 'filler'
+configure: failed program was:
+#line 1438 "configure"
+#include "confdefs.h"
+#include <sys/flock.h>
+   
+int main() {
+
+   flock_t filler;
+   
+; return 0; }
+configure:1472: checking do we have union semun defined
+configure:1486: cc -c -O -O2 -Dg77Fortran -fPIC  conftest.c 1>&5
+configure: In function 'main':
+configure:1481: error: storage size of 'filler' isn't known
+configure: failed program was:
+#line 1474 "configure"
+#include "confdefs.h"
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <sys/sem.h>
+
+int main() {
+
+union semun filler;
+
+; return 0; }
+configure:1525: checking for connect
+configure:1666: checking for gethostbyname

@@ -1,0 +1,33 @@
+//
+// CAEN Digitizer To DO List
+//
+// Pietro Giampa, RHUL, Sep 2012
+//
+
+************************************************
+*                                              *
+* List of steps needed to make the CAEN boards *
+* work properly in your area                   *
+*                                              *
+************************************************
+
+1) Install CAEN libraries or Make sure that the proper libraries are in
+   a directory you can easily access (CAENDigitizer, CAENComm, CAENVMElib)
+
+2) Create/Modify the CAENBash.sh bash script so that it points to the 
+   path where the installed libraries are 
+   (can also add path to your basic bash script)
+
+3) Make sure you point to the right CAEN libraries in your Makefile in MaxCam
+   depending on the area you are working on 
+
+4) Compile the "caentest" executable (make clean; make caentest)
+
+5) Run the executable to make sure you can connect to the Boards
+
+6) You are ready to go GOOD LUCK 
+
+
+//-------------------------------------------------------------//
+// For more details on libraries and caentest read CAEN_README //
+//-------------------------------------------------------------//

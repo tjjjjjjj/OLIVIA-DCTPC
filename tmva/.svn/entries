@@ -1,0 +1,97 @@
+8
+
+dir
+1
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft/tmva
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft
+
+
+
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+d3d5ed4b-f520-4247-9981-1203ad1f38be
+
+test
+dir
+
+doc
+dir
+
+lib
+dir
+
+TMVA
+dir
+
+src
+dir
+
+inc
+dir
+
+Makefile.arch
+file
+
+
+
+
+2014-03-24T16:30:51.000000Z
+97fc5adb5e0b88935c531b79669752d9
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+obj
+dir
+
+Module.mk
+file
+
+
+
+
+2014-03-24T16:30:51.000000Z
+ebb836a2b140dc933b3770f6f65e15cc
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+CMakeLists.txt
+file
+
+
+
+
+2014-03-24T16:30:51.000000Z
+77934e46cbba0f7c22ebcee2837dd1ee
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+Makefile
+file
+
+
+
+
+2014-03-24T16:30:51.000000Z
+d3be93ab38daf8600ca654a471ad9b1e
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+

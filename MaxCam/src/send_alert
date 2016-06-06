@@ -1,0 +1,40 @@
+#! /usr/bin/env python
+
+import hnpost
+import sys
+import os
+
+
+#Send e-mail to hypernews
+msg = hnpost.HyperNewsMessage(sys.argv[1],sys.argv[2],"dmatter@pippin.lns.mit.edu");
+forum = hnpost.HyperNewsForum("http://dmtpc.mit.edu/HyperNews/dmtpc","Alerts_DMTPC-10L.html")
+forum.post(msg,"dmatter","seedark")
+
+
+import DB
+#Send email to shifter
+cur = DB.openDB()
+
+#figure out current shifter 
+cur.execute("SELECT shifter FROM shifts ORDER BY idx DESC LIMIT 1");
+shifter_id = cur.fetchone() 
+cur.execute("SELECT email, sms_email, send_text_alerts FROM shifters WHERE idx=%s",shifter_id); 
+result = cur.fetchone() 
+
+#send email
+
+import smtplib
+to = result[0]
+msg = "To: "+to+"\nFrom: dmatter@pippin.lns.mit.edu\nSubject: "+sys.argv[1]+"\n\n"+sys.argv[2] 
+ms = smtplib.SMTP('localhost')
+ms.sendmail("dmatter@pippin.lns.mit.edu",to,msg) 
+
+#send text if desired 
+if result[2]:
+  ms.sendmail("dmatter@pippin.lns.mit.edu",result[1], msg)
+
+
+cur.close()
+
+#play sound in connex
+os.system("echo \""+sys.argv[2]+"\" | festival --tts") 

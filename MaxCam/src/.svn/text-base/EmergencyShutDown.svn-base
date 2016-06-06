@@ -1,0 +1,59 @@
+#! /usr/bin/perl
+
+
+use CGI ':standard';
+use CGI::Carp qw(fatalsToBrowser);
+use DM;
+
+use threads;
+
+print  header(), start_html(-title => "Dark Matter SHUTDOWN", -BGCOLOR=>"White");
+
+$ENV{'LD_LIBRARY_PATH'} = "/usr/local/lib/root:/usr/local/lib";
+$ENV{'ROOTSYS'} = "/usr/local/lib/root";
+$ENV{'MCCHANNELCFGS'} = "/var/www/html/channels/$DM::DETECTOR";
+
+my $thr0 = threads->create(
+  sub { 
+    while(system("./DMKillSynaccess ".$DM::SYNACCESS)){}; 
+    system("killall -9 DMPressureControl"); 
+    while(system("./DMKillSynaccess ".$DM::SYNACCESS)){};
+    print "Valve Thread Done\n";
+   }); 
+
+
+my $thr1 = threads->create(
+    sub {
+      system("killall -9 DMSlow"); 
+      system("./DMRampDown mesh_hv"); 
+    }
+  );
+
+my $thr2 = threads->create(
+    sub {
+      system("killall -9 DMSlow"); 
+      system("./DMRampDown wire_hv"); 
+    }
+  );
+
+$thr0->join();
+$thr1->join();
+$thr2->join();
+
+$ssh = DM->ssh_connect($DM::DAQ);
+$ssh->cmd("pkill -signal 9 -u dmatter run");
+$ssh->cmd("killall -9 root"); 
+$ssh->cmd("killall -9 root.exe"); 
+
+
+$db = DM->connect() or die ("Could not connect!\n"); 
+$sql = "update busy set slow_hold = 1"; 
+$statement = $db->prepare($sql) or die "can't prepare query '$sql': $DBI::errstr\n"; 
+$statement->execute() or die "can't execute query '$sql': $DBI::errstr\n"; 
+
+$sql = "INSERT INTO hvstatus (setval) values ( 0 )";
+$statement = $db->prepare($sql) or die "can't prepare query '$sql': $DBI::errstr\n"; 
+$statement->execute() or die "can't execute query '$sql': $DBI::errstr\n"; 
+
+
+

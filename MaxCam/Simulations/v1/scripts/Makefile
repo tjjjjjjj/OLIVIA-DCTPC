@@ -1,0 +1,13 @@
+###Set Options for compiling with ROOT libraries
+CXX          =g++
+CXXFLAGS     =-Os -g `root-config --cflags` -I../code  -I../../../../MaxCam
+LFLAGS       =`root-config --libs` -L../lib -L../../../../MaxCam -lMaxCam -lDmtpcSim -L../../../../MaxCam/waveformtools/lib -lWaveformTools
+
+all: runFromFile.exe 
+
+%.exe : %.cxx
+	$(CXX) $(CXXFLAGS) $(LFLAGS) -DEXEC $< -o $@
+
+clean:
+	@rm -f *.exe *.so *.d
+

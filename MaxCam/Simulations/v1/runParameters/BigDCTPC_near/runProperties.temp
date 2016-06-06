@@ -1,0 +1,34 @@
+Run Parameter===================================
+NumberOfEvents		10
+RunType			BigDCTPC_near
+Config	      	        normal
+EventType		doublealpha
+ProjectileParticle	alpha
+ProjectileMass		4001506
+RecoilParticle		alpha
+RecoilMass		4001506
+SRIMfile		SRIM_He_in_75TorrCF4_525TorrHe_Aug2014
+EnergyOption		random
+MinEnergy		5000.0
+MaxEnergy		5000.0
+FixEnergy		0.0
+PositionOption		random
+MinPositionLimits	-160.0	-160.0	0
+MaxPositionLimits	160.0	160.0	528
+RingPositionValues      53 0 0 3 4 0 528 10 528 1 0 1
+FixPosition		0	0	0
+TimeOption		random
+MinTime			2009	1	1	0	0	0
+MaxTime			2009	12	31	23	59	59
+FixTime			2009	6	1	12	0	0
+TimeStep		1
+DirectionOption		isotropic
+SourcePosition		0.0	0.0	0.0
+SourceDirection		1.0	0.0	0.0
+ThetaMax		5
+SpecialOption		none
+FissionSpectrumENDF	ENDF_Cf-252_n_spectrum
+TotalCS_ENDF		ENDF_CS_n_on_19F
+ElastScatterDCS_ENDF	ENDF_DCS_n_on_19F
+TimeResolution		15
+WimpEnergyOption	infinity

@@ -1,0 +1,25 @@
+#!/usr/bin/perl -w
+
+
+
+@allTclFiles = ();
+
+$user=$ENV{'USER'};
+@ARGV = ("ps -u  $user | grep root |");
+while (<>) {
+  $line = $_;
+  push(@allTclFiles, $line);
+  print $line;
+}
+
+
+foreach $file (@allTclFiles) {
+
+  @numbers = $file =~ m/(\d+)/g;
+
+  $killCommand = "kill -9 $numbers[0]";
+  print "$killCommand \n";
+  system($killCommand);
+
+}
+

@@ -1,0 +1,46 @@
+#!/usr/bin/perl
+
+use lib "/usr/local/apache2/cgi-bin";
+use DM;
+
+
+use CGI qw(:standard *table);
+use CGI::Carp qw(fatalsToBrowser);
+use Getopt::Long;
+
+
+$file = "test.root";
+$keyword = "DUMMY";
+$location = 26544;
+$description = "this is a dummy run";
+
+
+GetOptions( "file=s" => \$file,
+            "keyword=s" => \$keyword,
+            "location=s" => \$location,
+            "desc=s" => \$description);
+
+
+($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst)=localtime(time);
+$year += 1900;
+$mon  += 1;
+$timestamp =  "$year-$mon-$mday $hour:$min:$sec";
+
+$db = DM->connect;
+
+$sql = "insert into run_desc (file, keyword,  location,  description, timestamp) values ( '$file', '$keyword', '$location', '$description', '$timestamp')";
+
+print "$sql\n";
+
+$statement = $db->prepare($sql)
+    or die "Couldn't prepare query '$sql': $DBI::errstr\n";
+
+
+$statement->execute()
+    or die "Couldn't execute query '$sql': $DBI::errstr\n";
+
+
+$db->disconnect();
+
+
+

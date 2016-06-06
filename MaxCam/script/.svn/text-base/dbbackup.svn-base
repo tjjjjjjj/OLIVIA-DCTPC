@@ -1,0 +1,16 @@
+#!/bin/sh
+
+set -f
+
+echo "Content-type: text/plain; charset=iso-8859-1"
+echo
+
+
+bckup_file=/usr/local/apache2/htdocs/tmp/dbbackup_`date '+%y%m%d_%H%M%S'`.txt
+echo "DB file backed up! "
+echo ${bckup_file}
+mysqldump DM_TEST_26544 -p -u dmatter -pseedark run_desc  > ${bckup_file}
+#scp ${bckup_file} mitbbr00.lns.mit.edu:/export/data03/ddujmic/dbbackup
+cp ${bckup_file} /data/dbbackup
+cp ${bckup_file} /mnt/dmtpcdata01/data/dbbackup
+rm ${bckup_file}

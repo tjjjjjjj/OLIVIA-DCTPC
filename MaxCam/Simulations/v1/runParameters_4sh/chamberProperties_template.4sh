@@ -1,0 +1,57 @@
+#
+#	Properties of the 4-shooter chamber
+#
+# some random number that Albert determined for his work with 
+# modeling the effect of the spacers.  Right now, this is not
+# used and is disabled.
+SpacerDiameter		2.5
+# Ditto
+SpacerSpacing		20
+# Ditto
+SpacerAxis		x
+# [mm] hight in mm = |z(mesh)-z(lens)| (Used?  Jeremy thought not)
+Height			600
+# [mm] drift length (Used?  Jeremy thought not)
+DriftLength		38.1
+# [Torr] used for calculating the diffusion constant
+#
+#    4-shooter runs 154-199 with alpha source in and 
+#    Cf-252 source 
+Pressure		?PRESSURE
+# [K] used for calculating the diffusion constant
+Temperature		300
+# [V] used for calculating the diffusion constant
+DriftVoltage		1000
+# [v] not used for anything
+AnodeVoltage		656
+# [degrees] used, but only for WIMP runs.  Somehow related to the way
+# that the Cygnus angle is computed.
+OrientationAngle	0
+# [mm^2], and used.  May need to get updated; Jeremy seemed to think that
+# this should be smaller than this value.
+DiffusionConstantTerm	0.25
+# (# boolean_use_or_not) [mm] this isn't used right now
+DiffusionDzTerm		0.00419	0
+# comes from a qualitative fit to Hitachi's measurements; should 
+# match Hitachi well down to energies of 10's of keV
+# [unitless] quenching of electrical stopping
+ElectricScintillation	1.0
+# [unitless] quenching of nuclear stopping
+NuclearScintillation	0.3
+# total attenuation of electrons during drift; not used,
+# will be used if the charge readout is ever implemented
+# in the MC
+Attenuation		0
+# [electrons at the anode/keV] essentially the gas gain; 
+# not used, will be used if the charge readout is ever
+# implemented in the MC
+ElectronPerkeV		10000
+# [cm/us?] not used, will be used if the charge readout
+# is ever implemented in the MC
+DriftVelocity		0.11
+# [mm] not used, will be used if the charge readout is ever
+# implemented in the MC
+LongDiffusionConstTerm	400
+# [mm] not used, will be used if the charge readout is ever
+# implemented in the MC
+LongDiffusionDzTerm	3

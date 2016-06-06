@@ -1,0 +1,7 @@
+readChannel = 0
+writeChannel = 0 
+ref = common
+rampAlgorithm = follow
+invert = true
+calibrationMethod = softcal 
+epsilon = 0.005

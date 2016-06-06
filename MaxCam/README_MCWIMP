@@ -1,0 +1,327 @@
+/////////////////////
+////  McWimp
+/////////////////////
+
+
+
+McWimp is a class for simulating, storing, and analyzing
+information about particles. Despite the name, it is not
+limited to Wimps.  It can simulate recoils from various
+particles and generate events that produce background signals.
+
+
+
+McWimp has the following data members:
+
+  Particle Data [Info about particle and corresponding recoil]
+    double    	_wimpMass     	particle mass (keV)
+    TVector3  	_wimpV         	particle velocity (km/s)
+    double    	_time  		Time (days), 0 = noon on 12/31/99
+    double  	_recoilE	recoil particle energy (keV)
+    TVector3	_startPos	recoil vertex
+    TVector3	_recoilV	direction of recoil (unit vector)
+    string  	_type		object type (see getType() below)
+
+  Miscellaneous [data used by methods not part of McWimp class]
+    TH2F      	_simRecoil	2D histogram to store CCD simulation 
+
+  Settings [Other tags and parameters used by McWimp methods]
+    DetObj*   	_det      	detector object (see DetObj section)
+    double   	_Emin		energy cut for recoils / background signals
+    TF1*	_fxn		alphas are generated w/ this distribution
+    string    	_opt		coordinate options (see setOpt() below)
+    double  	_lat		latitude of detector location
+    double  	_lon		longitude of detector
+    int    	_ccd		if =1, simulation only in FoV of active CCDs
+
+
+
+METHODS:
+
+McWimp(...)
+  This method initializes an instance of the McWimp class.
+  It is defaulted to create a Wimp.  The particle data is set
+  to match a Wimp and the settings are defaulted to a detector
+  with its mesh parallel to the ground located at Lead,SD.
+
+
+SetAlpha()
+  Sets object as an Alpha.  Alphas do not have data saved for
+  _wimpMass, _wimpV, _time, or any of the settings (except _Emin
+  and _ccd).  Alphas are considered "recoil" particles because they
+  induce ionization.  However, the Wimp data is not set because alphas
+  do not actually "recoil" - they are simply ejected from some material.
+
+
+SetWimp()
+  Sets object as a Wimp.
+
+
+McWimp has the following data member handlers:
+
+  double	getWimpMass()
+  void		setWimpMass(double wM)
+  
+  TVector3 	getWimpV()
+  void		setWimpV(TVector3 wV)
+  
+  double	getTime()
+  void		setTime(double t)
+  
+  double	getRecoilE()
+  void		setRecoilE(double rE)
+  
+  TVector3 	getStartPos()
+  void 		setStartPos(TVector3 sP)
+  	
+  TVector3 	getRecoilV()
+  void		setRecoilV(TVector3 rV) 
+  
+  TH2F		getSimRecoil()
+  void 		setSimRecoil(TH2F sR)
+
+  string 	getType()		"a" means alpha, "w" means wimp
+  
+  DetObj*	getDet()
+  void		setDet(DetObj* det)
+
+  TF1* 		getFxn()
+  void 		setFxn(TF1* f)
+
+  void		setOpt(string opt)
+			"g" is galactic coordinates
+			"e" equatorial (aka horizontal) coord.
+			"lv" detector frame - mesh || to earth surface, y axis points north
+			"lh" det. frame - mesh orth. to earth surface, z points N, x points E
+
+  void		setEmin(double Em)
+  void		setLat(double lat)
+  void		setLon(double lon)
+  void		setCCD(int ccd)
+
+  void startInside()			see same function in DetObj()
+  void startAnywhere()			ditto
+
+  
+
+Methods for data analysis:
+
+  double Lxy()		Length of track projected onto mesh plane (mm) (rough est.)
+  double Lz()		Length of track projected onto z (mm) (rough est.)
+  double thetaRecoil()	Angle between recoil and Wimp direction (radians)
+  double cosRecoil()	Cos of thetaRecoil
+  double sinRecoil()	Sin of thetaRecoil
+  double thetaXY()	thetaRecoil projected onto mesh plane
+  double sinXY()	Sin of thetaXY
+  double sinZ()		Sin of difference between polar angles of recoil and Wimp directions
+  double thetaCy()	Angle between recoil and Wimp source (approx. Cygnus) (radians)
+
+
+Methods for simulation:
+
+void simulate()
+  Simulates an event.  If _type is "w", genWimp() will be called.
+  If it's "a", genAlpha() is called.
+
+
+void genWimp()
+  Uses settings and Wimp data to create a simulated Wimp particle that
+  takes the Earth's motion, and detector position/orientation into account.
+  Adds Maxwell-Boltzmann distribution to Wimp velocity and calculates a 
+  fluorine recoil.  A random recoil vertex (from DetObj) and azimuthal
+  recoil direction are chosen and the particle data is updated.
+
+
+void genAlpha()
+  Ignores Wimp data and most settings (still takes _ccd and _Emin into account).
+  Finds random position in detector (from DetObj) then gives alpha a Maxwell
+  -Boltzmann distribution.  If _fxn is specified, alpha energies will instead
+  be generated over that spectrum, and alpha direction will be isotropic. If alpha
+  comes from detector wall, the velocity distribution is folded over so that no 
+  simulated alphas shoot away from the detector's interior.  Relevant particle 
+  data is updated.
+
+  Currently uses very roughly estimated Alpha velocity distribution.
+
+
+TVector3 cosmicGun()
+  Function used by genWimp() to simulate the motion of Earth through the
+  Wimp cloud, and the detector's position/orientation on Earth.  Returns the
+  detector's apparent motion through Wimp cloud, i.e. the TVector3 points
+  towards the apparent Wimp source in the sky.
+
+
+
+
+
+
+
+////////////////////////////////
+////  DetObj
+////////////////////////////////
+
+
+
+Class for storing info about detector configuration.  Knows dimensions
+of detector and positions of CCDs.  Can calculate a random position inside
+detector for McWimp simulations.  Can be set to return positions only
+inside field of views of active CCDs.
+
+
+
+DATA MEMBERS:
+
+  double	_height		Height of detector
+  double	_radius		Radius of detector
+  double	_pixelX		Vixel size in x direction
+  double 	_pixelY		Vixel size in x\y direction
+  TH2D 		_ccdList	List of CCD configurations
+  TH1D 		_wireList	List of wire configurations
+  int 		_ccd 		If =1, only simulate events in CCDs' FoV
+  int 		_wire 		If =1, simulate blind regions created by wires
+  int 		_startInside	If =1, only generate events that start inside detector
+  TVector3 	_normal		Vector perpendicular to wall at simulated recoil vertex
+
+
+
+METHODS:
+
+
+DetObj(...)
+  Creates instance of DetObj.  Assumes detectors have cylindrical
+  structure.  Defaulted to model a detector with cross-sectional working 
+  area 1m^2, height 25 cm, 5 CCDs and 10 wires.  The detector's 
+  coordinate system has its origin at the center of its bottom circular
+  face (right now, the "bottom" is the mesh plane, but in future
+  simulations, the model may be extended to the actual 1m height and
+  the origin may be moved to the actual center or the detector's
+  bottom wall).  However, CCD and wire positions are not specified.  
+  These must be done manually by user.  McWimp currently stores a 
+  DetObj with a CCD configuration like this:
+		 _______
+		|  _|_  | } 40cm
+		|_|_|_|_| }
+		| |_|_| |
+ 		|___|___|
+
+  Each CCD images a 40x40 cm^2 region. 4 are placed in a square, one
+  for each quadrant of the coordinate system, and a fifth overlapping
+  CCD is centered at the origin.
+
+  The current version does not initialize wires. However the user may
+  manually set them.  Since this class only simulates the starting poisition
+  of a recoil/alpha track, it does not need to use any wire-related information.
+  The current version also only simulates events between the top cathode and
+  and top mesh for the m^3 model.  It will be extended to include the entire
+  working region.
+
+
+Methods for CCD configuration:
+
+  void addCCD(double x, double y, double dX, double dY, int imaged, int ccdNum)
+	Adds CCD to _ccdList. ccdNum-th position on list must be unoccupied.
+	x,y specify location of exact center of CCD (mm).  dX,dY specify dimensions
+        of CCD in pixels (we assume all CCDs will have the same vixel size).
+	imaged stores the state of the CCD at ccdNum-th position on list: -1
+	means "not set", 0 means off, 1 means on.
+  void removeCCD(int ccdNum)	Deletes specified CCD from _ccdList
+  void ccdOn(int ccdNum)	Turns specified CCD on
+  void ccdOff(int ccdNum)	Turns specified CCD off
+
+
+Methods for wire configuration:
+
+  void addWire(double x, int wireNum)
+	Adds wire to _wireList.  wireNum-th position on list must be unoccupied.
+  void removeWire(int wireNum)	Deletes specified wire from _wireList
+
+
+Data Member Handlers:
+
+  TH2D cList()		Returns _ccdList
+  TH1D wList()		Returns _wireList
+  void setPixelX(double pX)	
+  double getPixelX()
+  void setPixelY(double pY)
+  double getPixelY()
+  void setNormal(TVector3 n)
+  TVector3 getNormal()
+  void startInside()	sets _startInside to 1  (see _startInside above and randPos() below)
+  void startAnywhere()	sets _startInside to 0
+  int Inside()		returns _startInside
+
+
+Methods for coordinate conversion/search/analysis:
+
+  TVector2 truePos(int ccdNum, double x, double y)
+	Input a ccd number, and pixel coordinates.  Get location of pixel's
+	center in detector coordinates.
+
+  int inCCD(int ccdNum, double x, double y)
+	Checks if position x,y in detector coordinates is imaged by CCD number
+	ccdNum.
+
+  vector<int> inCCDs(double x,, double y)
+	Input detector coordinates x,y.  Get list of CCD numbers that image
+	the position x,y.  
+
+  void imageCCDs(int ccd)
+	Input ccd sets value of _ccd. (see DATA MEMBERS above)
+
+
+Methods for estimating/checking propagation of tracks:
+
+  int trackFits(TVector3 start, TVector3 sect, double E)
+	Given the starting and ending point of a recoil estimates if particle
+	has enough energy to reach active regoin.
+
+  int intersectDet(double x, double y, double z, TVector3 vec, double E)
+	Given starting position and direction, extends path of particle to see
+ 	if it intersects with detector's working regoin.  Feeds starting point
+	ending point and energy of recoil to trackFits.
+
+  int intersectCCD(double x, double y, double z, TVector3 vec, double E, int CCD)
+	Given starting position and direction, extends path of particle to see
+ 	if it intersects with the CCDs' fields of view.  Feeds starting point
+	ending point and energy of recoil to trackFits.
+
+  int marginsFit(double E)
+	Given recoil/alpha energy, checks that tracks originating at the walls
+	of the detector will be long enough to reach the active region.
+
+
+Methods for generating random recoil vertices:
+
+  There are 3 methods named randPos...() and 3 named randWall...().  The two
+  without appended numbers simply call rand...1() or rand...2() depending on
+  the value of _startInside.  If _startInside==1, rand...1()  simulates a 
+  vertex position that is always inside the detector's working regoin or the
+  CCDs' FoV.  Otherwise, rand...2() simulates vertices both inside and outside
+  the FoV/working region granted that the recoil direction (fed in as a
+  variable) lets the recoil particle travel into the active region.
+
+  TVector3 randPos(TVector3 vec, double E)
+  TVector3 randPos1()
+  TVector3 randPos2(TVector3 vec, double E)
+	Returns a random recoil vertex (or in the case of alphas, a track
+	starting point) within the interior of the detector. _normal is set
+	 to (0,0,0) since it's meaningless in this context.  If _ccd=1 but 
+	none of the CCDs are turned on, it returns (0,0,0) and prints 
+	a warning.
+
+  TVector3 randWall(TVector3 vec, double E)
+  TVector3 randWall1()
+  TVector3 randWall2(TVector3 vec, double E)
+	Returns a random track starting point in the wall of the detector.
+	_normal is set to the normal vector at that point in the wall so
+	that McWimp can use the information to fold the velocity distribution
+	over.  Calls randWall1() or randWall2() for actual vertex simulation.
+
+	Currently, the model assumes no background comes from Hayk/Denis's
+	circular rings/wires or the meshes/cathodes/anodes, so randWall2 is
+	not applicable.  It will be uncommented if those are determined to produce
+	background.
+
+
+
+

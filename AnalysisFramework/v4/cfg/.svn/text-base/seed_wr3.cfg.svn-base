@@ -1,0 +1,60 @@
+#This is a comment
+
+burnin_method = SQUARE
+burnin_num_events = 1000
+burnin_distance_thresh = 12
+outlier_factor = 1.25
+
+range_algorithm = 1 
+phi_algorithm = 2
+
+north_angle = 240
+longitude = -71.110556
+latitude = 42.373611
+
+cameras_orientation_top = 081264, A80333
+cameras_orientation_bottom = 100439, A80334 
+
+mc = 0 
+nokill = 0
+
+sat_thresh = 55000
+n_sat_thresh = 4
+
+channel_ids = top,bottom
+channel_types = csp,csp
+nbaseline = 25
+nblur = 1
+invert_waveform = 0
+
+cluster_find_algo = seed
+cluster_min_size = 5 
+cluster_min_size_unbinned = 16 
+cluster_find_seed_blur_radius = 4 
+blur_amount = 0.8
+gaussian_blur_amount = 2 
+cluster_find_seed_thresh_ring_ratio = 0.55
+cluster_find_seed_max_wrong_prob = 1e-33
+cluster_find_seed_min_threshold = 0.65
+cluster_find_seed_seed_threshold = 5.2
+cluster_neighbors_threshold_for_filling = 3
+cluster_min_neighbors_to_keep_pixel = 1
+cluster_join_min_rxy_cluster = 0.8 
+cluster_join_min_rxy_global = 0.65
+cluster_join_max_join_residual = 10 
+cluster_join_least_squares_weight = 2
+cluster_min_dist = 3600
+
+cluster_red_threshold = 2
+
+#fallback_camera_ids = A80333, A80334 
+
+gain_map_file = /net/zwicky/dmtpc/akaboth/forcosmin/gainMapWR318May.root
+
+partial_blur = 2
+partial_low_thresh = 5.5
+partial_high_thresh = 18
+partial_n_primary_thresh = 85
+partial_n_secondary_thresh = 70
+partial_dist_low = 2
+partial_dist_high = 8

@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<MethodSetup Method="Fisher::Fisher">
+  <GeneralInfo>
+    <Info name="TMVA Release" value="4.0.1 [262145]"/>
+    <Info name="ROOT Release" value="5.24/00 [333824]"/>
+    <Info name="Creator" value="cozzyd"/>
+    <Info name="Date" value="Fri May 27 17:34:24 2011"/>
+    <Info name="Host" value="Linux template.lns.mit.edu 2.6.18-194.17.1.el5PAE #1 SMP Wed Sep 29 12:41:57 EDT 2010 i686 i686 i386 GNU/Linux"/>
+    <Info name="Dir" value="/net/zwicky/dmtpc/cozzyd/projects/DarkMatter/AnalysisFramework/v4"/>
+    <Info name="Training events" value="5638"/>
+    <Info name="TrainingTime" value="0.00823689"/>
+    <Info name="AnalysisType" value="Classification"/>
+  </GeneralInfo>
+  <Options>
+    <Option name="V" modified="No">False</Option>
+    <Option name="VerbosityLevel" modified="No">Default</Option>
+    <Option name="VarTransform" modified="No">None</Option>
+    <Option name="H" modified="No">False</Option>
+    <Option name="CreateMVAPdfs" modified="No">False</Option>
+    <Option name="IgnoreNegWeightsInTraining" modified="No">False</Option>
+    <Option name="Method" modified="No">Fisher</Option>
+  </Options>
+  <Variables NVar="7">
+    <Variable VarIndex="0" Expression="log(E)" Label="log(E)" Title="log(E)" Unit="" Internal="log_E_" Type="F" Min="4.47381" Max="11.0263"/>
+    <Variable VarIndex="1" Expression="log(range)" Label="log(range)" Title="log(range)" Unit="" Internal="log_range_" Type="F" Min="1.38629" Max="5.35086"/>
+    <Variable VarIndex="2" Expression="log(cluster_rms)" Label="log(cluster_rms)" Title="log(cluster_rms)" Unit="" Internal="log_cluster_rms_" Type="F" Min="2.06682" Max="7.45774"/>
+    <Variable VarIndex="3" Expression="log(maxpixel)" Label="log(maxpixel)" Title="log(maxpixel)" Unit="" Internal="log_maxpixel_" Type="F" Min="3.31123" Max="9.26357"/>
+    <Variable VarIndex="4" Expression="neighbors" Label="neighbors" Title="neighbors" Unit="" Internal="neighbors" Type="I" Min="0" Max="8"/>
+    <Variable VarIndex="5" Expression="log(npixel)" Label="log(npixel)" Title="log(npixel)" Unit="" Internal="log_npixel_" Type="F" Min="3.17805" Max="6.73815"/>
+    <Variable VarIndex="6" Expression="log(npixel_red)" Label="log(npixel_red)" Title="log(npixel_red)" Unit="" Internal="log_npixel_red_" Type="F" Min="0.693147" Max="6.16752"/>
+  </Variables>
+  <Transformations NTransformations="0"/>
+  <MVAPdfs/>
+  <Weights NCoeff="8">
+    <Coefficient Index="0" Value="6.8400731101841372e-01"/>
+    <Coefficient Index="1" Value="1.0813030678488327e+00"/>
+    <Coefficient Index="2" Value="-1.2031933444132763e-02"/>
+    <Coefficient Index="3" Value="-3.8945321731031046e-01"/>
+    <Coefficient Index="4" Value="-6.5570827225468742e-01"/>
+    <Coefficient Index="5" Value="-4.9300697336680036e-03"/>
+    <Coefficient Index="6" Value="-8.2742400633606461e-01"/>
+    <Coefficient Index="7" Value="-1.4132795872453360e-02"/>
+  </Weights>
+</MethodSetup>

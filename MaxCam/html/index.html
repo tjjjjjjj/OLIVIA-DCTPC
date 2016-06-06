@@ -1,0 +1,151 @@
+<html>
+	<head>
+	<title> DMTPC - Mission Control </title>
+
+  <link rel="stylesheet" href="styles.css" type="text/css"/>
+	<script type="text/javascript" src="jquery.js"></script>
+  <script type="text/javascript" src="jquery.form.js"></script>
+	<script>
+	
+	$(document).ready(function()
+	{
+    $('#slowControl').load('../cgi-bin/printpars.pl');
+	  var refId = setInterval(function()
+    {
+      $('#slowControl').load('../cgi-bin/printpars.pl');
+      checkhold(); 
+    },1000); 
+
+    checkhold(); 
+
+    var options = {success: function(responseText){$('#resp').html(responseText);}};
+
+    $('#setter').ajaxForm(options); 
+
+    $('#detname').load('../cgi-bin/getdet'); 
+    $('#menu').load('../cgi-bin/makemenu',function(){$('#li_slow').addClass("active");});   
+    $('#togglehold').load('../cgi-bin/getholdbutton'); 
+
+   }); 
+
+   function checkhold()
+   {
+      $.get('../cgi-bin/gethold',function(data)
+      {
+        if (data.indexOf("1")==-1)
+        {
+          $('#controls').css("display","block");  
+          $('#hold').css("display","none");  
+        }
+        else
+        {
+          $('#controls').css("display","none");  
+          $('#hold').css("display","block");  
+        }
+        $('#initcontrols').css("display","none"); 
+      });
+   }
+	
+	</script>
+
+
+	</head>
+
+  <body>
+
+  <div id="all">
+  <img src="gfx/webpageheader.png" alt="DMTPC - Mission Control" />
+  <div id="detname">
+   </div>
+  <div id="menu">
+  </div>
+
+  <div id="main">
+  <div id="monitor">
+    <small>
+    <div id="slowControl">
+    loading...
+    </div>
+    </small>
+  </div>
+  <div id="startstop" align="center">
+
+      <a onClick='$.get("../cgi-bin/runsc",{action: "start"});' href="#"> 
+        <img name="start" 
+        onmouseout="document.start.src='gfx/start_sc.png'" 
+        onmouseover="document.start.src='gfx/start_sc_lit.png'" 
+        src="gfx/start_sc.png" alt="start" title="Start slow control"></a>
+      <a onClick='$.get("../cgi-bin/runsc",{action: "stop"});' href="#"> 
+        <img 
+        name="stop"
+        onmouseout="document.stop.src='gfx/stop_sc.png'" 
+        onmouseover="document.stop.src='gfx/stop_sc_lit.png'" 
+        src="gfx/stop_sc.png" alt="stop" title="Stop slow control" ></a>
+  </div>
+  <div id="initcontrols">
+    <b>Checking hold status... </b>
+  </div>
+  <div id="hold" align="center">
+    <p><span width="15"></span><img src="gfx/hold_controls.png">
+  </div>
+  <div id="controls" align="center"> 
+             <br/>
+        <!--
+        <p> High Voltage: <br/>
+          <a onClick='$.get("../cgi-bin/ramphv",{status: "1"});' href="#">[ Ramp UP ]</a>
+          &nbsp;&nbsp;|&nbsp;&nbsp; 
+          <a onClick='$.get("../cgi-bin/ramphv",{status: "-1"});' href="#">[ Ramp DOWN ]</a>
+        </p>
+        -->
+        <p>
+        <a onClick='$.get("../cgi-bin/ramphv",{status: "1"});' href="#">
+         <img name="rampup" 
+        onmouseout="document.rampup.src='gfx/ramp_up.png'" 
+        onmouseover="document.rampup.src='gfx/ramp_up_lit.png'" 
+        src="gfx/ramp_up.png" alt="ramp up" title="Ramp Up HV">
+        </a>
+        <a onClick='$.get("../cgi-bin/ramphv",{status: "-1"});' href="#">
+         <img name="rampdown" 
+        onmouseout="document.rampdown.src='gfx/ramp_down.png'" 
+        onmouseover="document.rampdown.src='gfx/ramp_down_lit.png'" 
+        src="gfx/ramp_down.png" alt="ramp down" title="Ramp Down HV">
+        </a>
+        <a onClick='$.get("../cgi-bin/setpress",{WHAT: "refill"});' href="#">
+         <img name="refill" 
+        onmouseout="document.refill.src='gfx/refill.png'" 
+        onmouseover="document.refill.src='gfx/refill_lit.png'" 
+        src="gfx/refill.png" alt="refill" title="Refill">
+        </a>
+
+        <a onClick='$.get("../cgi-bin/setpress",{WHAT: "adjust"});' href="#">
+         <img name="adjust" 
+        onmouseout="document.adjust.src='gfx/adjust.png'" 
+        onmouseover="document.adjust.src='gfx/adjust_lit.png'" 
+        src="gfx/adjust.png" alt="adjust" title="Adjust">
+        </a>
+        </p>
+
+        <div id="setdiv">
+        <form id="setter" action="../cgi-bin/sethv" method="post">
+        <div id="formdiv">
+          <span>
+          <label for="value">Set parameter: </label> <input type="text" name="value" size="4"><br>
+          <input type="radio" name="type" value="wire_hv"> Anode (in kV)<br> 
+          <input type="radio" name="type" value="mesh_hv"> Drift (in kV)<br>
+          <input type="radio" name="type" value="pressure"> Pressure (in Torr)<br>
+          <input type="submit"  value="Send"><input type="reset">
+        </span>
+        </form>
+        </div>
+        <p align="center">Result:</p> 
+        <div id="resp">
+         </div>
+       </div>
+
+    </div>
+  <div id="togglehold" align="center">
+  </div>
+  </div>
+
+</div>
+</body></html>

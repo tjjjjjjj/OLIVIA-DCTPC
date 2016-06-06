@@ -1,0 +1,31 @@
+#! /bin/bash
+
+#Checks files held in $1 or all files in output/summary/ to see
+#if they match the conditions placed in scripts/matchFiles.awk
+
+#To run: from v1
+#bash-$ ./scripts/matchFiles > files.txt
+#bash-$ ./scripts/matchFiles fileList.txt > files.txt
+#
+
+##file=$1
+##Number of files contained in $1
+##export nfiles=$(wc -l $1 | awk '{print $1}')
+path=output/summary/
+ 
+if [ -z $1 ]; then
+    file=match.temp
+    ls $path | awk '{print $1'} > $file
+else file=$1
+fi
+while read line
+  do
+  pass=$( ./scripts/matchFiles.awk $path$line )
+  if [[ pass -eq 1 ]]; then
+      echo $line | sed 's/.sum/.root/'
+  fi
+
+done < $file
+
+rm match.temp
+

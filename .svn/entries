@@ -1,0 +1,58 @@
+8
+
+dir
+1
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft
+
+
+
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+d3d5ed4b-f520-4247-9981-1203ad1f38be
+
+cfitsio
+dir
+
+AnalysisFramework
+dir
+
+McDark
+dir
+
+MaxCam
+dir
+
+tmva
+dir
+
+setup.sh
+file
+160
+
+
+
+2014-07-30T16:49:32.000000Z
+323642225213abaa2c4b90ceea8b2f51
+2014-07-30T20:37:20.295770Z
+160
+dctpc
+
+util
+dir
+

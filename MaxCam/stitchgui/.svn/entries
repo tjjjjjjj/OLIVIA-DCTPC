@@ -1,0 +1,79 @@
+8
+
+dir
+1
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft/MaxCam/stitchgui
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft
+
+
+
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+d3d5ed4b-f520-4247-9981-1203ad1f38be
+
+DmtpcStitchGUI.cc
+file
+
+
+
+
+2014-03-24T16:30:20.000000Z
+db7c84aa8d005d7bb32adc46d4291b98
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+DmtpcStitchGUIFrame.hh
+file
+
+
+
+
+2014-03-24T16:30:20.000000Z
+74031b7c9703335f712525eb0c9ca387
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+DmtpcStitchGUIFrame.cc
+file
+
+
+
+
+2014-03-24T16:30:20.000000Z
+38f7295a2958cdb054bcff08c282c5ad
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+CVS
+dir
+
+Makefile
+file
+
+
+
+
+2014-03-24T16:30:20.000000Z
+e83767f9ee50b8384ebdd3d3b566f49c
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+

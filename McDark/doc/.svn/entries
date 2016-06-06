@@ -1,0 +1,43 @@
+8
+
+dir
+1
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft/McDark/doc
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft
+
+
+
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+d3d5ed4b-f520-4247-9981-1203ad1f38be
+
+mcdarkman.pdf
+file
+
+
+
+
+2014-03-24T16:30:11.000000Z
+d3e276532b96b5e1a1eb53af3926eeeb
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+CVS
+dir
+

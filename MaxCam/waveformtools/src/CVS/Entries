@@ -1,0 +1,20 @@
+/CspPulse.cc/1.2/Wed May 18 16:09:37 2011//
+/CspWaveform.cc/1.3/Fri May 13 19:10:11 2011//
+/CspWfVector.cc/1.3/Fri May 13 19:07:48 2011//
+/Deconvolution.cc/1.2/Wed Jan  9 00:41:14 2013//
+/DmtpcPulse.cc/1.1/Fri Apr 15 21:19:18 2011//
+/FastPulse.cc/1.2/Wed May 18 16:09:37 2011//
+/FastWaveform.cc/1.3/Fri May 13 19:10:11 2011//
+/FastWfVector.cc/1.3/Fri May 13 19:07:48 2011//
+/FirFilter.cc/1.4/Thu Aug 16 19:58:15 2012//
+/FirKernels.cc/1.4/Wed Sep  5 21:58:26 2012//
+/IirFilter.cc/1.1/Thu Aug 16 19:55:55 2012//
+/PMTPulse.cc/1.1/Mon Jul 11 20:32:14 2011//
+/PMTWaveform.cc/1.1/Mon Jul 11 20:32:14 2011//
+/PMTWfVector.cc/1.1/Mon Jul 11 20:32:14 2011//
+/SkimWaveform.cc/1.2/Wed May 18 20:49:24 2011//
+/WaveformAnalysis.cc/1.8/Thu Sep  6 17:34:53 2012//
+/WaveformFFT.cc/1.3/Thu Aug 30 21:19:07 2012//
+/WaveformTools.cc/1.9/Wed Jan  9 00:42:04 2013//
+/WaveformVector.cc/1.3/Fri May 13 19:07:48 2011//
+D

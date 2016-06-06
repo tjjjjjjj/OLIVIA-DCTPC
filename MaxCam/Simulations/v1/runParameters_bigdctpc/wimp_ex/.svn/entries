@@ -1,0 +1,79 @@
+8
+
+dir
+1
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft/MaxCam/Simulations/v1/runParameters/wimp_ex
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft
+
+
+
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+d3d5ed4b-f520-4247-9981-1203ad1f38be
+
+cameraProperties0.example
+file
+
+
+
+
+2014-03-24T16:30:18.000000Z
+74721cb4b70209817d91fd3e0972ac49
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+wimpManager.example
+file
+
+
+
+
+2014-03-24T16:30:18.000000Z
+485642876c3e72ef0acbb6ab3196ceb9
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+chamberProperties.example
+file
+
+
+
+
+2014-03-24T16:30:18.000000Z
+ba80792aaad3820e3617b8d08b576e91
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+CVS
+dir
+
+wimpRun.example
+file
+
+
+
+
+2014-03-24T16:30:18.000000Z
+005a43cd9c069cb75933c5e59255d1a7
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+

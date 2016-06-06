@@ -1,0 +1,106 @@
+#!/usr/bin/python
+
+# Driver for the MC
+# Uses template files, but substitutes commonly adjusted parameters
+# from the command line making it easy to run scripts to generate
+# a suite of MC files while scanning parameter space
+
+import os
+import sys
+from optparse import OptionParser
+
+def main():
+    usage = "usage: %prog [options] type"
+    parser = OptionParser(usage=usage)
+    parser.add_option("-n", "--nevt", action="store", type="string", dest="nevt",  help="Number of MC events", metavar="NEVT")
+    parser.add_option("-t", "--type", action="store", type="string", dest="type",  help="Type of MC (e.g. alpha, Cf) Case-insensitive", metavar="TYPE")
+    parser.add_option("-f", "--fixenergy", action="store", type="string", dest="fixenergy",  help="Fixed Energy (e.g. alpha particle kinetic energy) [keV]", metavar="E_keV")
+    parser.add_option("-p", "--pressure", action="store", type="string", dest="pressure",  help="Chamber pressure [Torr]", metavar="PRESSURE")
+    parser.add_option("-g", "--gain", action="store", type="string", dest="gain",  help="Gain [ADU/keV]", metavar="GAIN")
+    parser.add_option("-r", "--readnoise", action="store", type="string", dest="readnoise",  help="Read Noise [ADU/bin]", metavar="READ_NOISE")
+    parser.add_option("-d", "--dryrun", action="store_true",dest="dryrun", help="Print command, but do not run the simulation")
+    
+    #parser.set_defaults(nevt="100", fixenergy="3588.0")
+    parser.set_defaults(nevt="100",pressure="75.0",gain="6.0",readnoise="6.3",dryrun=False)
+    (options, args) = parser.parse_args()
+    
+    print "options      = ", options
+
+    #
+    # Ensure that user specifies type of MC to do (e.g. alpha or Cf-252 or ...)
+    # and if alpha is desired, that projectile energy is defined
+    #
+    if (options.type == None):
+        print "\n\nERROR:  Must specify type"
+        parser.print_help()
+        sys.exit(0)
+    if ( (options.type.upper() == "ALPHA") and (options.fixenergy == None) ):
+        print "\n\nERROR:  For alpha runs, must specify the Alpha energy (via fixenergy)"
+        parser.print_help()
+        sys.exit(0)
+
+    #
+    # Determine which Simulation input files to use
+    #
+    options.type = options.type.upper()
+    paramRoot = "./runParameters_4sh/"
+    cameraTemplateFile = paramRoot+"cameraProperties_template.4sh"
+    chamberFile = paramRoot+"chamberProperties_template.4sh"
+    if (options.type == "ALPHA"):
+        runFile = paramRoot+"alpha_4sh/AlphaRunProperties_template.4sh"
+        typedir = "alpha_4sh/"
+        typemgr = "AlphaManager_template.4sh"
+    else:
+        print "unrecognized MC type:  ", options.type
+        print "returning..."
+        sys.exit(0)
+
+    #
+    # Alter the user-specified parameters
+    # 
+    modifyTemplate(options, cameraTemplateFile) # e.g. runParameters_4sh/cameraProperties_template.4sh
+    modifyTemplate(options, runFile)            # e.g. runParameters_4sh/alpha_4sh/AlphaRunProperties_template.4sh
+    modifyTemplate(options, chamberFile)        # e.g. runParameters_4sh/alpha_4sh/AlphaRunProperties_template.4sh
+
+
+    #
+    # Run the simulation
+    #
+    cmd = "./scripts/runFromFile runParameters_4sh/"
+    cmd += typedir
+    cmd += typemgr
+    print cmd
+    if not options.dryrun:
+        os.system(cmd)
+
+def modifyTemplate(options, filein):
+    # the input file should have "_template" in it
+    # the output file will replace "_template" by "_autogen"
+    if filein.find("_template") == -1:
+        print "error, filein should contain '_template'"
+        print "try again"
+        sys.exit(0)
+        
+    # open the template file
+    fin = open(filein, 'r')
+    alllines = fin.read()
+    fin.close()
+
+    # replace the ?XXX fields with current values
+    for opt, val in options.__dict__.items():
+        print "opt, val ===>  ", opt, ", ", val
+        #print type(opt).__name__
+        if (type(val).__name__ != "bool"):
+            alllines = alllines.replace("?"+opt.upper(), val)
+    fileout = filein.replace("_template", "_autogen")
+    print fileout
+
+    # create the _autogen file
+    fout = open(fileout, 'w')
+    fout.write(alllines)
+    fout.close()
+    
+if __name__ == "__main__":
+    main()
+
+

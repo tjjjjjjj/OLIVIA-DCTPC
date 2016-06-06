@@ -1,0 +1,5 @@
+#! /bin/bash
+
+time ./scripts/runFromFile.exe $1 #>> output/logs/runlogFor$(date +%y%m%d).log 2>&1 &
+wait
+echo "Run Finished!"

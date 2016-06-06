@@ -1,0 +1,20 @@
+SpacerDiameter		0.5
+SpacerSpacing		24.9
+SpacerAxis		y
+Height			720
+DriftLength		528
+Pressure		600
+Temperature		295
+DriftVoltage		7500
+AnodeVoltage		700
+OrientationAngle	0
+TopOrBottomTPC		1
+DiffusionConstantTerm	0.25
+DiffusionDzTerm		0.00419	0
+ElectricScintillation	1.0
+NuclearScintillation	0.3
+Attenuation		0
+ElectronPerkeV		10000
+DriftVelocity		0.016
+LongDiffusionConstTerm	400
+LongDiffusionDzTerm	3

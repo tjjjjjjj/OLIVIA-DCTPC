@@ -1,0 +1,62 @@
+/run/initialize
+
+#DAWNFILE HepRepFile RayTracer VRML1FILE VRML2FILE
+/vis/open HepRepFile
+/vis/scene/create spitz_scene
+/vis/drawVolume
+/vis/viewer/set/viewpointThetaPhi 0 90 deg
+/vis/scene/add/trajectories
+/vis/scene/endOfEventAction accumulate
+
+#/generator/wimpMass       100.0 
+#/generator/wimpDensity    0.3
+#/generator/mwVelocity     230.0
+#/generator/earthVelocity  244.0
+#/generator/earthDVelocity 15.0
+#/generator/yearFraction   0.0
+#/generator/distribution   gun
+
+#/field/anodeVoltage    3000 volt
+#/field/cathodeVoltage -1500 volt
+
+
+/gun/position    0 0 -100 cm
+/gun/direction   0 0 1
+
+
+#/gun/List
+
+#/gun/particle  e-
+#/gun/particle    ion
+#/gun/ion 2 4 2
+#/gun/energy    16 keV
+#/run/beamOn 10000
+
+#/gun/particle    alpha
+#/gun/energy    2100 keV
+#/run/beamOn 10
+
+#/gun/energy    8 keV
+#/gun/particle  gamma
+#/run/beamOn 1000
+
+/gun/particle  neutron
+/generator/distribution DD
+#/generator/distribution Cf252
+/generator/minEnergy 500 keV
+/generator/maxEnergy 5 MeV
+/generator/minX -10 mm
+/generator/maxX 10 mm
+/generator/minY -10 mm
+/generator/maxY 10 mm
+/generator/minZ -50 cm
+/generator/maxZ -50 cm
+
+#/mcdark/printTracks 1
+#/mcdark/printHits 1
+
+/run/beamOn 10
+
+
+
+

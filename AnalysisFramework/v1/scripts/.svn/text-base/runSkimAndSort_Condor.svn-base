@@ -1,0 +1,83 @@
+#!/bin/bash
+
+# some other script will call this one with the run number as input 
+# this is the script condor executes, it runs on the local machine
+
+# cd to directory where the job will execute
+cd $_CONDOR_SCRATCH_DIR;
+
+# set up job variables
+export input_dir=/net/mitbbr00/data03/ddujmic/data;
+export local_datafile=dmtpc_run00$1.root;
+export local_skimfile=dmtpc_run00$1skim.root;
+export input_datafile=$input_dir/$local_datafile;
+export output_dir=/net/mitbbr00/dmtpcdata01/data_processing_14April2009;
+export output_skimfile=dmtpc_run00$1skim.root;
+export output_sortfile=dmtpc_run00$1sksort.root;
+export local_keysfile=keys$1.txt;
+export local_filesfile=files$1.txt;
+export local_sortkeysfile=sksortkeys$1.txt;
+export local_sortfilesfile=sksortfiles$1.txt;
+export executable='/net/cockroach/data01/root/bin/root';
+export codedir='/net/cockroach/data02/jocelyn/data_processing_14April2009/projects/DarkMatter/AnalysisFramework/v1';
+
+# output run conditions
+echo '     local scratch:      ' $_CONDOR_SCRATCH_DIR;
+echo '     input directory:    ' $input_dir;
+echo '     local datafile:     ' $local_datafile;
+echo '     input datafile:     ' $input_datafile;
+echo '     output directory:   ' $output_dir;
+echo '     output skimfile:    ' $output_skimfile;
+echo '     output sortfile:    ' $output_sortfile;
+echo '     local keysfile:     ' $local_keysfile;
+echo '     local filesfile:    ' $local_filesfile;
+echo '     executable:         ' $executable;
+echo '     code directory:     ' $codedir;
+
+# first, clean up
+rm $local_keysfile;
+rm $local_filesfile;
+rm $local_sortkeysfile;
+rm $local_sortfilesfile;
+
+# set up the local directory
+cp $input_datafile $local_datafile
+cp $codedir/rootlogon.C .
+mkdir ./skim$1;
+mkdir ./sort$1;
+
+# define inputs for skimming job
+echo $local_datafile > $local_filesfile;
+echo 'skimming input file: ' $local_datafile
+echo '' > $local_keysfile;
+export skimdir='./skim'$1'/';
+
+# run skimming job
+echo $codedir'/cleanSkim.C++("'${local_filesfile}'","'${local_keysfile}'","'${skimdir}'")';
+$executable -l -b -q $codedir'/cleanSkim.C++("'${local_filesfile}'","'${local_keysfile}'","'${skimdir}'")';
+wait;
+
+# define inputs for sorting job
+echo $local_datafile > $local_sortfilesfile;
+echo 'sorting input file: ' $local_sortdatafile
+echo './' > $local_sortkeysfile;
+echo './skim'$1'/ skim' >> $local_sortkeysfile;
+export skimdir='./sort'$1'/';
+
+# run sorting job
+echo $codedir'/sortTracks.C++("'${local_sortfilesfile}'","'${local_sortkeysfile}'","'${skimdir}'");'
+$executable -l -b -q $codedir'/sortTracks.C++("'${local_sortfilesfile}'","'${local_sortkeysfile}'","'${skimdir}'");'
+wait;
+
+# clean up again
+rm -f $local_filesfile;
+rm -f $local_keysfile;
+rm -f $local_sortfilesfile;
+rm -f $local_sortkeysfile;
+rm -f $local_datafile;
+mv ./skim$1/$output_skimfile /net/cockroach/data02/jocelyn/data_processing_14April2009/skim/;
+mv ./skim$1/dmtpc_run00$1bias.root /net/cockroach/data02/jocelyn/data_processing_14April2009/skim;
+mv ./sort$1/$output_sortfile /net/cockroach/data02/jocelyn/data_processing_14April2009/sort;
+rmdir ./skim$1;
+rmdir ./sort$1;
+echo "Processing on run $1 Done"

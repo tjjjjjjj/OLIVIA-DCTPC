@@ -1,0 +1,27 @@
+SpacerDiameter		2.5
+SpacerSpacing		20
+# x or y  otherwise, no spacers are made
+SpacerAxis		none    
+Height			508
+DriftLength		200
+Pressure		75
+Temperature		300
+DriftVoltage		5000
+AnodeVoltage		730
+OrientationAngle	0
+DiffusionConstantTerm	0.25
+DiffusionDzTerm		0.00419	0
+ElectricScintillation	1.0
+NuclearScintillation	0.3
+Attenuation		0
+ElectronPerkeV		1
+# [mm/ns]
+DriftVelocity		0.11 
+# Diffusion: sigma_L(z) = sqrt{ sigma0^2 + 2(D/mu)*(L/V)*z }
+#                       = sqrt{LongDiffusionConstTerm + LongDiffusionDzTerm*z}
+# [mm^2] 
+# For z=0, 0.25 mm diffusion
+LongDiffusionConstTerm	0.0625
+# [mm] 
+LongDiffusionDzTerm	10.
+#LongDiffusionDzTerm	0.00375

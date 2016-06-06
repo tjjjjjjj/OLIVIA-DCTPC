@@ -1,0 +1,49 @@
+
+Source code
+-----------
+
+1) CVS:
+export CVSROOT=":ext:termite.lns.mit.edu:/export/raid2/cvsroot"
+export CVS_RSH="ssh"
+
+2) cvs co  projects/DarkMatter/MaxCam
+
+
+Compile library for analysis
+----------------------------
+
+1) For analysis, only fits libraries are needed (included in standard 
+   Scientific Linux distribution). Otherwise cfitsio 3.006 (the version 
+   included in SL4) is in the cvs tree under projects/DarkMatter/cfitsio
+   as well as an installation script. 
+
+   To install:
+
+   cvs co projects/DarkMatter/cfitsio
+   cd projects/DarkMatter/cfitsio
+   ./configure --prefix=/usr
+   make
+   sudo make install 
+
+
+
+2) Compilation on MacOSX assumes analysis only.
+
+3) To compile do 'make' in 'projects/DarkMatter/MaxCam'
+
+
+
+Compile library for DAQ
+-----------------------
+
+1) For datataking with FLI MaxCam requires
+- SDK libraries/drivers http://www.moronski.com/fli/
+- FITS libraries (cfitsio) http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html
+- COMEDI libraries: http://www.comedi.org/download/   
+  comedi-0.7.73.tar.gz and comedilib-0.7.22.tar.gz 
+- mysql
+
+2) To compile do 'make' in 'projects/DarkMatter/MaxCam'
+
+
+

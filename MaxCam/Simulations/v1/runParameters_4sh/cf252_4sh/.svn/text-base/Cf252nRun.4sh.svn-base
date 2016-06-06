@@ -1,0 +1,86 @@
+#
+#	Run Parameters
+#
+# number of events to throw
+NumberOfEvents		100
+# ?
+EventType		neutron
+# default file tag is "dmtpc_mc_"; this is the moniker
+# that gets appended to the output root file name
+FileTag			dmtpc_4sh_mc_
+# default file tag is "output/data/"; this is the path 
+# that the mc data will be output to
+DataPath		/net/zwicky/dmtpc/data/4sh/mc/
+# temporary directory for 4-shooter mc until zwicky gets fixed
+#DataPath		/net/eeyore/data01/jbattat/data/4sh/mc/
+# default file tag is "output/summary/"; this is the path 
+# that the mc run summary will be output to
+TextPath		/net/zwicky/dmtpc/data/4sh/mc/
+# temporary directory for 4-shooter mc until zwicky gets fixed
+#TextPath		/net/eeyore/data01/jbattat/data/4sh/mc/
+# ? 
+ProjectileParticle	neutron
+# [keV]
+ProjectileMass		939566
+# ?
+RecoilParticle		fluorine
+# [keV]
+RecoilMass		17697740.0
+# SRIM file to use when calculating energy loss of recoil 
+# particle in gas
+SRIMfile		SRIM_F_in_CF4_100Torr
+# options=random (flat), fixed (mono), endf
+EnergyOption		endf
+# [keV] matters for endf (flat?)
+MinEnergy		0.0
+# [keV] matters for endf (flat?)
+MaxEnergy		20000.0
+# [keV] for EnergyOption=fixed
+FixEnergy		0.0
+# options=random, fixed; if you pick random, the limits are 
+# usually chosen to be the viewable area
+PositionOption		random
+# [mm] in detector coords
+MinPositionLimits	-73.216	-73.216	0
+# [mm] in detector coords
+MaxPositionLimits	73.216	73.216	200
+# [mm] if you have a fixed position
+# true 4-shooter source position
+FixPosition		0	0	0
+# if you're doing wimps and you want it to 
+# be right, have to use it; gives each event
+# a time within a second
+TimeOption		random
+# times with [sec] precision
+MinTime			2009	1	1	0	0	0
+MaxTime			2009	12	31	23	59	59
+FixTime			2009	6	1	12	0	0
+# options=collimated, source
+# source: there's a source somewhere; calculates the position
+# and gets the vector as the direction from the impact
+# point to the source.  So, you pick the recoil point.
+DirectionOption		source
+# doesn't matter if you have PositionOption=random
+SourcePosition		-3000.0	0.0	100.0
+SourceDirection		1.0	0.0	0.0
+# if you have a colimated source, it's the half-opening
+# angle in degrees
+ThetaMax		5
+# options=endf;	things using endf are special, so let the MC 
+# know it's handling this case; wimp, endf or none
+SpecialOption		endf
+# used for picking the energy of the neutron that causes 
+# a recoil
+FissionSpectrumENDF	ENDF_Cf-252_n_spectrum
+# cross-section; total
+TotalCS_ENDF		ENDF_CS_n_on_19F
+# cross-section; differential
+ElastScatterDCS_ENDF	ENDF_DCS_n_on_19F
+# not used; deprecated; meant for the future, if we ever 
+# add some sort of charge read-out model; this will probably
+# not happen for this MC
+TimeResolution		15
+# whether or not to save the cluster and cluster image without bias 
+# or noise in the Simulation tree; True if you want it, anything else
+# if you don't.  Default is false.  Case doesn't matter.
+SaveTrueClusters	True

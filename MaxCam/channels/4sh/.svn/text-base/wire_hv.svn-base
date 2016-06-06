@@ -1,0 +1,6 @@
+readChannel = 0
+writeChannel = 0
+ref = ground
+rampAlgorithm = direct
+calibrationMethod = softcal
+epsilon = 0.002

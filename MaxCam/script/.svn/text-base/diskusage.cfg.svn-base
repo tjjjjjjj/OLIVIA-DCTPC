@@ -1,0 +1,6 @@
+[DMTPC]
+
+name: DMTPC
+volumes: /data /mnt/dmtpcdata01
+paths: /data/ /data/scopeData
+

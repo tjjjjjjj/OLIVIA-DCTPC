@@ -1,0 +1,5 @@
+To run visualization:
+java -jar HepRApp.jar
+
+To shoot particles:
+./bin/Linux-g++/McDark neutrons.mac 

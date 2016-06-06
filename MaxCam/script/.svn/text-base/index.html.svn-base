@@ -1,0 +1,165 @@
+<html><body><h1>  DMTPC R&D Setup - Bldg 44-013 </h1>
+</body></html>
+
+
+<table border="0" bgcolor=#CCCCCC width="100%">
+
+<tr valign="top"> <td> <h2> Slow Control</h2> 
+<td>
+
+<tr>
+<td><embed src="SlowControlPrintout.swf" width="310" height="130" type="application/x-shockwave-flash" 
+pluginspage="http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash">
+</embed>
+
+<td>
+<a href="http://mitdm10.mit.edu/cgi-bin/runsc?action=start"> <IMG SRC="start_icon.gif" ALT="Start" title="Start slow control" height=40></A>
+<a href="http://mitdm10.mit.edu/cgi-bin/runsc?action=stop"> <IMG SRC="stop_icon.png" ALT="Stop" title="Stop slow control" height=40> </a>
+
+
+<tr>  <td> <h2> Setup</h2>
+
+
+<tr> <td>
+<li><a href="http://dmtpc.mit.edu/HyperNews/dmtpc/get/Logbook_DMTPC_RnD.html">LOG BOOK</a>
+<td>
+
+<tr> <td>
+<li>
+<a href="http://mitdm12.mit.edu">Chamber Power Control</a>
+<td>
+
+<!--
+<td height="100%" width="100%" valign="middle" align="center"><embed src="SpinningMoon.swf" width="800" height="500" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/shockwave/download/index.cgi
+?P1_Prod_Version=ShockwaveFlash">
+</embed></td>
+-->
+
+<tr> <td>
+<li>Pressure: 
+<a href="http://mitdm10.mit.edu/cgi-bin/plotpress?TYPE=log">[log]</a>
+<a href="http://mitdm10.mit.edu/cgi-bin/plotpress?TYPE=lin">[lin]</a>
+<td>
+[<a href="http://mitdm10.mit.edu/cgi-bin/delsc?table=pressure">Erase pressure data</a>]
+[<a href="http://mitdm10.mit.edu/cgi-bin/setpress?WHAT=refill">Re-fill</a>]
+[<a href="http://mitdm10.mit.edu/cgi-bin/setpress?WHAT=adjust">Adjust</a>]
+
+
+<tr> <td>
+<li> HV Bias:
+ <a href="http://mitdm10.mit.edu/cgi-bin/plothv">[Voltage]</a>
+ <a href="http://mitdm10.mit.edu/cgi-bin/ploti">[Current]</a>
+<td>
+[<a href="http://mitdm10.mit.edu/cgi-bin/ramphv?status=1">Ramp UP HV</a>]
+[<a href="http://mitdm10.mit.edu/cgi-bin/ramphv?status=-1">Ramp DOWN HV</a>]
+<form action="http://mitdm10.mit.edu/cgi-bin/sethv" method="action">
+<P>
+<label for="value">Set parameter: </label> <input type="text" name="value"><br>
+<input type="radio" name="type" value="wire_hv"> Anode (Volt)<br> 
+<input type="radio" name="type" value="mesh_hv"> Drift (Volt)<br>
+<input type="radio" name="type" value="pressure"> Pressure (Torr)<br>
+<input type="submit"  value="Send"><input type="reset">
+</P>
+</FORM>
+
+
+<tr> <td>
+<li>
+CCD:
+ <a href="http://mitdm10.mit.edu/cgi-bin/plotdb?TABLE=ccd&PARAM=temperature">[Temperature]</a>,
+ <a href="http://mitdm10.mit.edu/cgi-bin/plotdb?TABLE=ccd&PARAM=exposure">[Exposure time]</a>,
+ <a href="http://mitdm10.mit.edu/cgi-bin/plotdb?TABLE=ccd&PARAM=daqtime">[DAQ time]</a>,
+ <a href="http://mitdm10.mit.edu/cgi-bin/plotdb?TABLE=ccd&PARAM=avgpixel">[Average pixel yield]</a>
+<td>
+[<a href="http://mitdm10.mit.edu/cgi-bin/delsc?table=ccd">Erase CCD Data</a>]
+
+
+<tr> <td>
+<li>
+ Scope:
+ <a href="http://mitdm10.mit.edu/cgi-bin/plotdb?TABLE=scope&PARAM=nwf">[No of WF]</a>,
+ <a href="http://mitdm10.mit.edu/cgi-bin/plotdb?TABLE=scope&PARAM=esum">[Total energy]</a>
+<td>
+[<a href="http://mitdm10.mit.edu/cgi-bin/delsc?table=scope">Erase Scope Data</a>]
+
+
+<tr> <td>
+<li>
+ Temperature Point: 
+[<a href="http://mitdm10.mit.edu/cgi-bin/plotdb?TABLE=temp0&PARAM=value">0</a>]
+[<a href="http://mitdm10.mit.edu/cgi-bin/plotdb?TABLE=temp1&PARAM=value">1</a>]
+[<a href="http://mitdm10.mit.edu/cgi-bin/plotdb?TABLE=temp2&PARAM=value">2</a>]
+<td>
+Erase temperature:
+[<a href="http://mitdm10.mit.edu/cgi-bin/delsc?table=temp0">0</a>]
+[<a href="http://mitdm10.mit.edu/cgi-bin/delsc?table=temp1">1</a>]
+[<a href="http://mitdm10.mit.edu/cgi-bin/delsc?table=temp2">2</a>]
+
+<tr> <td>
+<li>
+[<a href="http://mitdm13.mit.edu">RnD LIVE</a>]
+
+
+<tr> <td>
+<li>
+Particle counter:
+ <a href="http://mitdm10.mit.edu/cgi-bin/plotdb?TABLE=p500&PARAM=value">[0.5um]</a>,
+ <a href="http://mitdm10.mit.edu/cgi-bin/plotdb?TABLE=p2500&PARAM=value">[2.5um]</a>
+<td>
+[<a href="http://mitdm10.mit.edu/cgi-bin/delsc?table=p500">Erase 0.5um Data</a>]
+[<a href="http://mitdm10.mit.edu/cgi-bin/delsc?table=p2500">Erase 2.5um Data</a>]
+
+
+
+
+
+
+<tr> <td>  <td> </tr>
+
+
+<tr> <td> <h2>Data</h2> 
+<li> <a href="http://mitdm10.mit.edu/cgi-bin/diskusage.py">Disk usage</a>  </li>
+<li> <a href="http://mitdm10.mit.edu/cgi-bin/dbbackup">Make database backup</a>  </li>
+<li> <a href="http://mitdm10.mit.edu/cgi-bin/copydata">Copy data</a>  </li>
+<li> <a href="http://mitdm10.mit.edu/cgi-bin/lsruns">List of runs</a> 
+ <a href="http://mitdm10.mit.edu/cgi-bin/lsruns?LIMIT=50">[Last 50]</a>
+ <a href="http://mitdm10.mit.edu/cgi-bin/lsruns?ITEM=List&KEYWORD=ALPHA">[ALPHA]</a> 
+ <a href="http://mitdm10.mit.edu/cgi-bin/lsruns?ITEM=List&KEYWORD=CF252">[CF252]</a> 
+ <a href="http://mitdm10.mit.edu/cgi-bin/lsruns?ITEM=List&KEYWORD=FE55">[FE55]</a> 
+ <a href="http://mitdm10.mit.edu/cgi-bin/lsruns?ITEM=List&KEYWORD=WIMP">[WIMP]</a> 
+ <a href="http://mitdm10.mit.edu/cgi-bin/lsruns?ITEM=List&KEYWORD=NONE">[BKGR]</a> 
+ <a href="http://mitdm10.mit.edu/cgi-bin/lsruns?ITEM=List&KEYWORD=CO57">[CO57]</a> 
+ <a href="http://mitdm10.mit.edu/cgi-bin/lsruns?ITEM=List&KEYWORD=DT">[DT]</a> 
+ <a href="http://mitdm10.mit.edu/cgi-bin/lsruns?ITEM=List&KEYWORD=COSMIC">[COSMIC]</a> 
+<li> <a href="http://mitdm10.mit.edu/runExperiment.txt">How-to run experiment</a> </li>
+<li> <a href="http://mitdm10.mit.edu/tmp/dqm/">DQM Plots</a></li>
+<td>
+<form action="http://mitdm10.mit.edu/cgi-bin/makemonitoringplots" method="action">
+<P>
+<label for="value">Make DQM plots: </label> <input type="text" name="value" value="800-805">
+<input type="submit"  value="Send">
+</P>
+</FORM>
+</tr>
+
+
+
+<tr>  <td> <h2> Analysis</h2> 
+<li> <a href="http://mitdm10.mit.edu/readData.cxx">Example accessing data</a> </li>
+<li>
+<a href="http://mitdm10.mit.edu/htmldoc/ClassIndex.html">Class documentation</a>
+<li>
+<a href="http://mitdm10.mit.edu/README">README Setup</a>
+<li>
+<a href="http://mitdm10.mit.edu/tmp">Temporary Plots</a>
+</li>
+<td>
+</tr>
+
+
+
+
+
+</table>
+
+

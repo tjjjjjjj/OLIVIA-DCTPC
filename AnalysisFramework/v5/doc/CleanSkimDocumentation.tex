@@ -1,0 +1,136 @@
+\documentclass{book}
+\usepackage{fullpage}
+\title {The AnalysisFramework (v5) Manual and User's Guide} 
+\author {Cosmin Deaconu, Shawn Henderson, Jeremy Lopez}  
+
+\begin{document} 
+\maketitle
+\tableofcontents
+
+\chapter{Preliminaries} 
+
+\begin{center}
+\textit{``Press Here to Begin''} -- The Boarding Pass Machine
+\end{center} 
+
+\section{About This Document} 
+This document was written to accompany v5 of cleanSkim. It is the first attempt at a comprehensive documentation of the DMTPC analysis framework. This manual is intended both as an introduction for new users as well as a reference for seasoned veterans. 
+
+In the DMTPC CVS repository, this document may be found in the directory \texttt{projects/DarkMatter/AnalysisFramework/v5/doc/}. 
+\section{Introduction} 
+
+The \texttt{AnalysisFramework} is a set of tools for analzying data for DMTPC. The main tool is called \texttt{cleanSkim}.  \texttt{cleanSkim} is used to process raw CCD images and charge or PMT pulses into something more useful for further analysis. For images, \texttt{cleanSkim} performs pedestal subtraction, hot pixel removal, cluster identification, and basic parameterization of discovered clusters. For waveforms, \texttt{cleanSkim} performs cleaning,  pulse identification, and parameterization. 
+
+In addition, there are tools for generating a gain map, which describes the relative gain of the CCD chip as well as the locations of the spacers, and tools that can be used to make cuts on data for WIMP searches.   
+
+The \texttt{AnalysisFramework} is written in C++ using the ROOT libraries. It is inextricably linked to \texttt{libMaxCam.so}, which for historical reasons contains most of the analysis tools used by DMTPC. 
+
+\section{History} 
+The AnalysisFramework has gone through several versions as our data has evolved and our algorithms have improved. This is a brief attempt to summarize the history. 
+
+\subsection{Provenance} 
+
+The first versions of the AnalysisFramework were written by Asher Kaboth, although the tools used were developed by the collaboration as a whole. Later versions were written with contributions from  Cosmin Deaconu, Shawn Henderson, and Jeremy Lopez. 
+
+\subsection{v1} 
+The first attempt at the AnalysisFramework used Source Extractor (\texttt{sextractor}). Not much is currently known about this version. There is no \texttt{sextractor} in any subsequent version. 
+\subsection{v2} 
+This version, which functioned as a ROOT script, served as the base for future versions. The output was a simple ROOT tree. 
+\subsection{v3} 
+This was the first version of the AnalysisFramework that could be compiled (instead of running as a ROOT script. The output format was changed to using \texttt{DmtpcSkimEvent}. Additions in this version include waveform handling and tools for RBI detection. 
+\subsection{v4} 
+The default cluster finding algorithm was changed for the first time since v2 and the output format was changed to make it easier to draw things from the tree. Optionally, a Gain Map can be used for the cluster finding. 
+\subsection{v5} 
+The version accompanying this guide. The code was largely reorganized to be easier to understand and modify. The first version to include image stitching. 
+\subsection{v6} 
+Inevitably, this version will exist. If this section has not been updated for it, then probably this document is obsolete. 
+
+\chapter{Inputs} 
+
+\begin{center}
+\textit{``gets() reads  a line from stdin into the buffer pointed to by s until \\
+         either a terminating newline or EOF, which it replaces with a null byte \\
+         ('0').  No check for buffer overrun is performed (see BUGS below).''}\\ -- Linux Man Pages
+\end{center}
+
+To better understand what the AnalysisFramework does, it is necessary to understand the input to it. 
+\section{Raw Data} 
+Raw data consists of runs which in turn are made up of many events (typically 1000). Each event represents some amount of camera exposure with matching (approximately) charge pulses. A run contains the following elements. 
+\subsection{CCD Images} 
+The images are read out from the camera. Typically, they are binned to improve SNR and reduce storage requirements. Each camera will have one image per event. 
+
+The native format of the images we currently use are unsigned 16-bit integers, so TH2S's are used for storage (with explicit casting as ROOT doesn't provide an unsigned histogram). Because historically these were stored less efficiently as TH2F's, the histograms are auto converted to TH2F's on request. 
+\subsection{``Bias'' Images} 
+Prior to taking the CCD images, typically 100 frames are taken with the shutter closed with the same exposure as the CCD images. The intent is to provide a pedestal correction. Technically these are dark frames and not bias frames, but for typical exposures and temperatures, there is very little dark nosie. 
+
+In the past, only the average of the 100 images was saved, but now each individual image is saved. 
+\subsection{Overscan Images} 
+
+The CCD has two rows of pixels which are masked from incoming light. These are also read out.  
+\subsection{Waveforms} 
+Waveforms are currently digitized using an unsigned 8-bit digitizer so they are shunted into a TH1C. Similarly to the CCD images, they are autoconverted to a TH1F for historical reasons (and this also accidentally allows easy support for more bitty digitizers). 
+
+Typically, there are 4 types of waveforms (though not all detectors have everything): 
+
+\begin{itemize} 
+\item Anode waveforms, read through a charge-sensitive preamplifier.
+\item Veto waveforms, read through a charge-sensitive preamplifier.
+\item Mesh waveforms, read through a fast amplifier
+\item PMT waveforms
+\end{itemize} 
+
+\section{Monte Carlo} 
+Monte Carlo generated data aims to match the raw data, but does not currently contain overscans and currently does not contain waveforms.
+
+Write me more. 
+
+\section{Gain Map} 
+Due the anode inhomogeneities and optical effects, the gain is not uniform everywhere in the image. To correct for that, a gain map is used. The gain map is a map of the relative gain everywhere on the chip. 
+
+Typically, it is generated using a gamma source which should approximately paint the field of view evenly with ionization. These images are then carefully summed (excluding visible tracks and sparks) and cleaned to produce a gain map. The gain map also elucidates the positions of the spacers in the field of view.also elucidates the positions of the spacers in the field of view.
+
+\section{Stitch Information} 
+
+For the 4shooter detector, four cameras image the same plane. Because tracks can cross from one to the other, it is useful to create a total composite image. To do this, the relative orientations of the four cameras must be known very well. 
+
+To train the cameras, the anode plane is illuminated using an LED. The veto ring and anode edge are found using a circular hough transform. 
+
+\chapter{\texttt{cleanSkim} Operation} 
+\begin{center} 
+\textit{``Enhance.''} -- CSI 
+\end{center} 
+
+This section describes the flow and algorithms of the \texttt{cleanSkim} program. 
+\section{Image Pedestal Correction} 
+\section{Spark Detection} 
+\section{Image Cleaning} 
+\section{Image Stitching} 
+\section{Cluster Identification} 
+\section{Cluster Parameters} 
+\section{Waveform Handling} 
+\subsection{Organization} 
+\subsection{Charge Sensitive Pulses} 
+\subsection{Fast Pulses} 
+\subsection{PMT Pulses} 
+
+\chapter{Usage} 
+\section{Compilation} 
+\section{Configuration File} 
+\section{Command Line Usage} 
+\section{Monte Carlo Files} 
+\section{Examples} 
+
+\chapter{Batch Operation} 
+\section{Pipeline} 
+
+\chapter{\texttt{cleanSkim} Output and Post Processing} 
+\section{The Output Format} 
+\subsection{Drawing Examples} 
+\section{AnalysisCut Framework} 
+\subsection{Annotated Example} 
+\chapter{Bugs and TODO} 
+\chapter{Glossary} 
+\chapter{Index} 
+
+\end{document} 
+

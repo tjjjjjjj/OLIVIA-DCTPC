@@ -1,0 +1,67 @@
+8
+
+dir
+1
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft/MaxCam/examples/DeadTime
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft
+
+
+
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+d3d5ed4b-f520-4247-9981-1203ad1f38be
+
+DeadTime.cc
+file
+
+
+
+
+2014-03-24T16:30:21.000000Z
+8e53b8e226fe01856b1ba115472de61c
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+DeadTimeOldData.cc
+file
+
+
+
+
+2014-03-24T16:30:21.000000Z
+007f13feeefca202faffc93da37a7112
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+CVS
+dir
+
+Makefile
+file
+
+
+
+
+2014-03-24T16:30:21.000000Z
+2b313ae2760d7b0cd1c04565ce39500f
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+

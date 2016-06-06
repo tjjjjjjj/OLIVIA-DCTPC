@@ -1,0 +1,41 @@
+#!/usr/bin/perl
+
+use lib "/usr/local/apache2/cgi-bin";
+use DM;
+
+
+use CGI qw(:standard *table);
+use CGI::Carp qw(fatalsToBrowser);
+
+print "Content-type:text/html\n\n";
+
+if (!param("table")) {
+  die "Unknown table \n";
+}
+
+my $table = param("table");
+
+$db = DM->connect;
+
+if ($table eq "allhv") {
+  #$sql = "delete wire_hv.*,wire_i.*,wire2_hv.*,mesh_hv.*,mesh_i.* from wire_hv,wire_i,wire2_hv,mesh_hv,mesh_i";
+  $sql="delete from wire_hv";  $statement = $db->prepare($sql); $statement->execute();
+  $sql="delete from wire_i";   $statement = $db->prepare($sql); $statement->execute();
+  $sql="delete from wire2_hv"; $statement = $db->prepare($sql); $statement->execute();
+  $sql="delete from wire2_i";  $statement = $db->prepare($sql); $statement->execute();
+  $sql="delete from mesh_hv";  $statement = $db->prepare($sql); $statement->execute();
+  $sql="delete from mesh_i";   $statement = $db->prepare($sql); $statement->execute();
+} else {
+  $sql = "delete from $table";
+  print "$sql\n";
+  $statement = $db->prepare($sql) or die "Couldn't prepare query '$sql': $DBI::errstr\n";
+  $statement->execute() or die "Couldn't execute query '$sql': $DBI::errstr\n";
+}
+
+
+$db->disconnect();
+
+print <<EOF;
+<META HTTP-EQUIV="Refresh"  CONTENT="0;
+URL=http://18.146.0.111">
+EOF

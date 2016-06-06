@@ -1,0 +1,8 @@
+#!/bin/csh -v
+
+rm /skim/*
+
+cat files.txt >>& cleanSkim.log 
+bin/cleanSkim -c seed_cf4_28mm.cfg >>& cleanSkim.log
+
+

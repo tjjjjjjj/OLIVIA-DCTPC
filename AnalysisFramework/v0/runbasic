@@ -1,0 +1,17 @@
+#!/bin/bash
+
+echo dmtpc_run$1.root > files$1.txt
+echo ./ > keys$1.txt
+
+export cleandir='./clean/'
+export recondir='./recon/'
+
+root -l -b -q "cleanData.C+(\"files$1.txt\",\"keys$1.txt\",\"$cleandir\")" >> run$1.log 2>&1 &
+wait
+root -l -b -q "quickRecon.C+(\"files$1.txt\",\"keys$1.txt\",\"$recondir\")" >> run$1.log 2>&1 &
+wait
+
+rm -f $cleandir/dmtpc_run$1clean.root
+rm -f files$1.txt
+rm -f keys$1.txt
+echo "Processing on run $1 Done"

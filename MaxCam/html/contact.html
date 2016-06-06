@@ -1,0 +1,76 @@
+
+<html>
+	<head>
+	<title> DMTPC - Mission Control </title>
+
+	<script type="text/javascript" src="jquery.js"></script>
+  <script type="text/javascript" src="jquery.form.js"></script>
+	<script>
+	
+	$(document).ready(function()
+	{
+	  var refId = setInterval(function()
+    {
+      $('#slowControl').load('../cgi-bin/testing/printpars_test.pl');
+    },1000); 
+
+    $('#setter').ajaxForm(function() {
+    });
+
+    $('#detname').load('../cgi-bin/getdet'); 
+    $('#menu').load('../cgi-bin/makemenu',function(){$('#li_contact').addClass('active');}); 
+
+   }); 
+
+
+	
+	</script>
+
+  <link rel="stylesheet" href="styles.css" type="text/css"/>
+
+	</head>
+
+  <body>
+ <div id="all">
+  <img src="gfx/webpageheader.png" alt="DMTPC - Mission Control" />
+  <div id="detname">
+   </div>
+  <div id="menu">
+  </div>
+
+  <div id="main">
+
+  <b>For assistance with slow control issues:</b>
+  <p>
+  Cosmin Deaconu<br>
+  <a href="mailto:cozzyd@mit.edu?subject=10L Help">cozzyd@mit.edu</a><br>
+  775.846.9105 (cell)<br/>
+  tehvillageidiot (aim/skype) <br/> 
+
+  <p>
+  <b>For assistance with detector issues:</b>
+  <p>
+  Asher Kaboth<br>
+  <a href="mailto:akaboth@mit.edu?subject=10L Help">akaboth@mit.edu</a><br>
+  617.715.4720 (office)<br>
+  201.638.7972 (cell)<br>
+  <p>
+  <b>For assistance with monitoring issues:</b>
+  <p>
+  Jeremy Lopez<br>
+  <a href="mailto:jplopez@mit.edu?subject=10L Help">jplopez@mit.edu</a><br>
+   860.874.2481 (cell)
+  <p>
+  <b>WIPP on-site contact information:</b>
+  <p>
+  Surface office<br>
+  xxx.xxx.xxxx
+  <p>
+  Underground<br>
+  xxx.xxx.xxxx
+ 
+  </div>
+
+</div>
+</body></html>
+

@@ -1,0 +1,40 @@
+# for board types, see Scope.cc
+BoardType	0	ALAZAR_ATS860
+# Clock rate in GHz
+# (I'm setting in Hz to match my code... Hopefully nothing breaks)
+ClockRate       0       2.5e8
+RecordLength	0	12288 #12*1024
+RecordPreSize	0	4096  #4*1024
+# Channels are
+# PARAM  SCOPENUM  CHANNUM  VALUE1 VALUE2 ... VALUEN
+ChannelName	0	0     CH_A
+# SerialNumber of device connected to this scope and channel
+# Must match the SerialNumber in the other device 
+# (e.g. SerialNumber in PMT0.example)
+ConnectedDevice	0	0      PMT_0
+# Set the voltage ranges
+VoltageMin	0	0      0
+VoltageMax	0	0      1.0
+
+#Added by TJ~~~~~~~~~~~~~~~~~~~~~~~~+
+#                                   V
+
+DecayTime       0       436.e-9
+RiseTime        0       8.e-9 
+DriftVel        0       1.646e7
+Scale           0       0.131
+ScopeRes        0       4.096 
+VoltageNoise    0       0.838
+TimeNoise1      0       1.  
+TimeNoise2      0       4.
+ZeroOffset      0       -152
+ZeroOffsetVar   0       -2.05
+NSamples        0       5   
+VerticalOffset  0       -2.11
+DecayOffset     0       1   #the "ringing" model implemented with this variable was incorrect. Setting to 1 is the equivalent of disabling.
+
+#See EventGenerator.cc for comments
+#on these variables
+
+#                                   ^
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+

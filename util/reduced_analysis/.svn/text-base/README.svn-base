@@ -1,0 +1,121 @@
+You will want to invoke the setup script before you begin analyzing:
+cd reduced_analysis
+. setup.sh
+
+An explanation of the reduced files and variables is below. More thorough explanations can be found in the following files: 
+
+$DCTPC_TOP_DIR/MaxCam/DmtpcSkimEvent.hh
+$DCTPC_TOP_DIR/MaxCam/MaxCamClusterImage.hh
+$DCTPC_TOP_DIR/MaxCam/waveformtools/include/FastPulse.hh
+
+
+The hadd_firstrun_lastrun.root files hold every event between firstrun and lastrun that passes two simple requirements: (1) it is not a spark or close to a spark and (2) it features at at least one waveform. For events with multiple waveforms but no tracks, only the waveform featuring the best match in energy between the mesh and anode energy is kept. For events with one or more waveforms and one or more tracks, only the waveform-track combination that best matches, based on mesh area and track energy agreement, is kept.
+
+
+TTree: dctpc_eventinfo  
+
+   Int_t           RunNum;  //Run number. A run is incremented after 100 bias frames (lasting a second each) and 1000 events (lasting a second each) are taken.  
+   Int_t           SetNum;  //Set number.  A set is incremented if the lid is opened. 
+   Int_t           SequenceNum;  //Sequence number. A sequence is incremented if there is a gas refill and/or if the voltages are cycled off and on.
+   Int_t           ExposureInRun_sec;  //The integrated exposure in the run in units of seconds, after accounting for the removal of spark events and events near sparks. 
+   Int_t           EventNum;  //Event number.  
+   Double_t        Image_mean_ccdadu;  //The mean pixel weight of the image in units of CCD ADU.
+   Double_t        Image_rms_ccdadu;  //The pixel weight RMS of the image in units of CCD ADU.
+   Int_t           Edge;  //Did CCD track cross the edge of the image? Edge==1 means yes. 
+   Int_t           BurnIn;  //How many burn-in (CCD relic) spots were there? 
+   Int_t           Pixels_killed;  //The number of pixels killed in the image, usually due to saturation or burn in.
+   Int_t           LastSpark;  //How far away was the last spark in number of events?
+   Int_t           NextSpark;  //How far away is the next spark in number of events?
+   Int_t           Ntrack;  //Number of CCD tracks in the event.
+   Int_t           Ntrig;  //Number of waveforms above threshold in the event.
+   Double_t        Etrack_kev;  //CCD track amplitude (energy, according to the CCD).
+   Double_t        Etrig_kev;  //Anode waveform amplitude (energy, according to the anode).
+   Double_t        Emesh_kev;  //Mesh waveform area (energy, according to the mesh).
+   Double_t        Track_mean_ccdadu;  //The mean pixel weight of the CCD track in units of CCD ADU.
+   Double_t        Track_rms_ccdadu;   //The rms of the pixel weights of the CCD track in units of CCD ADU.
+   Double_t        Track_x_pix;  //The position of the middle of the CCD track in X in units of pixels. 
+   Double_t        Track_y_pix;  //The position of the middle of the CCD track in Y in units of pixels.
+   Double_t        Track_x_start_pix;  //The position of the start of the CCD track in X in units of pixels. 
+   Double_t        Track_y_start_pix;  //The position of the start of the CCD track in Y in units of pixels.
+   Double_t        Track_x_end_pix;  //The position of the end of the CCD track in X in units of pixels. 
+   Double_t        Track_y_end_pix;  //The position of the end of the CCD track in Y in units of pixels. 
+   Double_t        Track_range_pix;  //The range of the CCD track in units of pixels.
+   Double_t        Track_width_pix;  //The average width of the CCD track in units of pixels.
+   Double_t        Track_fitwidth_pix;  //The second transverse moment of the CCD track, which can be thought of as the 1sigma width, in units of pixels.
+   Double_t        Track_maxpixel_ccdadu;  //The CCD track maximum pixel weight in units of CCD ADU.    
+   Int_t           Track_neighbors;  //Number of nearest neighbors to the CCD track maximum that are above the track-finding threshhold.
+   Int_t           Track_pixels;  //The number of pixels in the CCD track.   
+   Double_t        Track_phi_deg;  //The angle of the CCD track in the azimuthal plane in units of degrees.
+   Double_t        Track_skewness;  //The CCD track skewness (head-tail).
+   Double_t        Anode_rms_v;  //The RMS of the anode waveform in units of volts.
+   Double_t        Mesh_rms_v;  //The RMS of the anode waveform in units of volts.
+   Double_t        Mesh_peak_v;  //The height of the peak of the mesh waveform in units of volts.
+   Double_t        Mesh_base_v;  //The baseline of the mesh waveform in units of volts.
+   Double_t        Anode_base_v;  //The baseline of the anode waveform in units of volts.
+   Double_t        Mesh_max_v;  //The maximum aplitude of the mesh waveform in units of volts (not necessarily equal to the peak, since fitting is done to define the peak).
+   Double_t        Anode_max_v;  //The maximum aplitude of the anode waveform in units of volts (not necessarily equal to the peak, since fitting is done to define the peak).
+   Double_t        Veto_peak_v;  //The height of the peak of the veto waveform in units of volts.
+   Double_t        Mesh_starttime_samp;  //The start time of the mesh waveform in units of digitizer samples.
+   Double_t        Anode_starttime_samp;  //The start time of the anode waveform in units of digitizer samples.
+   Double_t        Mesh_peaktime_samp;  //The time of the mesh peak (from the beginning of the waveform buffer initialization) in units of digitizer samples. 
+   Double_t        Mesh_totaltime_samp;  //The total width of the mesh waveform in units of digitizer samples.
+   Double_t        Anode_R0time_samp;  //The rise time to the peak of the anode waveform in units of digitizer samples.
+   Double_t        Mesh_R0time_samp;  //The rise time to the peak of the mesh waveform in units of digitizer samples.
+   Double_t        Mesh_R10time_samp;  //The rise time it takes to get to 90% of the height of the first peak of the mesh waveform in units of digitizer samples.
+   Double_t        Mesh_R25time_samp;  //The rise time it takes to get to 75% of the height of the first peak of the mesh waveform in units of digitizer samples.
+   Double_t        Mesh_R50time_samp;  //The rise time it takes to get to 50% of the height of the first peak of the mesh waveform in units of digitizer samples.
+   Double_t        Mesh_R75time_samp;  //The rise time it takes to get to 25% of the height of the first peak of the mesh waveform in units of digitizer samples.
+   Double_t        Mesh_R90time_samp;  //The rise time it takes to get to 10% of the height of the first peak of the mesh waveform in units of digitizer samples.
+   Double_t        Mesh_F0time_samp;  //The fall time from peak to baseline of the mesh waveform in units of digitizer samples.
+   Double_t        Mesh_F10time_samp;  //The fall time it takes to get 90% of the way from peak to baseline of the mesh waveform in units of digitizer samples.
+   Double_t        Mesh_F25time_samp;  //The fall time it takes to get 75% of the way from peak to baseline of the mesh waveform in units of digitizer samples.
+   Double_t        Mesh_F50time_samp;  //The fall time it takes to get 50% of the way from peak to baseline of the mesh waveform in units of digitizer samples.
+   Double_t        Mesh_F75time_samp;  //The fall time it takes to get 25% of the way from peak to baseline of the mesh waveform in units of digitizer samples.
+   Double_t        Mesh_F90time_samp;  //The fall time it takes to get 10% of the way from peak to baseline of the mesh waveform in units of digitizer samples.
+   Int_t           Timenow_sec;  //The time of the event in Unix time (seconds). 
+   Int_t           Triggerindex;  //The index of the trigger that corresponds to the best-matched waveform. 
+   Double_t        Triggertimestamp_samp[Ntrig];  //(An array with Ntrig elements). The trigger times of each of the waveforms in units of "samples/2". The trigger time stamp of the waveform that is best-matched is Triggertimestamp_samp[Triggerindex]
+   
+   
+For simulation input files, there are a few extra "truth-level" variable in the dctpc_eventinfo TTree:
+
+   Double_t        TRUTH_phi_deg;  //The true angle of the track in the azimuthal plane in units of degrees.
+   Double_t        TRUTH_x_start_mm;  //The true position of the start of the track in X in units of mm.
+   Double_t        TRUTH_y_start_mm;  //The true position of the start of the track in Y in units of mm.
+   Double_t        TRUTH_x_start_pix;  //The true position of the start of the CCD track in X in units of pixels.
+   Double_t        TRUTH_y_start_pix;  //The true position of the start of the CCD track in Y in units of pixels.
+   Double_t        TRUTH_z_start_mm;  //The true position of the start of the track in Z in units of mm.
+   Double_t        TRUTH_x_end_mm;  //The true position of the end of the track in X in units of mm.
+   Double_t        TRUTH_y_end_mm;  //The true position of the end of the track in Y in units of mm.
+   Double_t        TRUTH_x_end_pix;  //The true position of the end of the CCD track in X in units of pixels.
+   Double_t        TRUTH_y_end_pix;  //The true position of the end of the CCD track in Y in units of pixels.
+   Double_t        TRUTH_z_end_mm;  //The true position of the end of the track in Z in units of mm.   
+   Double_t        TRUTH_theta_deg;  //The true polar angle of the track in units of degrees.
+   Double_t        TRUTH_particleE_kev;  //The true energy of the initial particle in units of keV
+   Double_t        TRUTH_depositedE_ccdadu;  //The true deposited energy of the track in units of CCD ADU.
+   Double_t        TRUTH_range_pix;  //The true 3D range of the track in units of pixels.
+   Double_t        TRUTH_range_mm;  //The true 3D range of the track in units of mm.
+   Double_t        TRUTH_zrange_mm;  //The true Z range of the track in units of mm.
+   Double_t        TRUTH_lengthcalibration;  //The true calibration constant to turn pixels into mm.
+   Double_t        TRUTH_pressure_torr;  //The simulated pressure in torr.
+   Double_t        TRUTH_gain;  //The simulated gain factor.
+   Double_t        TRUTH_noise_ccdadu;  //The simulated RMS noise in units of CCD ADU.
+   Double_t        TRUTH_bias;  //The simulated bias factor.
+   
+      
+   
+TTree: dctpc_runinfo:   
+
+This tree holds the information about each run.
+
+   Int_t           RunNum;  //Run number. A run is incremented after 100 bias frames (lasting a second each) and 1000 events (lasting a second each) are taken. 
+   Int_t           SetNum;  //Set number.  A set is incremented if the lid is opened. 
+   Int_t           SequenceNum;  //Sequence number. A sequence is incremented if there is a gas refill or if the voltages are cycled on/off.
+   Int_t           Exposure_sec;  //The integrated exposure in the run in units of seconds, after accounting for the removal of spark events and events near sparks. 
+   Int_t           Totaltracks;  //The total number of CCD tracks in the run.
+   Int_t           Totaltrigs;  //The total number of waveform triggers in the run.
+   Int_t           Time_startofrun_sec;  //The time of the start of the run in Unix time (seconds). 
+   Double_t        Pressure_torr;  //The gas pressure during the run in units of torr.
+   Double_t        Voltage_amp_volts;  //The actual voltage at the amplification plane during the run in units of volts.
+   Double_t        Voltage_drift_volts;  //The set voltage of the cathode during the run in units of volts.
+    

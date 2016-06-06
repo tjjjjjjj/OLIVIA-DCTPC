@@ -1,0 +1,6 @@
+The input root files are now located at:
+/net/nudsk0001/d00/scratch/spitzj/reduced_analysis_input_files_root
+
+To retrieve them, please type (from this directory):
+
+scp $USER@cgate.mit.edu:/net/nudsk0001/d00/scratch/spitzj/reduced_analysis_input_files_root/* ./

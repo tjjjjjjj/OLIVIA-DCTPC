@@ -1,0 +1,129 @@
+
+<html>
+	<head>
+	<title> DMTPC - Mission Control </title>
+
+	<script type="text/javascript" src="jquery.js"></script>
+  <script type="text/javascript" src="jquery.form.js"></script>
+	<script>
+	
+	$(document).ready(function()
+	{
+    lock(); 
+    update_out(); 
+
+
+    var refid = setInterval(lock,1000); 
+    $('#detname').load('../cgi-bin/getdet'); 
+    $('#menu').load('../cgi-bin/makemenu',function(){$('#li_daq').addClass('active');}); 
+
+    //Set up form
+
+    var formopts = {
+                     beforeSubmit: lock
+                   };
+
+    $('#ccdinitform').ajaxForm(formopts); 
+    $('#daqform').ajaxForm(formopts); 
+
+   }); 
+
+   function update_out()
+   { 
+   
+     $('#daqout').load('../cgi-bin/printlog?which=daq');
+     if ($('#daq_auto').attr('checked')) 
+     {
+       var div = $("#daqout")[0]; 
+       var scrollHeight = Math.max(div.scrollHeight, div.clientHeight);
+       div.scrollTop = scrollHeight - div.clientHeight;
+       $("#main").attr("height","100%"); 
+     }
+   }
+
+   function lock()
+   {
+     $.get('../cgi-bin/daqstatus', function(data)
+     {
+        if (data.indexOf("1")==-1)
+        {
+          $('#submit_button').removeAttr("disabled"); 
+          $('#submit_button2').removeAttr("disabled"); 
+          $('#status_text').html("<big>Status: READY</big>"); 
+        }
+        else
+        {
+          $('#submit_button').attr('disabled','true'); 
+          $('#submit_button2').attr('disabled','true'); 
+          $('#status_text').html("<big>Status: BUSY</big>"); 
+          update_out(); 
+        }
+     });
+   }
+
+	
+	</script>
+
+  <link rel="stylesheet" href="styles.css" type="text/css"/>
+
+	</head>
+
+  <body>
+ <div id="all">
+  <img src="gfx/webpageheader.png" alt="DMTPC - Mission Control" />
+  <div id="detname">
+   </div>
+  <div id="menu">
+  </div>
+
+  <div id="main">
+
+
+  <div id="monitor" align="center">
+    <form id="ccdinitform" action ="../cgi-bin/rundaq" method="post">
+      <input type="hidden" name="what" value="ccdinit">
+      <input type="submit" id="submit_button" value="CCDInit">
+    </form>
+    <hr/>
+    <div id="response" >
+    </div>
+	  <p id="formp">         
+	  <form id="daqform" action="../cgi-bin/rundaq" method="post">
+      <table border="1" >
+        <tr><td>Number of Runs: </td><td><input type="text" name="nruns"></td></tr>
+        <tr><td>Number of Events: </td><td> <input type="text" name="nevents"></td></tr>
+        <tr><td>Exposure Time (ms): </td><td> <input type="text" name="exposure"></td></tr>
+        <tr><td>Keyword: </td><td> <input type="text" name="keyword"></td></tr>
+        <tr><td>Location: </td><td> <input type="text" name="location"></td></tr>
+        <tr><td>Comment: </td><td> <textarea rows="10" cols="18" name="comment"></textarea></td><tr>
+        <tr><td>Type: </td><td> <select name="what">
+          <option value="run">Normal Run</option>
+          <option value="dark">Shutter Closed</option>
+        </td></tr>
+        <tr><td>Trigger Level:</td><td> <input type="text" name="trigger" value="6"></td></tr>
+        <tr><td>Your Email:</td><td> <input type="text" name="email"></td></tr>
+      </table>
+      <input type="submit"  id="submit_button2" value="Run"><input type="reset">
+      </p>
+    </form>
+  </div>	 
+<!-- kludge to hold place until images appear -->
+
+<p align="center" id="status_text"><big>Status: READY</big></p>
+ <img src="gfx/norecent.png" height=325>
+ <p/>
+   <div style="float:left;">
+     <br/>
+     <b>Output: </b>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="daq_auto" checked>Autoscroll
+      <br/>
+
+      <div id="daqout" class="log">
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</body></html>
+

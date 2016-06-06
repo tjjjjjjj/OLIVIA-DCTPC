@@ -1,0 +1,10 @@
+Remember to invoke the setup command, specific for the simulation:
+. setup_tier2.sh
+
+To shoot particles:
+./bin/Linux-g++/McDark neutrons.mac 
+
+To run visualization:
+java -jar HepRApp.jar
+
+, and then open the relevant .heprep file you created.

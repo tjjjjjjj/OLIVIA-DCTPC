@@ -1,0 +1,6 @@
+#!/bin/bash
+
+nohup root -l -b -q "vgc402Analog.cxx+()" >> vgc402.log 2>&1 &
+#root -l -b -q "logPressure.cxx+(5000)" 
+#wait
+#echo "done"

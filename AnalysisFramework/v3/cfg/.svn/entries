@@ -1,0 +1,67 @@
+8
+
+dir
+1
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft/AnalysisFramework/v3/cfg
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft
+
+
+
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+d3d5ed4b-f520-4247-9981-1203ad1f38be
+
+default.cfg
+file
+
+
+
+
+2014-03-24T16:30:01.000000Z
+c3f52cc36478e7649933e6db31957ed9
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+CVS
+dir
+
+4sh.cfg
+file
+
+
+
+
+2014-03-24T16:30:01.000000Z
+cabc2d7550cc3b87676473a3fb81f5d1
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+mc.cfg
+file
+
+
+
+
+2014-03-24T16:30:01.000000Z
+707d816088a7bdcb3e10ad4a9ba40e4b
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+

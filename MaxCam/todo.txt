@@ -1,0 +1,16 @@
+* scope: ScopeWaveform to replace TH1F
+         Need to make changes in 3 places:
+	 1. DmtpcDAQ.cc
+            new( (*data()->event()->scopeData())[ii] ) TH1F(*wfChanA)
+            becomes
+	    new( (*data()->event()->scopeData())[ii] ) ScopeWaveform(*wfChanA)
+	 2. DmtpcEvent.hh
+            TH1F* scopeData(int i) { return (TH1F*)scopeData()->At(i);
+	    becomes
+            ScopeWaveform* scopeData(int i) { return (ScopeWaveform*)scopeData()->At(i);
+	 3. DmtpcEvent.cc
+            _scopeData = new TClonesArray("TH1F", MAX_N_TRIGGERS);
+	    becomes
+            _scopeData = new TClonesArray("ScopeWaveorm", MAX_N_TRIGGERS);
+
+* scope: prepare for two channel operation

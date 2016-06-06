@@ -1,0 +1,74 @@
+#Run Summary for file: 
+output/data/dmtpc_mc_00005.root
+#===================================
+
+Run Parameters
+===================================
+NumberOfEvents		100
+EventType		alpha
+ProjectileParticle	alpha
+ProjectileMass		4001506
+RecoilParticle		alpha
+RecoilMass		4001506
+SRIMfile		SRIM_F_in_CF4_100Torr
+Location		mit
+EnergyOption		random
+MinEnergy		0.0
+MaxEnergy		20000.0
+FixEnergy		0.0
+PositionOption		random
+MinPositionLimits	-73.216	-73.216	0
+MaxPositionLimits	73.216	73.216	200
+FixPosition		0	0	0
+TimeOption		random
+MinTime			2009	1	1	0	0	0
+MaxTime			2009	12	31	23	59	59
+FixTime			2009	6	1	12	0	0
+TimeStep		1
+DirectionOption		isotropic
+SourcePosition		0.0	0.0	0.0
+SourceDirection		1.0	0.0	0.0
+ThetaMax		5
+SpecialOption		none
+FissionSpectrumENDF	ENDF_Cf-252_n_spectrum
+TotalCS_ENDF		ENDF_CS_n_on_19F
+ElastScatterDCS_ENDF	ENDF_DCS_n_on_19F
+TimeResolution		15
+WimpEnergyOption	infinity
+
+#Chamber Properties: 
+#===================================
+SpacerDiameter		2.5
+SpacerSpacing		20
+SpacerAxis		y
+Height			508
+DriftLength		200
+Pressure		600
+Temperature		300
+DriftVoltage		5000
+AnodeVoltage		730
+OrientationAngle	0
+TopOrBottomTPC		1
+DiffusionConstantTerm	0.25
+DiffusionDzTerm		0.00419	0
+ElectricScintillation	1.0
+NuclearScintillation	0.3
+Attenuation		0
+ElectronPerkeV		10000
+DriftVelocity		0.11
+LongDiffusionConstTerm	400
+LongDiffusionDzTerm	3
+
+#Camera Properties: 
+#===================================
+#Properties of Camera 0
+CameraPosition		0	0	0
+CameraBins		0	256	256
+ImageWidths		0	146.432	146.432
+PixelsPerBin		0	4
+ReadNoise		0	.3
+Bias			0	0
+Gain			0	2.3
+NoiseFactor		0	1
+DarkCurrent		0	0
+EMGain			0	1

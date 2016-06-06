@@ -1,0 +1,10 @@
+#
+#
+mysql DM_SLOWCONTROL -u dmatter -pseedark -h mitdm004.mit.edu -e "update busy set daq=1"
+usbpermit.tcl 
+root -b -c ccdinit.cxx 2>&1 > ccdinit.log
+mysql DM_SLOWCONTROL -u dmatter -pseedark -h mitdm004.mit.edu -e "update busy set daq=0"
+#
+#
+echo "--- RUN SCRIPT FINISHED ---"
+

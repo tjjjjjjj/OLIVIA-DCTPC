@@ -1,0 +1,8 @@
+#!/bin/csh -v
+
+rm /skim/*
+
+#cat files.txt >>& /logs/quickSkim.log 
+/home/raytheon/work/code/v4/bin/quickSkim -d 15 -c seed_cf4_28mm.cfg >>& /logs/quickSkim.log
+
+

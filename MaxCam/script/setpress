@@ -1,0 +1,59 @@
+#!/usr/bin/perl
+
+use DM;
+
+use CGI ':standard';
+use CGI::Carp qw(fatalsToBrowser);
+
+$|=1;
+
+print "Content-type:text/html\n\n";
+
+
+#if(int(DM->check_hold())==1)
+#{
+#  die "hold in place"; 
+#}
+
+
+#Check hv status
+#$db = DM->connect; 
+#$sql = "SELECT setval from hvstatus order by timestamp desc limit 1";
+#$statement = $db->prepare($sql) or die "Couldn't prepare query '$sql': $DBI::errstr\n";
+#$statement->execute() or die "Couldn't execute query '$sql': $DBI::errstr\n";
+#$row_ref = $statement->fetchrow_hashref(); 
+
+#$db->disconnect(); 
+
+#if (int($row_ref->{setval})==1)
+#{
+#  die "hv is on"; 
+#}
+
+
+
+my $What = param("WHAT") or die "No parameter defined!";
+
+
+#  check that DMPressureControl is running
+@ARGV = ("ps -A | grep DMPressureContr |");
+$nRunning=0;
+while(<>) {
+  $nRunning++;
+}
+if ($n<1) {
+  $ENV{'LD_LIBRARY_PATH'} = "/usr/local/lib/root/:/usr/local/lib";
+  $ENV{'ROOTSYS'} = "/usr/local/lib/root";
+  $ENV{'MCCHANNELCFGS'} = "$DM::APACHE_ROOT/$HTMLDIR/channels/$DM::DETECTOR";
+  if ($What eq "refill") {
+  	system("nohup $DM::APACHE_ROOT/cgi-bin/DMPressureControl > $DM::APACHE_ROOT/$DM::HTMLDIR/tmp/presscontrol.out 2>&1 &");
+  }
+  if ($What eq "adjust") {
+  	system("nohup $DM::APACHE_ROOT/cgi-bin/DMPressureControl adjust > $DM::APACHE_ROOT/$DM::HTMLDIR/tmp/presscontrol.out 2>&1 &");
+  }
+}
+print "nproc=$nRunning";
+
+
+
+

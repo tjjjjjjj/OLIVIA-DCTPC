@@ -1,0 +1,55 @@
+8
+
+dir
+1
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft/AnalysisFramework/v5/cfg
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft
+
+
+
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+d3d5ed4b-f520-4247-9981-1203ad1f38be
+
+CVS
+dir
+
+seed_mc_stitch.cfg
+file
+
+
+
+
+2014-03-24T16:30:08.000000Z
+5a545cde09bcb8b81f9d73a0b10fd432
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+seed_stitch.cfg
+file
+
+
+
+
+2014-03-24T16:30:08.000000Z
+837cd7af27608131ccb09953768732ef
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+

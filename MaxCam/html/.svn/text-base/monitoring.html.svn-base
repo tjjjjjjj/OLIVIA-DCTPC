@@ -1,0 +1,209 @@
+<html>
+<head>
+<title> DMTPC - Mission Control </title>
+
+<script src="jquery.js"></script>
+<script type="text/javascript" src="jquery.form.js"></script>
+
+
+<script>
+
+  var refreshId;
+  var refreshId2;
+  function load_file(url)
+  {
+    div_display = document.getElementById("plots").style.display.toLowerCase();
+    if (div_display=="none" || div_display=="none"){
+      $('#plots').load(url);
+      $('#plots').css("display","inline");
+      $('#plots2').css("display","none");
+    }else{
+      $('#plots2').load(url);
+      $('#plots2').css("display","inline");
+      $('#plots').css("display","none");
+    }
+  }
+
+  function preload(div_name, url,height,width,clear)
+  { 
+    $img = $('<img />').attr('src',url)
+              .attr("width",height)
+              .attr("height",width) 
+              .load(
+              function()
+              {
+                if(clear){$(div_name).html("");}
+                $(div_name).append($(this)); 
+              }) ;
+    if (clear) $img.attr("onClick","load_img_in_popup(\""+url+"\");");}
+
+
+
+  function load_image(div_name,script_url)
+  {
+    $.ajax({url: script_url, cache: false, 
+            success:  function(url){
+                        
+                       preload(div_name,url,"400","300",true); 
+                       }}); 
+  }
+
+  function show_popup()
+  {
+   $('#popup').css("display","block"); 
+   $('#blanket').css("display","block"); 
+   $('#blanket').css("height",$(document).height()+"px"); 
+   $('#popup').center(); 
+   $('#popup').html('<br\><p align="center"> <a href="#" onClick="hide_popup();">[close]</a></p>');
+  }
+
+   function hide_popup()
+  {
+   $('#popup').css("display","none"); 
+   $('#blanket').css("display","none"); 
+
+   $.get('../cgi-bin/deleteImage2.pl?rand='+Math.random());
+  }
+
+  function load_img_in_popup(url)
+  {
+      show_popup(); 
+      preload('#popup',url,"640","480",false);
+  }
+
+  $(document).ready(function()
+  {
+    jQuery.fn.center = function () {
+          this.css("position","absolute");
+          this.css("top", ( $(window).height() - this.height() ) / 2+$(window).scrollTop() + "px");
+          this.css("left", ( $(window).width() - this.width() ) / 2+$(window).scrollLeft() + "px");
+          return this;
+     }
+
+
+    $('#detname').load('../cgi-bin/getdet'); 
+    $('#menu').load('../cgi-bin/makemenu',function(){$('#li_monitoring').addClass("active");});  
+
+   $('#dbplot').ajaxForm({success: function(url)
+    {
+      load_img_in_popup(url); 
+    }});
+ 
+    $('#plots').html("<h1>Loading...</h1>");
+
+    $("#checkProcess").load('../cgi-bin/CheckPlots.py');
+    refreshId = setInterval("$(\"#checkProcess\").load('../cgi-bin/CheckPlots.py')",10000);
+
+//Two plotting divs for double buffering
+    //$('#plots').css("display","inline");
+    //$('#plots2').css("display","none");
+
+    load_file('http://pippin.lns.mit.edu/tmp/monitoring_plots.html');
+    refreshId2 = setInterval("load_file('http://pippin.lns.mit.edu/tmp/monitoring_plots.html')",30000);
+
+    $("#stop").click(function()
+    {
+      clearInterval(refreshId2);
+    });
+  });
+</script>
+<link rel="stylesheet" href="styles.css" type="text/css"/>
+</head>
+<body>
+  <div id="all">
+  <img src="gfx/webpageheader.png" alt="DMTPC - Mission Control" />
+  <div id="detname">
+   </div>
+  <div id="menu">
+  </div>
+
+  <div id="main">
+    <div id="blanket" style="display:none">
+   </div>
+  
+   <div id="popup" style="display:none">
+   </div>
+
+<!--  
+<div align="left">
+<button id="stop">Stop</button>
+</div>
+-->
+<h2 align="center"> Plots </h2>
+<hr/>
+<div id="checkProcess" align="center">Checking Status </div> 
+  
+
+<div align="center">
+
+See <a href="SQL_Structure.html" target="new_"> here </a> for chart of SQL Database.<br>
+<form id="dbplot" action="../cgi-bin/MakePlot.py">
+<P>
+<table>
+  <tr>
+    <td><label for="Table">Table: </label></td>
+    <td><input width="30" type="text" name="Table"></td>
+    <td><label for="Value">Parameter: </label></td>
+    <td><input type="text" name="Value"><td> 
+        <td rowspan="4"><input type="submit" style="height:8em;width:8em;" value="Plot"></td>
+  </tr>
+  <tr>
+    <td><label for="StartDate"> Start Date: </label></td>
+    <td><input type="text" name="StartDate"></td>
+    <td><label for="StartTime"> Start Time: </label></td>
+    <td><input type="text" name="StartTime"></td>
+  </tr>
+  <tr>
+    <td><label for="EndDate"> End Date: </label></td>
+    <td><input type="text" name="EndDate"></td>
+    <td><label for="EndTime"> End Time: </label></td>
+    <td><input type="text" name="EndTime"></td>
+  </tr>
+  <tr>
+    <td><label for="Log"> Style </label></td>
+    <td><input type="radio" name="Log" value="False" checked> Lin</td>
+    <td><input type="radio" name="Log" value="True"> Log</td>
+  </tr> 
+  <tr> 
+    <td><label for="UseSet"> Show Set Values </label></td>
+    <td><input type="radio" name="UseSet" value="False" checked>No</td>
+    <td><input type="radio" name="UseSet" value="True">Yes</td>
+  </tr>
+</table>
+</P>
+</div>
+</form>
+<!--
+<form id="dbplot" action="../cgi-bin//makePlot.pl">
+<P>
+<table>
+  <tr>
+    <td><label for="TABLE">Table: </label></td>
+    <td><input width="30" type="text" name="TABLE"></td>
+    <td><label for="PARAM">Parameter: </label></td>
+    <td><input type="text" name="PARAM"><td> 
+        <td rowspan="3"><input type="submit" style="height:8em;width:8em;" value="Plot"></td>
+  </tr>
+  <tr>
+    <td><label for="START_TIME"> Start Time: </label></td>
+    <td><input type="text" name="START_TIME"></td>
+    <td><label for="END_TIME"> End Time: </label></td>
+    <td><input type="text" name="END_TIME"></td>
+  </tr>
+  <tr>
+    <td><label for="MINVAL"> Min: </label></td>
+    <td><input type="text" name="MINVAL"></td>
+    <td><label for="MAXVAL"> Max: </label></td>
+    <td><input type="text" name="MAXVAL"></td>
+  </tr>
+</table>
+</P>
+</div>
+</form>
+-->
+<hr/>
+<div align="center" id="plots"></div>
+<div align="center" id="plots2"></div>
+</body>
+
+</html>

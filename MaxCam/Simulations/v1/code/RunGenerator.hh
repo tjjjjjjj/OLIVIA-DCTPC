@@ -1,0 +1,157 @@
+#ifndef RUNGENERATOR_HH
+#define RUNGENERATOR_HH
+
+#include "ParticleGenerator.hh"
+#include "SimCamera.hh"
+#include "SimChamber.hh"
+#include "SimScope.hh"
+#include "ScopeDataInfo.hh"
+#include "EventGenerator.hh"
+
+
+
+#include "../../../DmtpcDataset.hh"
+#include "../../../MaxCamSRIM.hh"
+#include "../../../MaxCamClusterImage.hh"
+
+#include "TH2.h"
+#include "TClonesArray.h"
+#include "TObject.h"
+#include "TSystem.h"
+#include "TRandom3.h"
+#include "TH1.h"
+#include "TTree.h"
+#include "TBranch.h"
+#include "TLeaf.h"
+#include "TString.h"
+#include "TFile.h"
+#include "TTimeStamp.h"
+#include "TDatime.h"
+#include "TObjArray.h"
+class ScopeDataInfo;
+
+class RunGenerator : public TObject{
+
+public:
+
+  RunGenerator();
+  ~RunGenerator();
+
+
+	 
+  void setNumberOfEvents(Int_t nev){fNEvents = nev;}
+  Int_t getNumberOfEvents(){return fNEvents;}
+
+  void setRunNumber(Int_t run){fRunNumber = run;}
+  Int_t getRunNumber(){return fRunNumber;}
+
+  void findFileNames();
+
+  EventGenerator* getEventGenerator(){return fEventGen;}
+  
+  ScopeDataInfo* getScopeDataInfo(){return scopeinfo;}
+  ScopeDataInfo* dataInfo(int ii=0);
+  
+  void setFilename(TString filename){fFilename = filename;}
+  TString getFilename(){return fFilename;}
+
+  void setTextFile(TString filename){fTextfile = filename;}
+  TString getTextFile(){return fTextfile;}
+
+  void setDataPath(TString datapath){fDatapath = datapath;}
+  TString getDataPath(){return fDatapath;}
+  void setTextPath(TString textpath){fTextpath = textpath;}
+  TString getTextPath(){return fTextpath;}
+
+  void setFileTag(TString tag){fFiletag = tag;}
+  TString getFileTag(){return fFiletag;}
+
+  void setSaveTrueClusters(TString trueORfalse){ trueORfalse.ToLower(); (trueORfalse.Contains("true")) ? (fSaveTrueClusters=true) : (fSaveTrueClusters=false); }
+  Bool_t getSaveTrueClusters(){return fSaveTrueClusters;}
+
+  void setVerbose(Int_t v){fVerbose = v; }
+  Int_t getVerbose(){return fVerbose;}
+
+  //These were moved to SimScope...
+  //Int_t   getNlevels(Int_t scope);
+  //Float_t getVoltageStep(Int_t scope, Int_t chan);
+  //Float_t levelOfVolts(Int_t scope, Int_t chan, Float_t level_volts);
+
+
+ 
+  DmtpcDataset* dataset(){return fData;}
+
+  void readScopeProperties(TString filename);
+  void readPMTProperties(TString filename);
+  void readCameraProperties(TString filename);
+  void readDetectorProperties(TString filename);
+  void readRunParameters(TString filename);
+  void readParametersFromFile(TString filename);
+  void setSpacers();
+  void normalizeGainMaps(); 
+  void dataSetup();
+  void initialize();
+  void run(Bool_t empty = 0);
+
+  void emptyEvent();
+  void recoilEvent();
+  void saveEvent();
+  void endRun();
+  void outputTextFile(Bool_t fromFile, TString filename = ""); 
+  EventGenerator *fEventGen;
+  
+  //ScopeDataInfo* dataInfo(int ii=0);
+
+  void addScopeDataInfo(int ii);
+
+
+private:
+
+  void prepScopeChannel(Int_t scope, Int_t chan); 
+  
+  ScopeDataInfo *scopeinfo;
+  DmtpcDataset *fData;
+  TTree *fSim;
+  Int_t fNEvents;
+  Int_t fSimEventNum;
+  Float_t fSimMass;
+  Int_t fSeq;
+  Float_t fSimEnergy;
+  Float_t fTrackTheta;
+  Float_t fTrackPhi;
+  vector<Float_t> fSimEscint;
+  Float_t fSimPhi;
+  Float_t fSimTheta;
+  Float_t fSimX;
+  Float_t fSimY;
+  Float_t fSimZ;
+  Float_t fSimLength;
+  Float_t fSimZLength;
+  Float_t fSimDeltaZ;
+  Float_t fSimProjE;
+  vector<Float_t> fSimIntegral;
+  vector<Float_t> fTotalGain;
+  Float_t fSimProjPhi;
+  Float_t fSimProjTheta;
+  Float_t fSimProjMass;
+  Float_t fCosCygnus;
+  Double_t fSpacerSpacing;
+  TDatime* fSimTime;
+  TString fFilename;
+  TString fTextfile;
+  TRandom3* fRnd;
+  TTimeStamp *fTime;
+  Int_t fRunNumber;
+  TString fDatapath;
+  TString fTextpath;
+  TString fFiletag;
+  TObjArray *fSimTrueClusterArray;
+  Bool_t fSaveTrueClusters;
+  Int_t fVerbose;
+  ClassDef(RunGenerator,1)
+
+  std::vector<ScopeDataInfo*> _scopeDataInfo;
+};
+
+
+#endif

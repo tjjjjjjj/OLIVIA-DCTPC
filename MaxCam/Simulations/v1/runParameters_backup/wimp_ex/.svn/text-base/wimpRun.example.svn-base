@@ -1,0 +1,30 @@
+Run Parameters
+===================================
+NumberOfEvents		2000
+EventType		wimp
+ProjectileParticle	wimp
+ProjectileMass		100000000.0
+RecoilParticle		fluorine
+RecoilMass		19000000.0
+SRIMfile		SRIM_F_in_CF4_100Torr
+EnergyOption		random
+MinEnergy		75.0
+MaxEnergy		20000.0
+FixEnergy		0.0
+PositionOption		random
+MinPositionLimits	-73.216	-73.216	0
+MaxPositionLimits	73.216	73.216	200
+FixPosition		0	0	0
+TimeOption		random
+MinTime			2009	1	1	0	0	0
+MaxTime			2009	12	31	23	59	59
+FixTime			2009	6	1	12	0	0
+DirectionOption		isotropic
+SourcePosition		0.0	0.0	0.0
+SourceDirection		1.0	0.0	0.0
+ThetaMax		5
+SpecialOption		wimp
+FissionSpectrumENDF	none
+TotalCS_ENDF		none
+ElastScatterDCS_ENDF	none
+TimeResolution		15

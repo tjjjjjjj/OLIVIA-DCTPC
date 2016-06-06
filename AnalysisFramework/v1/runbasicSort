@@ -1,0 +1,14 @@
+#!/bin/bash
+
+echo dmtpc_run$1.root > files$1.txt
+echo /export/data03/ddujmic/data/ > keys$1.txt
+echo "/export/dmtpcdata01/analysis/v1/skim/  skim" >> keys$1.txt
+
+export skimdir='/export/dmtpcdata01/analysis/v1/sort/'
+
+root -l -b -q "sortTracks.C++(\"files$1.txt\",\"keys$1.txt\",\"$skimdir\")" >> /export/dmtpcdata01/analysis/v1/logFiles/run$1sort.log 2>&1 &
+wait
+
+rm -f files$1.txt
+rm -f keys$1.txt
+echo "Processing on run $1 Done"

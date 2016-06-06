@@ -1,0 +1,94 @@
+// MaxCam includes
+#include "SimScope.hh"
+
+// ROOT includes
+#include "TObject.h"
+
+// C++ includes
+#include <iostream>
+using std::cout;
+using std::endl;
+//________________________________
+/*Begin_Html
+<center><h2>The SimScope Class </h2></center>
+The SimScope class is designed to hold the various parameters of the 
+Scopes used in the detector.  A separate class is used so that in
+future versions of the simulation, several instances of the class may
+be added to a TObjectArray or TClonesArray to allow for generation of
+multiple Scope signal, each having its own properties.
+End_Html*/
+//________________________________
+
+ClassImp(SimScope)
+
+SimScope::SimScope()
+{
+  //<<<<<Default Constructor>>>>>
+  fSerialNumber = "";
+  fScopeNumber = 0;
+  fChans = new TObjArray();
+}
+SimScope::SimScope(TString ser, Int_t pmtnum)
+{
+  //<<<<<Alternate Constructor>>>>
+  fSerialNumber = ser;
+  fScopeNumber = pmtnum;
+  fChans = new TObjArray();
+}
+
+SimScope::~SimScope()
+{
+  //<<<<<Destructor>>>>>
+}
+
+void
+SimScope::setBoardType(TString bt) {
+  fBoardType= bt;
+  updateHardwareSpecs();
+}
+
+void
+SimScope::updateHardwareSpecs() {
+  // given the board type, set all of the hardware parameters
+  if (fBoardType=="ALAZAR_ATS860") {
+    cout << "found an Alazar ATS860 board" << endl;
+    fNChan = 2;
+    fNbitsPerSamp = 8;
+  }
+}
+
+Float_t
+SimScope::getVoltageStep(Int_t ch)
+{
+  Int_t nlevels = getNlevels();
+  Float_t vmin  = chan(ch)->getVoltageMin();
+  Float_t vmax  = chan(ch)->getVoltageMax();
+  return (vmax-vmin)/nlevels;
+}
+
+Float_t
+SimScope::getLevelOfVolts(Int_t ch, Float_t level_volts) 
+{
+  Float_t vmin  = chan(ch)->getVoltageMin();
+  int level     = (level_volts-vmin)/getVoltageStep(ch);
+
+  Int_t nlevels = getNlevels();
+  if (level<0) level=0;
+  if (level > nlevels) level=nlevels-1;
+    
+  return level;
+}
+
+
+SimScopeChannel* 
+SimScope::chan(Int_t channum) {
+  int nchan = fChans->GetEntries(); 
+  SimScopeChannel* chan;
+  if (channum < nchan) chan = (SimScopeChannel*) fChans->At(channum);
+  else{
+    cout << "Invalid channel number: "<<channum<<". There are "<<nchan <<" channels. Returning null pointer." <<endl;
+    chan = NULL;
+  }
+  return chan;
+  
+}

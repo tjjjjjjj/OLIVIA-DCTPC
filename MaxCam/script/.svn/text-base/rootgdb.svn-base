@@ -1,0 +1,8 @@
+#!/bin/sh
+line=`ps -wwfu $USER | grep root.exe | grep -v grep | tail -1`
+if [ "$line" == "" ] ; then
+	echo "NO ROOT session running"
+	exit 1
+fi
+set $line
+exec gdb $8 $2

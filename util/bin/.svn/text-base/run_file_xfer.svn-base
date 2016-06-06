@@ -1,0 +1,51 @@
+#!/usr/bin/python
+import os,commands,__main__,sys
+from file_xfer import simpleFileXfer
+
+def singleProcess(nprocs=1):
+    # Only 1 session be running. Die if found one already running.
+    out=commands.getoutput("ps aux | grep %s" % __main__.__dict__['__file__'])
+    if len(out.split('\n'))>=int(nprocs): 
+        print "Process already running... exit!"
+        print out 
+        return  False
+    else:
+        return True
+
+def xferTPC2MIT():
+    k=simpleFileXfer()
+    if ( not k.SetLocalDataDir("/home/dctpc/data") or
+         not k.SetRemoteAccess('kazuhiro','cgate.mit.edu') or
+         not k.SetRemoteDataDir('/net/nudsk0001/d00/scratch/dctpc_tmp/data')):
+        return False
+    k.SetNumFilesToCopy(1)
+    k.SetDebugMode(False)
+    k.SetXferMode(k.TPC2MIT)
+    k.CleanUpLocalFiles(True)
+    k.CopyFiles()
+    return True
+
+def xferTPC2DCNODE():
+    k=simpleFileXfer()
+    if ( not k.SetLocalDataDir("%s/data" % os.environ['DCTPC_DATA_DIR']) or
+         not k.SetRemoteAccess('dctpc','dcftpc1.in2p3.fr') or
+         not k.SetRemoteDataDir("/home/dctpc/data/") ):
+        return False
+    k.CleanUpLocalFiles(True)
+    k.SetMaxFiles(350)
+    k.SetNumFilesToCopy(0)
+    k.SetRemote2Local(True)
+    k.SetDebugMode(True)
+    k.SetXferMode(k.TPC2DCNODE)
+    k.CopyFiles()
+    return True
+
+if __name__ == '__main__':
+    out=commands.getoutput('uname -n')
+    if out=='dcnode.in2p3.fr' or out=='dcpop.in2p3.fr' or out=='dcpip.in2p3.fr':
+        if singleProcess(4):
+            xferTPC2DCNODE()
+    elif out=='dcftpc1':
+        if singleProcess(4):
+            xferTPC2MIT()
+    sys.exit(0)

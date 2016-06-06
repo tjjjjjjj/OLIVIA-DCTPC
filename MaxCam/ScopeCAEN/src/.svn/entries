@@ -1,0 +1,68 @@
+8
+
+dir
+1
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft/MaxCam/ScopeCAEN/src
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft
+
+
+
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+d3d5ed4b-f520-4247-9981-1203ad1f38be
+
+CAENKeyComm.cc
+file
+
+
+
+
+2014-03-24T16:30:20.000000Z
+c10cc0bf9c89d5ca616838918e50fa83
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+has-props
+
+runCAENv1720.cc
+file
+
+
+
+
+2014-03-24T16:30:20.000000Z
+230c13cb3e50af9bc2252a80279687d8
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+ScopeCAENv1720.cc
+file
+
+
+
+
+2014-03-24T16:30:20.000000Z
+70e715c286685ae21b99d1cf42582bc0
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+CVS
+dir
+

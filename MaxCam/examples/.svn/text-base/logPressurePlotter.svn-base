@@ -1,0 +1,5 @@
+#!/bin/bash
+
+root -l -b -q "logPressurePlotter.cxx+(1000)" >> logPressurePlotter.log 2>&1 &
+wait
+echo "done"

@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<MethodSetup Method="Fisher::Fisher">
+  <GeneralInfo>
+    <Info name="TMVA Release" value="4.1.2 [262402]"/>
+    <Info name="ROOT Release" value="5.24/00 [333824]"/>
+    <Info name="Creator" value="cozzyd"/>
+    <Info name="Date" value="Wed Aug 31 15:34:59 2011"/>
+    <Info name="Host" value="Linux template.lns.mit.edu 2.6.18-194.17.1.el5PAE #1 SMP Wed Sep 29 12:41:57 EDT 2010 i686 i686 i386 GNU/Linux"/>
+    <Info name="Dir" value="/net/zwicky/dmtpc/cozzyd/projects/DarkMatter/AnalysisFramework/v4"/>
+    <Info name="Training events" value="3167"/>
+    <Info name="TrainingTime" value="2.67009735e-02"/>
+    <Info name="AnalysisType" value="Classification"/>
+  </GeneralInfo>
+  <Options>
+    <Option name="V" modified="No">False</Option>
+    <Option name="VerbosityLevel" modified="No">Default</Option>
+    <Option name="VarTransform" modified="No">None</Option>
+    <Option name="H" modified="No">False</Option>
+    <Option name="CreateMVAPdfs" modified="No">False</Option>
+    <Option name="IgnoreNegWeightsInTraining" modified="No">False</Option>
+    <Option name="Method" modified="No">Fisher</Option>
+  </Options>
+  <Variables NVar="13">
+    <Variable VarIndex="0" Expression="E" Label="E" Title="E" Unit="" Internal="E" Type="F" Min="2.13420822e+02" Max="5.99529785e+03"/>
+    <Variable VarIndex="1" Expression="range" Label="range" Title="range" Unit="" Internal="range" Type="F" Min="4.00000000e+00" Max="8.80908585e+01"/>
+    <Variable VarIndex="2" Expression="cluster_rms" Label="cluster_rms" Title="cluster_rms" Unit="" Internal="cluster_rms" Type="F" Min="4.89377260e+00" Max="1.02739502e+03"/>
+    <Variable VarIndex="3" Expression="maxpixel" Label="maxpixel" Title="maxpixel" Unit="" Internal="maxpixel" Type="F" Min="2.11745815e+01" Max="4.98475635e+03"/>
+    <Variable VarIndex="4" Expression="neighbors" Label="neighbors" Title="neighbors" Unit="" Internal="neighbors" Type="F" Min="0.00000000e+00" Max="8.00000000e+00"/>
+    <Variable VarIndex="5" Expression="npixel" Label="npixel" Title="npixel" Unit="" Internal="npixel" Type="F" Min="1.60000000e+01" Max="2.38000000e+02"/>
+    <Variable VarIndex="6" Expression="npixel_red" Label="npixel_red" Title="npixel_red" Unit="" Internal="npixel_red" Type="F" Min="2.00000000e+00" Max="1.09000000e+02"/>
+    <Variable VarIndex="7" Expression="log(E)" Label="log(E)" Title="log(E)" Unit="" Internal="log_E_" Type="F" Min="5.36326599e+00" Max="8.69873047e+00"/>
+    <Variable VarIndex="8" Expression="log(range)" Label="log(range)" Title="log(range)" Unit="" Internal="log_range_" Type="F" Min="1.38629436e+00" Max="4.47836876e+00"/>
+    <Variable VarIndex="9" Expression="log(cluster_rms)" Label="log(cluster_rms)" Title="log(cluster_rms)" Unit="" Internal="log_cluster_rms_" Type="F" Min="1.58796358e+00" Max="6.93478155e+00"/>
+    <Variable VarIndex="10" Expression="log(maxpixel)" Label="log(maxpixel)" Title="log(maxpixel)" Unit="" Internal="log_maxpixel_" Type="F" Min="3.05280137e+00" Max="8.51414013e+00"/>
+    <Variable VarIndex="11" Expression="log(npixel)" Label="log(npixel)" Title="log(npixel)" Unit="" Internal="log_npixel_" Type="F" Min="2.77258873e+00" Max="5.47227049e+00"/>
+    <Variable VarIndex="12" Expression="log(npixel_red)" Label="log(npixel_red)" Title="log(npixel_red)" Unit="" Internal="log_npixel_red_" Type="F" Min="6.93147182e-01" Max="4.69134808e+00"/>
+  </Variables>
+  <Spectators NSpec="0"/>
+  <Classes NClass="2">
+    <Class Name="Signal" Index="0"/>
+    <Class Name="Background" Index="1"/>
+  </Classes>
+  <Transformations NTransformations="0"/>
+  <MVAPdfs/>
+  <Weights NCoeff="14">
+    <Coefficient Index="0" Value="5.9858646445673580e-01"/>
+    <Coefficient Index="1" Value="8.1164931775561694e-05"/>
+    <Coefficient Index="2" Value="1.2986742251338305e-03"/>
+    <Coefficient Index="3" Value="-5.4078925608597467e-03"/>
+    <Coefficient Index="4" Value="1.0624854309992126e-03"/>
+    <Coefficient Index="5" Value="-9.9902669764574820e-03"/>
+    <Coefficient Index="6" Value="5.5084574002678575e-03"/>
+    <Coefficient Index="7" Value="-2.7572291275695895e-02"/>
+    <Coefficient Index="8" Value="4.8020968178565071e-01"/>
+    <Coefficient Index="9" Value="-3.6163373788020026e-01"/>
+    <Coefficient Index="10" Value="1.6673855589398567e-01"/>
+    <Coefficient Index="11" Value="-6.9588850666429680e-01"/>
+    <Coefficient Index="12" Value="-4.7970848979419983e-01"/>
+    <Coefficient Index="13" Value="8.6746405073383137e-01"/>
+  </Weights>
+</MethodSetup>

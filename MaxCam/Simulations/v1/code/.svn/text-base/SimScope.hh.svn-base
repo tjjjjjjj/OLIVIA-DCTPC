@@ -1,0 +1,57 @@
+#ifndef __SIMSCOPE__
+#define __SIMSCOPE__
+
+//ROOT includes
+#include "TMath.h"
+#include "TObject.h"
+#include "TString.h"
+
+//Viper includes
+#include "SimScopeChannel.hh"
+
+class SimScope : public TObject {
+
+public: 
+
+  SimScope();
+  SimScope(TString ser, Int_t pmtnum);
+  //SimScope(const SimScope &other);
+  virtual ~SimScope();
+
+  void setSerialNumber(TString ser){fSerialNumber = ser;}
+  void setScopeNumber(Int_t num){fScopeNumber = num;}
+  void setBoardType(TString bt);
+  void setClockRate(Float_t cr) {fClockRate = cr;}
+  void setRecordPreSize(Int_t sz) {fRecordPreSize = sz;}
+  void setRecordLength(Int_t sz) {fRecordLength = sz;}
+
+  SimScopeChannel* chan(Int_t channum);
+  TObjArray* chans() { return fChans; }
+  TString getSerialNumber(){return fSerialNumber;}
+  Int_t   getScopeNumber(){return fScopeNumber;}
+  TString getBoardType(){return fBoardType;}
+  Float_t getClockRate() {return fClockRate;}
+  Int_t   getRecordLength() { return fRecordLength; }
+  Int_t   getRecordPreSize() { return fRecordPreSize; }
+  Int_t   getNbitsPerSamp() { return fNbitsPerSamp;}
+  Int_t   getNlevels() {return (Int_t)(TMath::Power(2,getNbitsPerSamp()));}
+  Float_t getVoltageStep(Int_t chan);
+  Float_t getLevelOfVolts(Int_t chan, Float_t level_volts);
+
+private:
+
+  void updateHardwareSpecs();
+
+  TObjArray* fChans;      //Array of SimScopeChan 
+  TString fSerialNumber;  //Scope Serial Number
+  Int_t   fScopeNumber;   //Scope Number
+  TString fBoardType;     //Type of scope board --> defines nchannels, and others
+  Int_t   fNChan;         //Number of channels on this scope
+  Int_t   fNbitsPerSamp;  //Bits per sample (=8 for Alazar ATS860)
+  Float_t fClockRate;     //Digitization rate in GHz (max is 0.25 for ATS860)
+  Int_t   fRecordPreSize; //Number of samples in the pre-trigger waveform
+  Int_t   fRecordLength;  //Total number of samples per waveform
+  ClassDef(SimScope,1)
+};
+
+#endif

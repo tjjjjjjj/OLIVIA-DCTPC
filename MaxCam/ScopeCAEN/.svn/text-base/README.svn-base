@@ -1,0 +1,47 @@
+//-------------------------------------------------------------+
+//                                                             +
+// Running CAEN digitizers, Save waveform to ROOT file         +
+//                                                             +
+// Pietro Giampa, RHUL 2013                                    +
+//                                                             +
+//-------------------------------------------------------------+
+
+
+This Allows the user to take charge data with a CAEN board,  all the code has been done via the CAENDigitizer
+library which it should be compatible with all the CAEN boards.
+
+The Readout from the digitizer is saved into a TTree called "dmtpc" which has :
+	- TH1S of the waveform
+	- Record Length
+	- Event Counter
+	- Trigger Time Tag
+
+//-------------------------------------------------------------+
+
+TO COMPILE :
+
+1) Make clean;
+
+2) Make caen;
+
+- This should build an executable "caen" in the main directory
+
+
+//-------------------------------------------------------------+
+
+TO DO :
+
+1) Clean up some parts
+
+2) Creating specific function for setting up the board
+
+3) Creating specific function to enable channels
+
+4) Optimize output
+
+5) Turn into DmtpcDataset
+
+//-------------------------------------------------------------+
+
+
+Latest Update : 24th June 2013, Pietro Giampa

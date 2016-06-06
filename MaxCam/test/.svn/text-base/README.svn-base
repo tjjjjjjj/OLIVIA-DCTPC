@@ -1,0 +1,57 @@
+******************************
+***MaxCam testing framework***
+******************************
+
+
+--Introduction--
+
+This folder contains a makeshift testing framework for libMaxCam. Rather than
+adapting an existing unit testing framework, I created a simple one implemented
+with the Makefile. 
+
+
+--Using--
+
+To compile and run all enabled tests, call make in the test directory. 
+
+
+--Configuring--
+
+the TESTS line in the Makefile defines which tests will be run 
+
+the DEPENDENCIES line in the Makefile is used to specify files that if changed, should trigger
+a recompile of the compiled tests. For example, having ../libMaxCam.so there will force a test 
+recompile whenever make shared is called in MaxCam. 
+
+--Test Writing Basics-- 
+
+Tests may be written as either compiled C++ code or as a shell-executable script. 
+
+A test is considered successful if it executes and returns 0. It is considered unsuccessful if:
+
+  - It fails to compile
+  - It fails to be interpreted properly
+  - It seg faults or killed for another reason
+  - It returns non-zero 
+
+The output of a test may be found in the output directory. 
+
+If a test fails and a line starting with "REASON:" is found in the output file, 
+that line will be echoed to the the screen. Segmentation faults, compilation errors, and other
+similar things will also be echoed (because nothing is done to preven tthat).  
+
+A file called results is filled with the results of each test. 
+
+If a test takes arguments, create a file in args with the same name as the test. It should consist of one line containing the arguments. 
+
+--Writing a test in C++--
+
+Write a compileable C++ program contained in a single file under src. It will be compiled automatically. 
+
+Note that make clean doesn't clear out bin as you might expect since scripts live there. Instead, all files
+in the src directory are touched to force recompilation on the next make. 
+
+--Writing a test in bash or python or other scripting languages
+
+Put your test directly in bin. Make sure it's executable and has an appropriate first line (e.g. #! /bin/bash) 
+

@@ -1,0 +1,17 @@
+#!/usr/bin/perl
+
+use DM;
+use CGI ':standard';
+use CGI::Carp qw(fatalsToBrowser);
+print "Content-type:text/html\n\n";
+
+
+$size = @DM::CAMERA_HOST; 
+for ($count = 0; $count <$size; $count++) 
+{
+  print "<h1>".$DM::CAMERA_NAME[$count]."</h1>";
+  print "<iframe width=\"801\" height=\"800\" src=\"http://".$DM::CAMERA_HOST[$count]."/JVIEW.HTM\">";
+}
+
+
+

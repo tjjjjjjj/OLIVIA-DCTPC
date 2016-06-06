@@ -1,0 +1,8 @@
+#nothing here...
+SerialNumber	0	PMT_0
+# Diameter of PMT [mm] (assumes it's circular...)
+PMTDiameter	0      10.0
+# [mm, mm] x, y coordinate of sub-PMT point on anode plane
+PMTPosition	0      0.0	0.0
+# [mm] Perpendicular distance from anode plane to PMT face 
+PMTDistance	0      5.0

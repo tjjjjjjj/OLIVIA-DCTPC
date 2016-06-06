@@ -1,0 +1,48 @@
+Run Parameters
+===================================
+NumberOfEvents		1000
+EventType		alpha
+# default file tag is "dmtpc_mc_"; this is the moniker
+# that gets appended to the output root file name
+FileTag                 dmtpc_4sh_mc_
+ProjectileParticle	alpha
+ProjectileMass		4001506
+RecoilParticle		alpha
+RecoilMass		4001506
+SRIMfile		SRIM_He_in_CF4_100Torr
+EnergyOption		gaussian
+MinEnergy		0.0
+MaxEnergy		20000.0
+FixEnergy		3928.0
+EnergySpread		184
+PositionOption		fixed
+MinPositionLimits	-73.216	-73.216	0
+MaxPositionLimits	73.216	73.216	300
+#FixPosition		92.2	28.8	40.0
+# top of field cage, pulled back
+#FixPosition		92.2	28.8	246.9
+# alpha starts at the edge of the active region
+#FixPosition		65.999702   30.889661	246.9
+# first MC-driven tweak based on range difference between data and MC
+#FixPosition             72.291003   31.235507   283.935
+#FixPosition             73.363384   31.294459	283.935
+#FixPosition             73.363384   31.294459	326.5
+## transverse width was 7.85 px
+#FixPosition             73.363384   31.294459	360.78
+## transverse width was 8.50 px (gain ~2x) versus 8.43 in MC
+#FixPosition              73.363384   31.294459	389.6
+## new mm/px conversion; 0.160; pulled back 18 px and transverse width 9.33->7.77 (MC->DATA)
+FixPosition               76.580526   31.471312	322.043
+TimeOption		random
+MinTime			2009	1	1	0	0	0
+MaxTime			2009	12	31	23	59	59
+FixTime			2009	6	1	12	0	0
+DirectionOption		collimated
+SourcePosition		0.0	0.0	0.0
+SourceDirection		-1 0.005 0 
+ThetaMax	  	2	
+SpecialOption		none
+FissionSpectrumENDF	none
+TotalCS_ENDF		none
+ElastScatterDCS_ENDF	none
+TimeResolution		15

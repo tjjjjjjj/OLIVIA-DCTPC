@@ -1,0 +1,105 @@
+MaxCamChannel Configuration
+5/29/2010
+
+USING CONFIG FILES:
+
+Note: The old way of declaring MaxCamChannel "should" still work,
+      although I may have missed some things. 
+
+
+To use MaxCamChannel configuration files:
+
+  1. Declare the environmental variable MCCHANNELCFGS to the directory
+     where your config files reside. Note: The web DMSlow scripts will look
+     in /$APACHE_ROOT/$HTMLDIR/channels/$DETECTOR as configured in DM.pm
+
+  2. In your code,  you may create a channel by:
+      
+     MaxCamChannel channel("name_of_config_file"); 
+   
+ 
+DEFINING CONFIG FILES:
+
+-Default values are used when something is unspecifed. 
+-Fields and enum values are case insensitive. 
+-Values should not be quoted although they may be in the
+ description for clarity. 
+-Right now, blank values aren't supported as keys, so if you want 
+ to not specify a value, just don't include the line
+
+The fields are as follows:
+
+Field            |  Default      |   Description
+------------------------------------------------------------------------
+device           | /dev/comedi0  | For analog channels, this is the
+                 |               | comedi device to use. 
+------------------------------------------------------------------------
+serial           | /dev/ttyS4    | For serial channels, this is the 
+                 |               | serial device
+------------------------------------------------------------------------
+ref              | diff          | The analog reference mode. May be
+                 |               | "diff" for AREF_DIFF, 
+                 |               | "ground" for AREF_GROUND 
+                 |               | "common" for AREF_COMMON 
+------------------------------------------------------------------------
+readChannel      |  -1           | Analog channel to read. -1 for none
+------------------------------------------------------------------------
+writeChannel     |  -1           | Analog channel to write. -1 for none
+------------------------------------------------------------------------
+readRange        |  0            | comedi read range
+------------------------------------------------------------------------
+writeRange       |  0            | comedi write range
+------------------------------------------------------------------------
+readSubdev       |  0            | comedi read subdevice
+------------------------------------------------------------------------
+writeSubdev      |  1            | comedi write subdevice
+------------------------------------------------------------------------
+calibrationMethod| none          | Calibration method. May be:
+                 |               | "none" for no calibration
+                 |               | "hardcal" for hardware calibration
+                 |               |           (this will tell comedi to
+                 |               |           apply the calibration)
+                 |               | "softcal" for comedi software 
+                 |               |           calibration
+                 |               | "offset" for manual offset calibration
+------------------------------------------------------------------------
+readOffset       |  0            | If using "offset" calibration method
+                 |               | this is the read offset to apply
+------------------------------------------------------------------------
+writeOffset      |  0            | If using "offset" calibration method
+                 |               | this is the write offset to apply
+------------------------------------------------------------------------
+calibrationFile  |               | Use this to specify a calibration file
+                 |               | for "softcal" or "hardcal" calibration.
+                 |               | Leaving unspecified uses the default 
+                 |               | file for the device (specified by 
+                 |               | comedi)
+------------------------------------------------------------------------
+rampAlgorithm    |  direct       | Specifies the ramp algorithm. May be: 
+                 |               | "direct": Write out desired value 
+                 |               |           and wait until read channel
+                 |               |           reads that value.   
+                 |               | "follow": Adjust write value until 
+                 |               |           read channel reads the
+                 |               |           desired value. Uses the
+                 |               |           "offset_guesses" table to 
+                 |               |           store believed offset. 
+------------------------------------------------------------------------
+dv               |  0.001        | Amount to step voltage by for "follow" 
+------------------------------------------------------------------------
+dt               |  200          | Amount to wait between steps for 
+                 |               | "follow". In msecs. 
+------------------------------------------------------------------------
+epsilon          |  0.001        | Tolerance for "follow" read/write 
+                 |               | comparison. 
+------------------------------------------------------------------------
+invert           | false         | Reverse read polarity. 
+------------------------------------------------------------------------
+title            | (same as      | Title of channel. By default this is 
+                 |  name)        | set to the name. 
+------------------------------------------------------------------------
+dbaccess         | /etc/         | Location of dbaccess file. 
+                 | dbaccess.txt  | 
+ 
+                 
+               

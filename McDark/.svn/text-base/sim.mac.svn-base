@@ -1,0 +1,68 @@
+/control/verbose 2
+/run/verbose 2
+
+
+/vis/open HepRepFile
+/vis/scene/create
+/vis/drawVolume
+/vis/scene/endOfEventAction accumulate
+/vis/viewer/set/viewpointThetaPhi 0 0 deg
+/vis/viewer/zoom 1.0
+#/vis/viewer/flush
+
+/tracking/storeTrajectory 1
+/tracking/verbose 1
+/run/initialize
+
+
+
+/generator/distribution   gun
+
+/generator/minX 0 mm
+/generator/maxX 0 mm
+/generator/minY 0 cm
+/generator/maxY 0 cm
+/generator/minZ 40 mm
+/generator/maxZ 40 mm
+/gun/direction 0 0 -1
+
+/generator/minEnergy 50 keV
+/generator/maxEnergy 50 keV
+
+
+#/gun/particle  e-
+
+#/gun/particle    ion
+#/gun/ion 9 19 9
+#/gun/ion 2 4 2
+
+
+/gun/particle    alpha
+
+#/gun/particle  gamma
+
+#/gun/particle  neutron
+#/generator/distribution DD
+#/generator/distribution Cf252
+
+
+
+/mcdark/printTracks 1
+/mcdark/printHits 1
+/mcdark/plotEvent 1
+
+#
+#   Run events
+#
+/run/beamOn 1
+
+#spergel distribution parameters
+
+#/generator/spergel/wimpMass       100.0 
+#/generator/spergel/wimpDensity    0.3
+#/generator/spergel/mwVelocity     230.0
+#/generator/spergel/earthVelocity  244.0
+#/generator/spergel/earthDVelocity 15.0
+#/generator/spergel/yearFraction   0.0
+
+

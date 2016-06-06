@@ -1,0 +1,102 @@
+#!/bin/bash
+
+# set running=`ps -Af | grep cleanSkim | grep $USER`
+# echo $running
+
+# if( $running != "" ) then
+#    echo cleanSkim already running
+#    exit
+# endif
+
+export ROOTSYS=/usr
+export OUTDIR=/net/zwicky/esata01/dmtpc/data/raytheon/skim/
+
+echo USER $USER
+
+if [[ "$USER" == "fisherp" ]] 
+then
+    export USERDIR=/net/zwicky/dmtpc/fisherp/new/projects/DarkMatter/
+fi
+
+if [[ "$USER" == "wlkoch"  ]] 
+then
+    export USERDIR=/net/zwicky/dmtpc/wlkoch/projects/DarkMatter
+fi
+
+echo USERDIR $USERDIR
+
+cd $USERDIR/Raytheon
+
+ 
+touch datalist
+rm datalist
+touch editfile
+rm editfile
+touch skimlist
+rm skimlist
+
+echo "s/\/net\/zwicky\/esata01\/dmtpc\/data\/raytheon\/dmtpc_Raytheon_//" > editfile
+echo "s/\/net\/zwicky\/esata01\/dmtpc\/data\/raytheon\/dmtpc_10L_//" >> editfile
+echo "s/\/net\/zwicky\/esata01\/dmtpc\/data\/raytheon\/dmtpc_Fusion_//" >> editfile
+echo "s/.root//" >> editfile
+
+ls /net/zwicky/esata01/dmtpc/data/raytheon/*.root | sed -f editfile > datalist
+
+
+rm editfile
+echo "s/\/net\/zwicky\/esata01\/dmtpc\/data\/raytheon\/skim\/dmtpc_Raytheon_//" > editfile
+echo "s/\/net\/zwicky\/esata01\/dmtpc\/data\/raytheon\/skim\/dmtpc_10L_//" >> editfile
+echo "s/\/net\/zwicky\/esata01\/dmtpc\/data\/raytheon\/skim\/dmtpc_Fusion_//" >> editfile
+echo "s/skim.root//" >> editfile
+
+ls /net/zwicky/esata01/dmtpc/data/raytheon/skim/*skim.root | sed -f editfile > skimlist
+
+# cat skimlist
+
+touch files.txt
+rm files.txt
+
+
+
+root -l -b $USERDIR/Raytheon/MakeSkimFileList.C >> $OUTDIR/cleanSkim.log
+
+
+cat files.txt >& $OUTDIR/cleanSkim.log
+
+# cat files.txt
+
+cp files.txt $USERDIR/AnalysisFramework/v4/files.txt
+
+setenv LD_LIBRARY_PATH $ROOTSYS/lib:/usr/local/lib:$USERDIR/MaxCam/:$USERDIR/MaxCam/waveformtools/lib
+
+cd $USERDIR/AnalysisFramework/v4
+
+cp keys_fresh.txt keys.txt
+touch skim/a
+rm skim/*
+
+echo "====Starting====" >& $OUTDIR/cleanSkim.log
+date >& $OUTDIR/cleanSkim.log
+
+# echo Starting cleanSkim
+
+bin/cleanSkim >& $OUTDIR/cleanSkim.log
+
+# echo Ending cleanSkim
+
+echo "====Finishing====" >& $OUTDIR/cleanSkim.log
+date >& $OUTDIR/cleanSkim.log
+
+
+touch mess
+rm mess
+
+echo "===skimstream===" >> mess
+date >> mess
+cat files.txt >> mess
+ls $USERDIR/AnalysisFramework/v4/skim/ >> mess
+
+cat mess | mailx -s "skimstream" fisherp@mit.edu wlkoch@mit.edu
+
+# cat /net/zwicky/esata01/dmtpc/data/raytheon/skim/cleanSkim.log mess > /net/zwicky/esata01/dmtpc/data/raytheon/skim/cleanSkim.log 
+

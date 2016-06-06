@@ -1,0 +1,2890 @@
+<?xml version="1.0" ?>
+<heprep:heprep xmlns:heprep="http://www.slac.stanford.edu/~perl/heprep/"
+  xmlns:xsi="http://www.w3.org/1999/XMLSchema-instance" xsi:schemaLocation="HepRep.xsd">
+  <heprep:attdef extra="" name="Generator" type="Physics"
+  desc="HepRep Data Generator"/>
+  <heprep:attvalue showLabel="NONE" name="Generator"
+    value=" Geant4 version Name: geant4-09-04-patch-03    (9-December-2011)"/>
+  <heprep:attdef extra="" name="LVol" type="Physics"
+  desc="Logical Volume"/>
+  <heprep:attdef extra="" name="Region" type="Physics"
+  desc="Cuts Region"/>
+  <heprep:attdef extra="" name="RootRegion" type="Physics"
+  desc="Root Region"/>
+  <heprep:attdef extra="" name="Solid" type="Physics"
+  desc="Solid Name"/>
+  <heprep:attdef extra="" name="EType" type="Physics"
+  desc="Entity Type"/>
+  <heprep:attdef extra="" name="Material" type="Physics"
+  desc="Material Name"/>
+  <heprep:attdef extra="kg/m3" name="Density" type="Physics"
+  desc="Material Density"/>
+  <heprep:attdef extra="" name="State" type="Physics"
+  desc="Material State"/>
+  <heprep:attdef extra="m" name="Radlen" type="Physics"
+  desc="Material Radiation Length"/>
+  <heprep:type version="null" name="Detector Geometry">
+    <heprep:instance>
+      <heprep:type version="null" name="expHall">
+        <heprep:instance>
+          <heprep:attvalue showLabel="NONE" name="Layer"
+            value="1"/>
+          <heprep:attvalue showLabel="NONE" name="LVol"
+            value="expHall_log"/>
+          <heprep:attvalue showLabel="NONE" name="Region"
+            value="DefaultRegionForTheWorld"/>
+          <heprep:attvalue showLabel="NONE" name="RootRegion"
+            value="True"/>
+          <heprep:attvalue showLabel="NONE" name="Solid"
+            value="expHall_box"/>
+          <heprep:attvalue showLabel="NONE" name="EType"
+            value="G4Box"/>
+          <heprep:attvalue showLabel="NONE" name="Material"
+            value="G4_AIR"/>
+          <heprep:attvalue showLabel="NONE" name="Density"
+            value="1.20479"/>
+          <heprep:attvalue showLabel="NONE" name="State"
+            value="3"/>
+          <heprep:attvalue showLabel="NONE" name="Radlen"
+            value="303.921"/>
+          <heprep:attvalue showLabel="NONE" name="DrawAs"
+            value="Prism"/>
+          <heprep:attvalue showLabel="NONE" name="LineColor"
+            value="255,255,255"/>
+          <heprep:attvalue showLabel="NONE" name="Visibility"
+            value="False"/>
+          <heprep:primitive>
+            <heprep:point x="2000" y="2000" z="-2000">
+            </heprep:point>
+            <heprep:point x="2000" y="-2000" z="-2000">
+            </heprep:point>
+            <heprep:point x="-2000" y="-2000" z="-2000">
+            </heprep:point>
+            <heprep:point x="-2000" y="2000" z="-2000">
+            </heprep:point>
+            <heprep:point x="2000" y="2000" z="2000">
+            </heprep:point>
+            <heprep:point x="2000" y="-2000" z="2000">
+            </heprep:point>
+            <heprep:point x="-2000" y="-2000" z="2000">
+            </heprep:point>
+            <heprep:point x="-2000" y="2000" z="2000">
+            </heprep:point>
+          </heprep:primitive>
+          <heprep:type version="null" name="expZone">
+            <heprep:instance>
+              <heprep:attvalue showLabel="NONE" name="Layer"
+                value="2"/>
+              <heprep:attvalue showLabel="NONE" name="LVol"
+                value="expZone_log"/>
+              <heprep:attvalue showLabel="NONE" name="Region"
+                value="DefaultRegionForTheWorld"/>
+              <heprep:attvalue showLabel="NONE" name="RootRegion"
+                value="False"/>
+              <heprep:attvalue showLabel="NONE" name="Solid"
+                value="expZone_box"/>
+              <heprep:attvalue showLabel="NONE" name="EType"
+                value="G4Box"/>
+              <heprep:attvalue showLabel="NONE" name="Material"
+                value="G4_AIR"/>
+              <heprep:attvalue showLabel="NONE" name="Density"
+                value="1.20479"/>
+              <heprep:attvalue showLabel="NONE" name="State"
+                value="3"/>
+              <heprep:attvalue showLabel="NONE" name="Radlen"
+                value="303.921"/>
+              <heprep:attvalue showLabel="NONE" name="DrawAs"
+                value="Prism"/>
+              <heprep:attvalue showLabel="NONE" name="LineColor"
+                value="255,255,255"/>
+              <heprep:attvalue showLabel="NONE" name="Visibility"
+                value="False"/>
+              <heprep:primitive>
+                <heprep:point x="1000" y="1000" z="-1000">
+                </heprep:point>
+                <heprep:point x="1000" y="-1000" z="-1000">
+                </heprep:point>
+                <heprep:point x="-1000" y="-1000" z="-1000">
+                </heprep:point>
+                <heprep:point x="-1000" y="1000" z="-1000">
+                </heprep:point>
+                <heprep:point x="1000" y="1000" z="1000">
+                </heprep:point>
+                <heprep:point x="1000" y="-1000" z="1000">
+                </heprep:point>
+                <heprep:point x="-1000" y="-1000" z="1000">
+                </heprep:point>
+                <heprep:point x="-1000" y="1000" z="1000">
+                </heprep:point>
+              </heprep:primitive>
+              <heprep:type version="null" name="TPC">
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_geo"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="CF4Gas"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="0.476194"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="1175.68"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,255,255"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="305"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="305"/>
+                    <heprep:point x="0" y="-317.5" z="-1.94413e-14">
+                    </heprep:point>
+                    <heprep:point x="0" y="317.5" z="1.94413e-14">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+              </heprep:type>
+              <heprep:type version="null" name="TPC_ring">
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="-279.012" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-275.837" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="-279.012" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-275.837" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="-268.737" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-265.562" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="-268.737" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-265.562" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="-258.462" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-255.287" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="-258.462" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-255.287" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="-248.187" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-245.012" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="-248.187" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-245.012" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="-237.912" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-234.737" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="-237.912" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-234.737" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="-227.637" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-224.462" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="-227.637" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-224.462" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="-217.362" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-214.187" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="-217.362" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-214.187" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="-207.087" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-203.912" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="-207.087" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-203.912" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="-196.812" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-193.637" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="-196.812" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-193.637" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="-186.537" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-183.362" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="-186.537" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-183.362" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="-176.262" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-173.087" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="-176.262" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-173.087" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="-165.987" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-162.812" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="-165.987" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-162.812" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="-155.712" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-152.537" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="-155.712" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-152.537" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="-145.437" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-142.262" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="-145.437" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-142.262" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="-135.162" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-131.987" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="-135.162" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-131.987" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="-124.887" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-121.712" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="-124.887" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-121.712" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="-114.612" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-111.437" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="-114.612" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-111.437" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="-104.337" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-101.162" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="-104.337" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-101.162" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="-94.0625" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-90.8875" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="-94.0625" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-90.8875" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="-83.7875" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-80.6125" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="-83.7875" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-80.6125" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="-73.5125" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-70.3375" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="-73.5125" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-70.3375" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="-63.2375" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-60.0625" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="-63.2375" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-60.0625" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="-52.9625" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-49.7875" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="-52.9625" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-49.7875" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="-42.6875" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-39.5125" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="-42.6875" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-39.5125" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="-32.4125" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-29.2375" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="-32.4125" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-29.2375" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="-22.1375" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-18.9625" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="-22.1375" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-18.9625" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="-11.8625" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-8.6875" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="-11.8625" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="-8.6875" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="-1.5875" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="1.5875" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="-1.5875" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="1.5875" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="8.6875" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="11.8625" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="8.6875" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="11.8625" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="18.9625" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="22.1375" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="18.9625" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="22.1375" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="29.2375" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="32.4125" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="29.2375" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="32.4125" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="39.5125" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="42.6875" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="39.5125" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="42.6875" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="49.7875" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="52.9625" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="49.7875" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="52.9625" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="60.0625" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="63.2375" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="60.0625" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="63.2375" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="70.3375" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="73.5125" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="70.3375" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="73.5125" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="80.6125" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="83.7875" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="80.6125" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="83.7875" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="90.8875" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="94.0625" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="90.8875" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="94.0625" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="101.162" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="104.337" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="101.162" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="104.337" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="111.437" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="114.612" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="111.437" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="114.612" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="121.712" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="124.887" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="121.712" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="124.887" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="131.987" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="135.162" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="131.987" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="135.162" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="142.262" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="145.437" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="142.262" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="145.437" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="152.537" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="155.712" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="152.537" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="155.712" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="162.812" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="165.987" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="162.812" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="165.987" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="173.087" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="176.262" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="173.087" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="176.262" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="183.362" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="186.537" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="183.362" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="186.537" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="193.637" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="196.812" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="193.637" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="196.812" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="203.912" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="207.087" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="203.912" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="207.087" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="214.187" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="217.362" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="214.187" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="217.362" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="224.462" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="227.637" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="224.462" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="227.637" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="234.737" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="237.912" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="234.737" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="237.912" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="245.012" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="248.187" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="245.012" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="248.187" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="255.287" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="258.462" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="255.287" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="258.462" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="265.562" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="268.737" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="265.562" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="268.737" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_ring_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="TPC_ring_sol"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Tubs"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="G4_Cu"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="8960"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0143558"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Cylinder"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,178,0"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="226.1"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="226.1"/>
+                    <heprep:point x="0" y="275.837" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="279.012" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                  <heprep:primitive>
+                    <heprep:attvalue showLabel="NONE" name="Radius1"
+                      value="210.8"/>
+                    <heprep:attvalue showLabel="NONE" name="Radius2"
+                      value="210.8"/>
+                    <heprep:point x="0" y="275.837" z="-9.72063e-17">
+                    </heprep:point>
+                    <heprep:point x="0" y="279.012" z="9.72063e-17">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+              </heprep:type>
+              <heprep:type version="null" name="TPC_cam0">
+                <heprep:instance>
+                  <heprep:attvalue showLabel="NONE" name="Layer"
+                    value="3"/>
+                  <heprep:attvalue showLabel="NONE" name="LVol"
+                    value="TPC_cam0_log"/>
+                  <heprep:attvalue showLabel="NONE" name="Region"
+                    value="DefaultRegionForTheWorld"/>
+                  <heprep:attvalue showLabel="NONE" name="RootRegion"
+                    value="False"/>
+                  <heprep:attvalue showLabel="NONE" name="Solid"
+                    value="tpc_cam0_geo"/>
+                  <heprep:attvalue showLabel="NONE" name="EType"
+                    value="G4Box"/>
+                  <heprep:attvalue showLabel="NONE" name="Material"
+                    value="SiliconWafer"/>
+                  <heprep:attvalue showLabel="NONE" name="Density"
+                    value="2330"/>
+                  <heprep:attvalue showLabel="NONE" name="State"
+                    value="1"/>
+                  <heprep:attvalue showLabel="NONE" name="Radlen"
+                    value="0.0936607"/>
+                  <heprep:attvalue showLabel="NONE" name="DrawAs"
+                    value="Prism"/>
+                  <heprep:attvalue showLabel="NONE" name="LineColor"
+                    value="255,255,255"/>
+                  <heprep:attvalue showLabel="NONE" name="Visibility"
+                    value="True"/>
+                  <heprep:primitive>
+                    <heprep:point x="12.288" y="359.997" z="-12.288">
+                    </heprep:point>
+                    <heprep:point x="12.288" y="359.997" z="12.288">
+                    </heprep:point>
+                    <heprep:point x="-12.288" y="359.997" z="12.288">
+                    </heprep:point>
+                    <heprep:point x="-12.288" y="359.997" z="-12.288">
+                    </heprep:point>
+                    <heprep:point x="12.288" y="360.003" z="-12.288">
+                    </heprep:point>
+                    <heprep:point x="12.288" y="360.003" z="12.288">
+                    </heprep:point>
+                    <heprep:point x="-12.288" y="360.003" z="12.288">
+                    </heprep:point>
+                    <heprep:point x="-12.288" y="360.003" z="-12.288">
+                    </heprep:point>
+                  </heprep:primitive>
+                </heprep:instance>
+              </heprep:type>
+            </heprep:instance>
+          </heprep:type>
+        </heprep:instance>
+      </heprep:type>
+    </heprep:instance>
+  </heprep:type>
+  <heprep:type version="null" name="Event Data">
+    <heprep:instance>
+      <heprep:type version="null" name="TransientPolylines">
+        <heprep:attvalue showLabel="NONE" name="Layer"
+          value="100"/>
+        <heprep:instance>
+          <heprep:attvalue showLabel="NONE" name="DrawAs"
+            value="Line"/>
+          <heprep:attvalue showLabel="NONE" name="LineColor"
+            value="0,0,255"/>
+          <heprep:attvalue showLabel="NONE" name="Visibility"
+            value="True"/>
+          <heprep:primitive>
+            <heprep:point x="0" y="0" z="40">
+            </heprep:point>
+            <heprep:point x="0" y="0" z="39.585">
+            </heprep:point>
+            <heprep:point x="-0.0196363" y="0.0158017" z="39.232">
+            </heprep:point>
+            <heprep:point x="-0.0598161" y="0.0462834" z="38.9329">
+            </heprep:point>
+            <heprep:point x="-0.027301" y="0.125766" z="38.6864">
+            </heprep:point>
+            <heprep:point x="-0.000367179" y="0.338358" z="38.6973">
+            </heprep:point>
+            <heprep:point x="0.104281" y="0.44405" z="38.7122">
+            </heprep:point>
+            <heprep:point x="0.130376" y="0.462967" z="38.6895">
+            </heprep:point>
+          </heprep:primitive>
+        </heprep:instance>
+      </heprep:type>
+    </heprep:instance>
+  </heprep:type>
+</heprep:heprep>

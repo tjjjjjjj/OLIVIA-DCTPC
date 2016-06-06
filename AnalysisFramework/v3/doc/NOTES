@@ -1,0 +1,6 @@
+Things needed to do to get g++ to link against MaxCam:
+1. link MaxCam_linux.so to libmaxcam.so (or add make shared target to Makefile
+where the output file is named libmaxcam.so)
+2. fix all g++ errors (usually you can comment stuff out to do this..)
+3. Add the MaxCam directory to LD_LIBRARY_PATH
+

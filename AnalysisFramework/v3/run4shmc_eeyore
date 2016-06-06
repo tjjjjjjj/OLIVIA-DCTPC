@@ -1,0 +1,18 @@
+#!/bin/bash
+
+echo dmtpc_4sh_mc_$1.root > files$1.txt
+
+export skimdir='/export/data01/jbattat/data/4sh/mc/'
+export sumdir='/export/data01/jbattat/data/4sh/mc/'
+export datadir='/export/data01/jbattat/data/4sh/mc/'
+
+echo $datadir > keys$1.txt
+
+./bin/cleanSkim -c cfg/mc.cfg files$1.txt keys$1.txt $skimdir
+wait
+#./bin/createSummary dmtpc_run$1 $skimdir $sumdir >> run$1.log 2>&1 &
+wait
+
+rm -f files$1.txt
+rm -f keys$1.txt
+echo "Processing on run $1 Done"

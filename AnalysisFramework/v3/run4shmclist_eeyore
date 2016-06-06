@@ -1,0 +1,12 @@
+#!/bin/bash
+
+#takes a list of five-digit run number and runs cleanData and quickRecon 
+#on all of them.
+#Usage: ./runbasiclist aaaaa bbbbb ccccc [...] nnnnn
+
+until [ -z $1 ]
+do
+  ./run4shmc_eeyore $1
+  echo "Processing on run $1 Done"
+  shift
+done

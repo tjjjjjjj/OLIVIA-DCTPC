@@ -1,0 +1,99 @@
+#Run Summary for file: 
+output/data/dmtpc_mc_00001.root
+#===================================
+
+Run Parameter===================================
+NumberOfEvents		120
+RunType			LittleDCTPC_far
+Config	      	      	normal
+EventType		alpha
+ProjectileParticle	alpha
+ProjectileMass		4001506
+RecoilParticle		alpha
+RecoilMass		4001506
+SRIMfile		SRIM_He_in_75TorrCF4_525TorrHe_Aug2014
+EnergyOption		random
+MinEnergy		5300.
+MaxEnergy		5300.
+FixEnergy		0.0
+PositionOption		fixed
+MinPositionLimits	-83.5	-83.5	0
+MaxPositionLimits	83.5	83.5	100
+RingPositionValues      25 0 0 3 4 0 100 10 100 1 0 1
+FixPosition		-35	0	50
+TimeOption		random
+MinTime			2009	1	1	0	0	0
+MaxTime			2009	12	31	23	59	59
+FixTime			2009	6	1	12	0	0
+TimeStep		1
+DirectionOption		collimated
+SourcePosition		-35	0.0	50.0
+SourceDirection		1.0	0.0	0.0
+ThetaMax		8
+SpecialOption		none
+FissionSpectrumENDF	ENDF_Cf-252_n_spectrum
+TotalCS_ENDF		ENDF_CS_n_on_19F
+ElastScatterDCS_ENDF	ENDF_DCS_n_on_19F
+TimeResolution		15
+WimpEnergyOption	infinity
+
+#Chamber Properties: 
+#===================================
+SpacerDiameter		0.5
+SpacerSpacing		24.9
+SpacerAxis		y
+Height			720
+DriftLength		100
+Pressure		600
+Temperature		295
+DriftVoltage		6600
+AnodeVoltage		700
+OrientationAngle	0
+TopOrBottomTPC		1
+DiffusionConstantTerm   1.0
+DiffusionDzTerm		0.003	1
+ElectronLifetime        600.0
+ElectricScintillation	1.0
+NuclearScintillation	0.3
+Attenuation		0
+ElectronPerkeV		10000
+DriftVelocity		0.01646
+LongDiffusionConstTerm	400
+LongDiffusionDzTerm	3
+
+#Camera Properties: 
+#===================================
+#Properties of Camera 0
+CameraPosition		0	0	0
+CameraBins		0	256	256
+ImageWidths		0	160. 160.
+PixelsPerBin		0	4
+ReadNoise		0	10.4
+Bias			0	1000
+Gain			0	20.
+Gain_Landau             0       1.05 0.00001
+RadialParams            0       132.449 147.474 0.99942
+PhotonsADU              0       100.
+NoiseFactor		0	1
+DarkCurrent		0	0
+EMGain			0	1
+
+#Camera Properties: 
+#===================================
+# for board types, see Scope.cc
+BoardType	0	ALAZAR_ATS860
+# Clock rate in GHz
+# (I'm setting in Hz to match my code... Hopefully nothing breaks)
+ClockRate       0       2.5e8
+RecordLength	0	12288 #12*1024
+RecordPreSize	0	4096  #4*1024
+# Channels are
+# PARAM  SCOPENUM  CHANNUM  VALUE1 VALUE2 ... VALUEN
+ChannelName	0	0     CH_A
+# SerialNumber of device connected to this scope and channel
+# Must match the SerialNumber in the other device 
+# (e.g. SerialNumber in PMT0.example)
+ConnectedDevice	0	0      PMT_0
+# Set the voltage ranges
+VoltageMin	0	0      0
+VoltageMax	0	0      1.0

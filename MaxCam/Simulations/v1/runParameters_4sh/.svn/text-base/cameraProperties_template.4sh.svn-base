@@ -1,0 +1,36 @@
+#
+#	Properties of Camera 0 (ID=081264)
+# 
+# The first zero on all of these entries implies that the thing
+# in question is a property of that camera (counting up from zero...)
+# (camera-x camera-y) position in detector coords of camera center [mm]
+CameraPosition		0       0	0
+# [pixels]
+CameraBins		0	256	256
+# total width of the image in x and y in [mm] (pixel->length conversion factor)
+ImageWidths		0	166	166
+# hardware rebinning of image (done by the U6, in hardware)
+PixelsPerBin		0	4
+# [ADU/pixel]
+ReadNoise		0	?READNOISE
+# choose something nonzero? It's possible that cleanSkim will get confused 
+# by 0 bias.  Shouldn't effect anything, physically speaking, it's just a 
+# flat number; Jeremy says that the problem with setting the bias to zero, 
+# is that then things don't really work, because of the way sparks 	
+# are identified in cleanSkim... [ADU]
+#
+# post new data format upgrade, the bias HAS TO BE NONZERO to keep pixel
+# numbers from going negative, which somehow puts that at VERY large values
+# causing all images to be identified as sparks by cleanSkim.  Using 
+# 1000 as a hack for now.
+Bias			0	1000.
+# [ADU/keV]; this comes from the alpha calibration of the cameras
+Gain			0	?GAIN
+# Deprecated; the EMCCD had a larger noise than the U6, but that's just 
+# directly done in the code now
+NoiseFactor		0	1
+# [ADU/bin/image] Jeremys says that this should not matter very much, 
+# because it's a very small effect.
+DarkCurrent		0	0
+# 1 for regular CCD, anything else is EMCCD
+EMGain			0	1

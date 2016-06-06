@@ -1,0 +1,63 @@
+Run Parameters
+===================================
+NumberOfEvents		1000
+EventType		alpha
+# default file tag is "dmtpc_mc_"; this is the moniker
+# that gets appended to the output root file name
+FileTag                 dmtpc_4sh_mc_
+ProjectileParticle	alpha
+ProjectileMass		4001506
+RecoilParticle		alpha
+RecoilMass		4001506
+SRIMfile		SRIM_He_in_CF4_100Torr
+EnergyOption		gaussian
+MinEnergy		0.0
+MaxEnergy		20000.0
+FixEnergy		3563
+EnergySpread		178
+PositionOption		fixed
+MinPositionLimits	-73.216	-73.216	0
+MaxPositionLimits	73.216	73.216	300
+# what Cosmin had originally
+#FixPosition		-32.6	-92.9	40.0
+# top of field cage, pulled back
+# first guess
+#FixPosition		-32.6	-96.6	246.9
+# alpha starts at edge of active region
+#FixPosition		-33.114625   -63.778620	246.9
+# first MC-driven tweak based on range difference between data and MC
+#FixPosition             -33.080080   -64.547545	283.935
+# lining up based on projected energy profile (by eye)
+#FixPosition             -32.919406   -68.123937 283.935
+# second try at lining up based on projected energy profile (by eye)
+#FixPosition		 -33.112215   -63.832266 326.5
+# third try at lining up based on projected energy profile (by eye)
+## transverse width was  7.99 px
+#FixPosition             -32.927439   -67.945118   349.68
+# fourth try at lining up based on projected energy profile (by eye)
+# there was a problem with the file before
+## transverse width ~8.34 versus ~8.36 in MC
+#FixPosition              -32.758731   -71.700330   363.6672
+## ugh...fifth try lining up eproj by eye
+#FixPosition               -32.573955   -75.813181   364.5
+## and sixth...
+#FixPosition                -32.397212   -79.747213   364.5
+## and seventh
+#FixPosition                 -33.114625   -63.778620   364.5
+## and eighth
+#FixPosition                 -33.034288   -65.566817 364.5
+## new mm/px conversion; 0.160; pulled back 7 px and transverse width 9.23->7.67 (MC->DATA)
+FixPosition                  -32.978052   -66.818554 302.894
+TimeOption		random
+MinTime			2009	1	1	0	0	0
+MaxTime			2009	12	31	23	59	59
+FixTime			2009	6	1	12	0	0
+DirectionOption		collimated
+SourcePosition		0.0	0.0	0.0
+SourceDirection		-0.06 0.998 0 
+ThetaMax	  	2	
+SpecialOption		none
+FissionSpectrumENDF	none
+TotalCS_ENDF		none
+ElastScatterDCS_ENDF	none
+TimeResolution		15

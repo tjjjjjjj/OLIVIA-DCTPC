@@ -1,0 +1,64 @@
+8
+
+dir
+1
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft/MaxCam/test
+svn+ssh://dctpc@svn-nudaq.lns.mit.edu/home/dctpc/DCTPC_soft
+
+
+
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+d3d5ed4b-f520-4247-9981-1203ad1f38be
+
+src
+dir
+
+bin
+dir
+
+CVS
+dir
+
+args
+dir
+
+Makefile
+file
+
+
+
+
+2014-03-24T16:30:25.000000Z
+aa9cebbe9a96255869d55faa10040571
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+
+README
+file
+
+
+
+
+2014-03-24T16:30:25.000000Z
+9cab7a86f31fd91991e35efb0fb52e32
+2014-03-24T14:35:34.924741Z
+1
+dctpc
+

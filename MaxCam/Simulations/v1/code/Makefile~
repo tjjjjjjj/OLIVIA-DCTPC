@@ -1,0 +1,108 @@
+#include Makefile.root
+##MaxCam/Makefile.root
+
+###Set Options for compiling with ROOT libraries
+ROOTCONFIG   := root-config   ##function in $(ROOTSYS)/bin
+ARCH         := $(shell $(ROOTCONFIG) --arch)
+PLATFORM     := $(shell $(ROOTCONFIG) --platform)
+ROOTCFLAGS   := $(shell $(ROOTCONFIG) --cflags)
+ROOTLDFLAGS  := $(shell $(ROOTCONFIG) --ldflags)
+ROOTLIBS     := $(shell $(ROOTCONFIG) --libs)
+ROOTGLIBS    := $(shell $(ROOTCONFIG) --glibs)
+HASTHREAD    := $(shell $(ROOTCONFIG) --has-thread)
+
+OutPutOpt     = -o  ##gcc option to set output filename
+
+ifeq ($(ARCH),linux)
+#linux with egcs, gcc2.9x, gcc 3.x (>=RedHat 5.2)
+CXX           = g++ ##gcc name
+CXXFLAGS      = -O2 -Wall -fPIC -g ##options for above
+LD            = g++
+LDFLAGS 			= -lm 
+SOFLAGS       = -shared ##options to make .so file
+endif
+
+ifeq ($(ARCH),linuxx8664gcc)
+CXX           = g++ ##gcc name
+CXXFLAGS      = -O3 -Wall -fPIC -g ##options for above
+LD       		  = g++ 
+LDFLAGS 			= -lm 
+SOFLAGS       = -shared ##options to make .so file
+endif
+
+ifeq ($(ARCH),macosx)
+#MacOS X with cc (GNU cc 2.95.2 and gcc 3.3)
+MACOSX_MINOR := $(shell sw_vers | sed -n 's/ProductVersion://p' | cut -d . -f 2)
+MACOSXTARGET := MACOSX_DEPLOYMENT_TARGET=10.$(MACOSX_MINOR)
+ifeq ($(MACOSX_MINOR),5)
+MACOSX_MINOR  = 4
+endif
+CXX           = c++
+CXXFLAGS      = -O2 -pipe -Wall -W -Woverloaded-virtual
+LD            = $(MACOSXTARGET) c++
+LDFLAGS       = -O2 -m32 
+UNDEFOPT      = dynamic_lookup
+
+ifneq ($(MACOSX_MINOR),4)
+ifneq ($(MACOSX_MINOR),3)
+#UNDEFOPT      = suppress
+LD            = c++
+endif
+endif
+SOFLAGS       = -dynamiclib -single_module -undefined $(UNDEFOPT)
+endif
+#See MaxCam/Makefile for this section
+###
+###
+###
+OBJS = SimTools.o SimToolsCint.o \
+	SimCamera.o SimCameraCint.o \
+	SimPMT.o SimPMTCint.o \
+	SimScope.o SimScopeCint.o \
+	ScopeDataInfo.o ScopeDataInfoCint.o \
+	SimChamber.o SimChamberCint.o \
+	ParticleGenerator.o ParticleGeneratorCint.o \
+	EventGenerator.o EventGeneratorCint.o \
+	RunGenerator.o RunGeneratorCint.o\
+	SimRings.o SimRingsCint.o \
+	SimMesh.o SimMeshCint.o
+
+
+### ... for all Linux machines and MACOSX compile as analysis
+
+CXXFLAGS += -I/usr/local/lib 
+LDFLAGS  += -L../../../../cfitsio -lcfitsio 
+
+###Makefile executes all, which depends on the files in $(OBJS)
+###Once it compiles everything in #(OBJS), it creates simlibrary_$(ARCH)
+###using the gxx compiler
+all:	$(OBJS)
+	@echo "Making Library for $(ARCH) on $(HOSTNAME)"
+	$(LD) $(SOFLAGS) $(LDFLAGS) $(OBJS) $(OutPutOpt) ../lib/libDmtpcSim.so
+#	@rm -f $(OBJS) *Cint.cc *Cint.h *.so *.d
+clean:
+	@rm -f $(OBJS) ../lib/*Cint.cc ../lib/*Cint.h ../lib/*.so ../lib/*.d core
+	@rm -f *Cint.cc *Cint.h *.so *.d
+
+#tar:
+#	tar cvf MaxCam.tar MaxCam*cc MaxCam*hh Makefile Makefile.root examples/*.cxx tables/*
+#	gzip MaxCam.tar
+
+
+.SUFFIXES: .cc
+
+###
+
+##convert .hh to Cint.cc
+%Cint.cc: %.hh
+	@echo "Generating dictionary ..."
+	rootcint -f $@ -c $(CINTFLAGS) $<
+#	$(ROOTSYS)/bin/rootcint -f $@ -c $<
+
+##Convert .cc to .o
+.cc.o:
+	@echo "Compiling... for $(ARCH) on $(HOSTNAME)"
+	$(CXX) $(CXXFLAGS) $(ROOTCFLAGS) -c $<
+
+
+

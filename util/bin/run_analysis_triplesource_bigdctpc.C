@@ -1,0 +1,8 @@
+{
+  gROOT->Reset();
+  gROOT->LoadMacro("analysis_125CF4_bigdctpc_triplesource.C");
+  //  analysis_125CF4_bigdctpc_alpha(11779,11910);
+  analysis_125CF4_bigdctpc_alpha(17351,17366);
+  //  analysis_125CF4_bigdctpc_alpha(17369,17370); 
+  gApplication->Terminate();
+}

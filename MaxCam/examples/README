@@ -1,0 +1,238 @@
+Check out source code
+----------------------
+
+1) Setup CVS:
+
+On a bash shell: 
+  export CVSROOT=":ext:termite.lns.mit.edu:/export/raid2/cvsroot"
+  export CVS_RSH="ssh"
+
+On a tcsh:  
+  setenv CVSROOT :ext:termite.lns.mit.edu:/export/raid2/cvsroot 
+  setenv CVS_RSH ssh
+
+2) Check out the code and DMTPC articles: 
+
+ cvs co  projects/DarkMatter/MaxCam
+ cvs co  projects/DarkMatter/Notes 
+
+Compile library for analysis
+----------------------------
+
+1) Install fits libraries  
+
+   NB: this step is not necessary if you work on mitbbr00. If so, go to step 2) 
+
+   For analysis, only fits libraries are needed (included in standard 
+   Scientific Linux distribution). Otherwise can be downloaded from:
+    http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html
+
+    How to intall fitsio on a MAC: 
+    ===============================
+    - download the tar file from the web site 
+    - uncompress (double click on tar) 
+    - cd cfitsio
+    - sudo ./configure --prefix=/usr/local
+    - sudo make shared
+    - sudo make install
+    - cd /usr/local/lib
+    - sudo ln -s libcfitsio.dylib libcfitsio.so
+    - d libcfitsio.so
+
+2) Compile MaxCam 
+
+   cd projects/DarkMatter/MaxCam 
+   make clean
+   make (to make libs)
+
+[NB: The following is dangerous when several users work on mitbbr00!!!]
+on MAC: 
+   sudo make install (To create a pointer to /usr/local/lib)   
+on mitbbr00: 
+   cp MaxCam.so  /usr/local/lib/MaxCam.so
+
+3) Run analyais job 
+   ----------------
+
+a) First time package users: add /usr/local/lib and ~ /users/$USER/bin to your library path
+------------------------------------------
+ setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}/usr/local/lib 
+ 
+and make sure you have /usr/local/lib/libcfitsio.so in the machine you are running from... 
+
+b) setup directories for input and output 
+------------------------------------------
+
+cd MaxCam/examples  
+mkdir data		// (where input data is) 
+mkidr RESULTS           // where output root files go 
+
+on your MAC: 
+	scp dmatter@mitbbr11.lns.mit.edu:/data/ccdrun_00039.root ../data 
+
+on mitbbr00: 
+	setup a sym link to were the data is on the computer you are using (MUCH BETTER) 
+	ln -s  /export/data03/ddujmic/data . 
+
+3) run from the examples directory 
+
+cd MaxCam/examples 
+
+NB: 
+============================================================
+Before running (or even better, before compiling) grep for 
+"ddujmic" and make sure you are not looking for files in 
+Denis's private directory. If so, change the code as appropriate 
+and recomplile
+============================================================
+
+A) To run MC 
+
+root 
+.L makeWIMP.cxx++
+
+- configure:
+in begin() you can set chamber parameters
+in event() you define galaxy-dm velocity and generate a WIMP vector. you can also
+specify interaction coordinate and request a certain recoil energy...
+
+- to create one event:
+begin();
+event()
+event()
+or 
+event(500) // energy in keV 
+...
+
+For the usual color scheme: 
+gStyle->SetPalette(1);      
+
+For a lego plot: 
+ccdImage->Draw("lego2")  
+
+ /// to display:
+    //mc->getTrackImage()->Draw("colz");
+    //mc->getWireImage()->Draw("colz");
+    //mc->getCCDImage()->Draw("colz");
+
+- to create a sample:
+makeWIMP()
+
+OUTPUT: mcrun.root
+
+
+
+B) To produce gas gain ntuples for run 320 interactively: 
+   root 
+   .L micromesh.cxx++
+   segments(320,"am") 
+   NB: "am"=americium run, other options are cf or fe
+
+To run in background: 
+   
+
+
+To gas gain ntuples for run 320: 
+   root 
+
+## Old stuff from GS ## 
+
+
+# make sure you have a rootlogon that loads the libs you need... 
+# OBSOLETE cp /export/data03/sciolla/DM/projects-old/DarkMatter/MaxCam-old/examples/rootlogon.C . 
+# If you are on mitbbr00: 
+#	ln -s /export/data03/ddujmic/data data 
+# If not, copy the files in a subdirectory named data: 
+# scp sciolla@mitbbr00.lns.mit.edu:/export/data03/ddujmic/data/ccdrun_00139.root data
+
+
+root -b 
+
+.L ../MaxCam/examples/gsReadData.cxx
+readEvent(0)                      
+
+Or for a more authomated run: 
+root -b -q '../MaxCam/examples/gsReadData.cxx(10,10)'
+
+To use ...gainvsTime
+--------------------
+
+select  run 52 
+ root -b 'gsGainVsTime.cxx+(52)'
+
+select runs between 48 and 56
+ root -b 'gsGainVsTime.cxx+(0)'
+
+Now you have the ntuple in memory that contains for each event 
+integral of gaussian, time since beginning of run, etc. 
+
+Root > nt->Print()
+******************************************************************************
+*Tree    :res       :                                                        *
+*Entries :       68 : Total =           16021 bytes  File  Size =          0 *
+*        :          : Tree compression factor =   1.00                       *
+******************************************************************************
+*Br    0 :conf      : time/F:wirehv:meshhv:pressure                          *
+*Entries :       68 : Total  Size=       1961 bytes  One basket in memory    *
+*Baskets :        0 : Basket Size=      32000 bytes  Compression=   1.00     *
+*............................................................................*
+*Br    1 :wire0     : y/F:yerr:width:chi2:ndof/I                             *
+*Entries :       68 : Total  Size=       2292 bytes  One basket in memory    *
+*Baskets :        0 : Basket Size=      32000 bytes  Compression=   1.00     *
+*............................................................................*
+*Br    2 :wire1     : y/F:yerr:width:chi2:ndof/I                             *
+*Entries :       68 : Total  Size=       2292 bytes  One basket in memory    *
+*Baskets :        0 : Basket Size=      32000 bytes  Compression=   1.00     *
+*............................................................................*
+*Br    3 :wire2     : y/F:yerr:width:chi2:ndof/I                             *
+*Entries :       68 : Total  Size=       2292 bytes  One basket in memory    *
+*Baskets :        0 : Basket Size=      32000 bytes  Compression=   1.00     *
+*............................................................................*
+*Br    4 :wire3     : y/F:yerr:width:chi2:ndof/I                             *
+*Entries :       68 : Total  Size=       2292 bytes  One basket in memory    *
+*Baskets :        0 : Basket Size=      32000 bytes  Compression=   1.00     *
+*............................................................................*
+*Br    5 :wire4     : y/F:yerr:width:chi2:ndof/I                             *
+*Entries :       68 : Total  Size=       2292 bytes  One basket in memory    *
+*Baskets :        0 : Basket Size=      32000 bytes  Compression=   1.00     *
+*............................................................................*
+*Br    6 :wire5     : y/F:yerr:width:chi2:ndof/I                             *
+*Entries :       68 : Total  Size=       2292 bytes  One basket in memory    *
+*Baskets :        0 : Basket Size=      32000 bytes  Compression=   1.00     *
+*............................................................................*
+root [2] 
+
+To draw gain vs wire HV for wire #0: 
+  nt->Plot("wire0->y:conf:wirehv","wire2<1000")
+
+
+
+1) identify the wire: select its bins: 
+
+root [0]  .L gsGainVsTime.cxx
+root [1] all()             
+root [2] ana->getEvent(50)
+root [3] ana->ccdImage()->Draw("colz")
+
+and then identify the binx in x of interest: for wire 2 of run 48: 21 to 28 
+To see it: View -> Event Status and it will appear on the c1 wndow 
+
+
+
+
+======= DAQ STUFF ===== 
+
+Compile library for DAQ ( this could be out of date )
+-----------------------
+
+1) For datataking with FLI MaxCam requires
+- SDK libraries/drivers http://www.moronski.com/fli/
+- FITS libraries (cfitsio) http://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html
+- COMEDI libraries: http://www.comedi.org/download/   
+  comedi-0.7.73.tar.gz and comedilib-0.7.22.tar.gz 
+- mysql
+
+2) To compile do 'make' in 'projects/DarkMatter/MaxCam'
+
+and make sure MaxCam.so is produced. Then copy it in /usr/local/lib using 
+sudo make instal 

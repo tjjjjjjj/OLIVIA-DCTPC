@@ -1,0 +1,20 @@
+#!/bin/bash
+#Runs $1 events using the default parameters.
+#Parameters set in makeSimulations.cc::makeSimulations()
+#Outputs:
+# I. dmtpc_runYYMMDD_runN_sim.root
+###Holds:
+### A. DmtpcDataset "dmtpc"
+### B. Tree holding input parameters "params" 
+### C. Tree holding simulated data "Simulation"
+# II. dmtpc_runYYMMDD_runN_sim.txt
+### A. Text file showing input parameters to quickly review
+###    what was done in each run
+# III. simrunYYMMDD.log
+### A. Output log file (one per day)
+
+root -l -b -q "Simulations/makeSimulations.cc++($1,\"$(date +%y%m%d)\")" >> ./simruns$(date +%y%m%d).log 2>&1 &
+
+wait
+
+echo "Run Finished!"

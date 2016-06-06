@@ -1,0 +1,35 @@
+#!/usr/bin/perl
+
+use lib "/usr/local/apache2/cgi-bin";
+use DM;
+
+
+use CGI qw(:standard *table);
+use CGI::Carp qw(fatalsToBrowser);
+use Getopt::Long;
+
+
+$file = "test.root";
+
+
+GetOptions( "file=s" => \$file);
+
+
+$db = DM->connect;
+
+$sql = "delete from run_desc where file='$file'";
+
+print "$sql\n";
+
+$statement = $db->prepare($sql)
+    or die "Couldn't prepare query '$sql': $DBI::errstr\n";
+
+
+$statement->execute()
+    or die "Couldn't execute query '$sql': $DBI::errstr\n";
+
+
+$db->disconnect();
+
+
+

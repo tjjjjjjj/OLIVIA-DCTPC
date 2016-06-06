@@ -1,0 +1,14 @@
+#Properties of Camera 0
+CameraPosition		0	0	0
+CameraBins		0	256	256
+ImageWidths		0	225.632 225.632
+PixelsPerBin		0	4
+ReadNoise		0	10.4
+Bias			0	1000
+Gain			0	4.9
+Gain_Landau             0       1.05 0.00001
+RadialParams            0       68.3696 400.889 0.678324
+PhotonsADU              0       .4
+NoiseFactor		0	1
+DarkCurrent		0	0
+EMGain			0	1

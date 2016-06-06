@@ -1,0 +1,21 @@
+#!/usr/bin/perl
+
+use CGI ':standard';
+use CGI::Carp qw(fatalsToBrowser);
+
+print  header(), start_html(-title => "Dark Matter DQM", -BGCOLOR=>"White");
+
+$ENV{'LD_LIBRARY_PATH'} = "/usr/lib/:/usr/local/root/lib:/usr/local/lib";
+$ENV{'ROOTSYS'} = "/usr/local/root";
+$ENV{'PATH'}=$ENV{'PATH'}.":/usr/local/root/bin";
+
+$data=param('value');
+$command="cd /usr/local/apache2/htdocs/monitoring;./do_monitoring.py ".$data." 0";
+
+print "Running command=".$command."<br>";
+system($command);
+print "<br>link for HN:<br>"."<a href=\"http://mitdm004.mit.edu/tmp/dqm/dqm_runs".$data."\">http://mitdm004.mit.edu/tmp/dqm/dqm_runs".$data."</a>";
+print "<br><br>";
+print "Done running command<br>";
+
+print end_html();

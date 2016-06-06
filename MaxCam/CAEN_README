@@ -1,0 +1,72 @@
+//
+// CAEN Digitizer Basic Programs 
+//
+// Pietro Giampa, RHUL, Sept 2012
+//
+
+Here is a quick readme file that will guide you through the series of steps need/made 
+to operate the CAEN Digitizer via MaxCam.
+The first thing is to install the correct libraries, then test the board(s) with the
+test executable that allows you to make a connection with the board and then also allows 
+you to get a basic readout. 
+(For a less detailed list read : CAEN_TODO)
+
+?????
+(Not sure whether is best to keep the current scope structure for DMTPC 
+or simply write one program and used the CAEN lib in junction to 
+controll the digitizer in a new way for the DAQ process)
+?????
+
+//----------------//
+// CAEN Libraries //
+//----------------//
+
+In order to build our own library to controll the CAEN Digitizers via DMTPC software 
+we need to install a series of libraries built by the CAEN. The series of libraries that 
+need to be installed are the following :
+
+1) CAENDigitizer (most recent version : CAENDigitizer2_2.1)
+ 
+2) CAENComm (most recent version : CAENComm-1.02)
+
+3) CAENVMELib (most recent version : CAENVMELib-2.30.2)
+
+Make sure to include the path where you have installed these libraries in both the Makifile 
+for MaxCam and your bash script
+(and example of a bash script can be found in my area : 
+pietrog/new_cvs/projects/DarkMatter/CAENDigitizer/CAENBash.sh
+This example is based on the libraries I've installed at Holloway)
+(To set up the libraries in the Makefile, you can use as example
+the way the CAEN libraries have been inserted in the RHUL loop)
+
+
+IMPORTANT : 
+
+The necessary libraries can also be found in Zwicky under the CAEN directory, more specifically 
+in the subdirectory V1720/files, follow the README file to install the libraries
+The outline is install CAENVMELib first, CAENComm second and last CAENDigitizer. Just untar 
+and run the install executable of each lib
+
+//---------------------//
+// CAENTEST Executable //
+//---------------------//
+
+To quickly test the CAEN digitizer you have in your lab, you can simply run the executable
+"caentest", this executable pick basic functions straight from the program 
+ScopeCAENv1720.cc (in MaxCam) which is where all the functions that controll the digitizer, set variables
+and env and readout data are.
+The executable itself make a connection with the board(s) and it also make a basic 
+readout that can be controlled via keyboard.
+In case someone would like to modify the functions called in "caentest", the file to check 
+is in MaxCam and is called runCAEN.c
+The "caentest" executable at the moment is set up so that it works with the hardware 
+here at Royal Holloway, if someone would have to controll another CAEN digitizer you
+would have to make a similar executable with but making sure that in the Makefile
+you point to the machine that your Digitizer is connected to. But you can still you the executable
+built for RHUL as a basic example.
+
+//-----------------//
+// CAEN To Do List //
+//-----------------//
+
+..... Coming Soon .....

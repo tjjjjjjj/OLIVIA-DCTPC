@@ -1,0 +1,6 @@
+{
+  gROOT->Reset();
+  gROOT->LoadMacro("analysis_125CF4_dctpc_LI8_sim.C");
+  analysis_125CF4_dctpc_LI8_sim(1,1);
+  gApplication->Terminate();
+}
