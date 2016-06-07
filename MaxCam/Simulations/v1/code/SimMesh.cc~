@@ -7,14 +7,17 @@
 ClassImp(SimMesh)
 
   SimMesh::SimMesh() {/*empty constructor*/};
-SimMesh::SimMesh(double Initial_Energy_EG, double StepSize_EG, SimScope* scope_EG, int nscope_EG, double fMinEnergy_EG, vector<double>& fRecoilZ_EG, vector<double>& fRecoilEn_EG, SimChamber* fChamber_EG)
+
+SimMesh::SimMesh(int plot_offset_EG, int imin_EG, double Initial_Energy_EG, double StepSize_EG, SimScope* scope_EG, double fMinEnergy_EG, vector<double>& fRecoilZ_EG, vector<double>& fRecoilEn_EG, SimChamber* fChamber_EG)
 {
-  //Constructor
-  mass = 3.727e6 / (9e22); // alpha in keV/c^2, c in mm/s
+  //Constructor. See SimMesh.hh for comments.
+
+  cout << endl << "Checkpoint 1 (Mesh)" << endl;
+
+  mass = 3.727e6 / (9e22); //MAGIC NUMBER ALERT! alpha mass in keV/c^2, c in mm/s
   fRecoilEn = fRecoilEn_EG;
   fRecoilZ = fRecoilZ_EG;
   fMinEnergy = fMinEnergy_EG;
-  nscope = 0; //I think this is never used
   scope = scope_EG;
   fChamber = fChamber_EG;
   Td = scope->getDecayTime();
@@ -29,67 +32,85 @@ SimMesh::SimMesh(double Initial_Energy_EG, double StepSize_EG, SimScope* scope_E
   a2 = scope->getTimeNoise2();
   zero_offset = scope->getZeroOffset();
   zero_offset_var = scope->getZeroOffsetVar();
-  zero_offset += int(pow(fRecoilZ.at(0),0.5)*zero_offset_var);
   Nsamples = scope->getNSamples();
   vertical_offset = scope->getVerticalOffset() * 1/Scale;
-  jmax_init = 20000; //Magic number since value isn't very important. Could theoretically cause out-of-range errors if it is too low.
+  jmax_init = 20000; //MAGIC NUMBER ALERT! value isn't very important. Could theoretically cause out-of-range errors if it is too low.
   dx = StepSize_EG;
   Initial_Energy = Initial_Energy_EG;
   En = Initial_Energy;
   rand = new TRandom3(0);
-  imin = 0;
-  imax = imin + fRecoilZ.size();
-  j_init = int(j(fRecoilZ.at(0)));
+  imin = imin_EG;
+  imax = fRecoilZ.size();
+  j_init = int(j(fRecoilZ.at(imin)));
+  zero_offset += int(pow(fRecoilZ.at(imin),0.5)*zero_offset_var*a2);
   jmax = jmax_init + j_init;
-  // cout << "#############" << jmax << "############";
   Q = vector<double>(jmax,0);
   R = vector<double>(jmax,0);
-  // cout << "$$$$$$$$$$$$$$" << Q.size() << "$$$$$$$";
   t = 0;
+  plot_offset = plot_offset_EG;
+
+  cout << endl << "Checkpoint 2 (Mesh)" << endl;
+
 }
-    SimMesh::~SimMesh()
-    {
-    }
 
-    void SimMesh::simulate()
-    {
-      for(int i = imin; En>fMinEnergy && i < imax-1 && fRecoilZ.at(i)>0 && fRecoilZ.at(i)<fChamber->getDriftLength(); i++)
-	{
-	  SimMesh::step(i);
-	  if(need_space == 1) SimMesh::allocate();
-	}
-      SimMesh::decay();
-      SimMesh::noisify();
-      SimMesh::plot();
-    }
-  void SimMesh::step(int i)
-  {
-    double sz; //z-position                                    
-    double jD; //expected arrival time   
-    int jI; //rounded to int                                    
-    double tSD; //uncertainty of arrival time             
-    double El; //energy loss                                
-    need_space = 0; //vectors are almost out of allocated space  
-    sz = fRecoilZ.at(i);
-    El = fRecoilEn.at(i);
-    En -= fRecoilEn.at(i);
-    t += dx/vel();
-    tSD = timenoise(sz);
-    jD = j(sz);
-    
-    for (int samples = 0; samples < Nsamples; samples++)//randomly drops electrons onto the mesh at times around jI                                     
-      {
-	jI = int(round(jD + noise(tSD),1));
-	if (jI < 1) jI = 1;
-	jmin = (jI < jmin) ? jI : jmin;
-	if (jI > (jmax - jmax_init)) need_space = 1;
+SimMesh::~SimMesh(){/*destructor*/}
 
-	Q.at(jI)+=El/Nsamples;
-      }
-    En -= fRecoilEn.at(i);
+
+
+void SimMesh::simulate()// simulates waveforms on an initialized instance of SimMesh
+{
+  cout << endl << "Checkpoint 3 (Mesh)" << endl;
+  for(int i = imin; En>fMinEnergy && i < imax-1 && fRecoilZ.at(i)>0 && fRecoilZ.at(i)<fChamber->getDriftLength(); i++)
+    //while the particle still has energy, the index i is in range, and the particle is in the chamber
+    {
+      final_position = i+1;
+      SimMesh::step(i);
+      if(need_space == 1) SimMesh::allocate();
+    }
+  cout << endl << "Checkpoint 4 (Mesh)" << endl;
+  SimMesh::decay();
+  cout << endl << "Checkpoint 5 (Mesh)" << endl;
+  //SimMesh::noisify();
+  SimMesh::plot();
+  cout << endl << "Checkpoint 6 (Mesh finished)" << endl;
+}
+
+void SimMesh::step(int i) //runs one step of simulation
+{
+  double sz; //z-position                                    
+  double jD; //expected arrival time   
+  int jI; //jD rounded to int                                    
+  double tSD; //uncertainty of arrival time             
+  double El; //energy loss at current stop                                
+  need_space = 0; //records whether vectors are almost out of allocated space  
+  sz = fRecoilZ.at(i);
+  El = fRecoilEn.at(i);
+  t += dx/vel();
+  tSD = timenoise(sz);
+  jD = j(sz);
+  
+  for (int samples = 0; samples < Nsamples; samples++){
+    //randomly drops electrons onto the mesh at times around jI
+    jI = int(round(jD + noise(tSD),1));
+    if (jI < 1) jI = 1; //prevents underflow
+    jmin = (jI < jmin) ? jI : jmin; //keeps track of first signal for plotting purposes
+    if (jI > (jmax - jmax_init)) need_space = 1; //Q,R are almost out of space
+    Q.at(jI)+=El/Nsamples; //record electrons' signal
   }
+  En -= fRecoilEn.at(i);
+}
 
-double SimMesh::vecsum(vector<double>& B, int risesteps)
+double SimMesh::round(double x, double res) //rounds x to nearest multiple of res
+{double offset;
+  if (x <0.)
+    offset = -.5; //needed to actually round x, instead of just truncating it
+  if (x==0.)
+    offset =  0.;
+  if (x >0.)
+    offset =  .5;
+  return res*(double(int(x/res + offset)));}
+
+double SimMesh::vecsum(vector<double>& B, int risesteps) //computes sum of vector's elements
 {
   double sum = 0;
   for(int r=0;r<risesteps;r++)
@@ -97,55 +118,71 @@ double SimMesh::vecsum(vector<double>& B, int risesteps)
   return sum;
 }
 
+void SimMesh::allocate() //allocates space to Q,R
+{
+  jmax+=jmax_init;
+  Q.reserve(jmax);
+  R.reserve(jmax);
+  for(int k = 0;k<jmax_init;k++)
+    {
+      Q.push_back(0.);
+      R.push_back(0.);
+    }
+}
 
-  void SimMesh::allocate()
-  {
-    jmax+=jmax_init;
-    Q.reserve(jmax);
-    R.reserve(jmax);
-    for(int k = 0;k<jmax_init;k++)
-      {
-	Q.push_back(0.);
-	R.push_back(0.);
-      }
-  }
+void SimMesh::decay() //simulates rise, decay times
+{
+  int risesteps = int(Tr/dt) + 1;
+  double DecayConst = std::exp(-dt/Td);
+  vector<double> B(risesteps,0.); //used as a "buffer" for the rise time  
+  for(int i=1;i<jmax;i++)
+    {
+      B.at(i%risesteps) = Q.at(i);
+      R.at(i) = DecayConst*R.at(i-1) + vecsum(B,risesteps)/risesteps;
+    }
+}
 
-  void SimMesh::decay()
-  {
-    int risesteps = int(Tr/dt) + 1;
-    double DecayConst = std::exp(-dt/Td);
-    vector<double> B(risesteps,0.); //used as a "buffer" for the rise time  
-    for(int i=1;i<jmax;i++)
-      {
-        B.at(i%risesteps) = Q.at(i);
-	R.at(i) = DecayConst*R.at(i-1) + vecsum(B,risesteps)/risesteps;
-      }
-  }
+void SimMesh::noisify() //adds random noise to waveform. (Currently not used. Has been replaced by plotfinish().
+{
+  for(int i=0;i<jmax;i++)
+    R.at(i) = R.at(i) + noise(SD);
+}
 
-  void SimMesh::noisify()
-  {
-    for(int i=0;i<jmax;i++)
-	R.at(i) = R.at(i) + noise(SD);
-  }
+void SimMesh::plot() //plots results
+{
+  int presize = scope->getRecordPreSize();
+  int plotmax = presize + scope->getRecordLength();
+  int plotmin = presize + zero_offset;
+  
+  if (plot_offset == -1) plot_offset = jmin - plotmin; //You should use plot_offset = -1 for the first particle in an event. The code will set the value automatically so that the peak is near t=0. Use GetPlotOffset for each subsequent particle so that the offset is the same for each particle.
+  
+  if (plot_offset == -1) //Resets waveform to 0 for first particle in a batch
+    {
+      for (int j = 0; j < plotmax; j++)
+	scope->wf(0)->SetBinContent(j,0);
+    }
 
-  void SimMesh::plot()
-  {
-    int presize = scope->getRecordPreSize();
-    int plotmax = presize + scope->getRecordLength();
-    int plotmin = presize + zero_offset;
+  int error = 0; //used for returning error message in case of out-of-range
 
-    //Discretizes the waveform to the scope's resolution, and centers the waveform spike near t=0                                                     
-    for (int j = plotmin; j < plotmax; j++)
-      { scope->wf(0)->SetBinContent(j,round(Scale*(vertical_offset+R.at(j - (plotmin - jmin))),scoperes));
-	cout << endl << round(Scale*(vertical_offset + R.at(j+jmin-plotmin)),scoperes);
-	cout << endl << '#' << Scale* (vertical_offset+R.at(j+jmin-plotmin));
-	/*if (scope->wf(0)->GetBinContent(j)!=0)
-	  cout << endl << scope->wf(0)->GetBinContent(j);
-	if (j%500==0)
-	cout << "500 more...";*/
-      }
-      for (int j = 1; j < plotmin; j++)
-	scope->wf(0)->SetBinContent(j,round(Scale*(vertical_offset+noise(SD)),scoperes));
+  for (int j = plotmin; j < plotmax; j++)
+    {  
+      if (j + plot_offset >= 0 && j + plot_offset < R.size()) 
+	scope->wf(0)->SetBinContent(j,scope->wf(0)->GetBinContent(j)+Scale*R.at(j + plot_offset));
+      else
+	error = 1;
+    }
+  if (error == 1) cout << "Non-fatal out-of-range error in waveform plotting (SimMesh::plot()). Waveform has been cut off.";
+}
 
- 
-  }
+void SimMesh::plotfinish() //Shifts, adds noise to, and discretizes the voltage.
+{
+  cout << endl << "Checkpoint 7 (plotfinish)" << endl;
+  int plotmax = scope->getRecordPreSize()+scope->getRecordLength();
+
+  for (int j = 1; j < plotmax; j++)
+    {
+      scope->wf(0)->SetBinContent(j,scope->wf(0)->GetBinContent(j)+Scale*(vertical_offset+noise(SD)));
+      scope->wf(0)->SetBinContent(j,round(scope->wf(0)->GetBinContent(j),scoperes));
+    }
+  cout << endl << "Checkpoint 8 (plotfinish finished)" << endl;
+}

@@ -12,8 +12,6 @@ SimMesh::SimMesh(int plot_offset_EG, int imin_EG, double Initial_Energy_EG, doub
 {
   //Constructor. See SimMesh.hh for comments.
 
-  cout << endl << "Checkpoint 1 (Mesh)" << endl;
-
   mass = 3.727e6 / (9e22); //MAGIC NUMBER ALERT! alpha mass in keV/c^2, c in mm/s
   fRecoilEn = fRecoilEn_EG;
   fRecoilZ = fRecoilZ_EG;
@@ -40,7 +38,7 @@ SimMesh::SimMesh(int plot_offset_EG, int imin_EG, double Initial_Energy_EG, doub
   En = Initial_Energy;
   rand = new TRandom3(0);
   imin = imin_EG;
-  imax = fRecoilZ.size();
+  imax = imin + fRecoilZ.size();
   j_init = int(j(fRecoilZ.at(imin)));
   zero_offset += int(pow(fRecoilZ.at(imin),0.5)*zero_offset_var*a2);
   jmax = jmax_init + j_init;
@@ -48,9 +46,6 @@ SimMesh::SimMesh(int plot_offset_EG, int imin_EG, double Initial_Energy_EG, doub
   R = vector<double>(jmax,0);
   t = 0;
   plot_offset = plot_offset_EG;
-
-  cout << endl << "Checkpoint 2 (Mesh)" << endl;
-
 }
 
 SimMesh::~SimMesh(){/*destructor*/}
@@ -59,7 +54,6 @@ SimMesh::~SimMesh(){/*destructor*/}
 
 void SimMesh::simulate()// simulates waveforms on an initialized instance of SimMesh
 {
-  cout << endl << "Checkpoint 3 (Mesh)" << endl;
   for(int i = imin; En>fMinEnergy && i < imax-1 && fRecoilZ.at(i)>0 && fRecoilZ.at(i)<fChamber->getDriftLength(); i++)
     //while the particle still has energy, the index i is in range, and the particle is in the chamber
     {
@@ -67,12 +61,9 @@ void SimMesh::simulate()// simulates waveforms on an initialized instance of Sim
       SimMesh::step(i);
       if(need_space == 1) SimMesh::allocate();
     }
-  cout << endl << "Checkpoint 4 (Mesh)" << endl;
   SimMesh::decay();
-  cout << endl << "Checkpoint 5 (Mesh)" << endl;
   //SimMesh::noisify();
   SimMesh::plot();
-  cout << endl << "Checkpoint 6 (Mesh finished)" << endl;
 }
 
 void SimMesh::step(int i) //runs one step of simulation
@@ -154,36 +145,19 @@ void SimMesh::plot() //plots results
   int plotmax = presize + scope->getRecordLength();
   int plotmin = presize + zero_offset;
   
-
-  if (plot_offset == -1) //Resets waveform to 0 for first particle in a batch
-    {
-      for (int j = 0; j < plotmax; j++)
-        scope->wf(0)->SetBinContent(j,0.);
-    }
-
-  if (plot_offset == -1) plot_offset = jmin - plotmin; //You should use plot_offset = -1 for the first particle in an event. The code will set the value automatically so that the peak is near t=0. Use GetPlotOffset for each subsequent particle so that the offset is the same for each particle.
-  
-  int error = 0; //used for returning error message in case of out-of-range
+  if (plot_offset == -1) plot_offset = plotmin;
 
   for (int j = plotmin; j < plotmax; j++)
-    {  
-      if (j + plot_offset >= 0 && j + plot_offset < R.size()) 
-	scope->wf(0)->SetBinContent(j,scope->wf(0)->GetBinContent(j)+Scale*R.at(j + plot_offset));
-      else
-	error = 1;
-    }
-  if (error == 1) cout << "Non-fatal out-of-range error in waveform plotting (SimMesh::plot()). Waveform has been cut off.";
+    scope->wf(0)->AddBinContent(j,Scale*R.at(j - (plotmin - jmin)));
 }
 
 void SimMesh::plotfinish() //Shifts, adds noise to, and discretizes the voltage.
 {
-  cout << endl << "Checkpoint 7 (plotfinish)" << endl;
-  int plotmax = scope->getRecordPreSize()+scope->getRecordLength();
+  int plotmax = scope->getRecordPreSize()+getRecordLength();
 
   for (int j = 1; j < plotmax; j++)
     {
-      scope->wf(0)->SetBinContent(j,scope->wf(0)->GetBinContent(j)+Scale*(vertical_offset+noise(SD)));
+      scope->wf(0)->AddBinContent(j,Scale*(vertical_offset+noise(SD)));
       scope->wf(0)->SetBinContent(j,round(scope->wf(0)->GetBinContent(j),scoperes));
     }
-  cout << endl << "Checkpoint 8 (plotfinish finished)" << endl;
 }

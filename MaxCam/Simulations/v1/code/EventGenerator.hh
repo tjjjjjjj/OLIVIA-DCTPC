@@ -147,6 +147,9 @@ private:
   TVector3 fTempPosition;         //Current particle position in loop
   TRandom3 *fRnd;                 //Random number generator
   TObjArray *fTrueClusterArray;
+  
+  double Second_Energy; //Initial energy of second alpha, used for SimMesh
+
   ClassDef(EventGenerator,1)
 };
 

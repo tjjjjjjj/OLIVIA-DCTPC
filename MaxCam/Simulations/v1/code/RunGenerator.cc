@@ -504,14 +504,19 @@ RunGenerator::findFileNames()
 void 
 RunGenerator::saveEvent()
 {
+  cout << endl << "Checkpoint 11.0 (save event)" << endl;
   //cout << "saveEvent() " << endl;
   fData->event()->timeStamp()->Set(fSimTime->GetYear(),fSimTime->GetMonth(),
 				   fSimTime->GetDay(),fSimTime->GetHour(),
 				   fSimTime->GetMinute(),fSimTime->GetSecond());
 
+  cout << endl << "Checkpoint 11.01 (save event)" << endl;
+
   fData->event()->UTCtimeStamp()->Set(fSimTime->GetYear(),fSimTime->GetMonth(),
 				     fSimTime->GetDay(),fSimTime->GetHour(),
 				     fSimTime->GetMinute(),fSimTime->GetSecond(),0,1,0);
+
+  cout << endl << "Checkpoint 11.02 (save event)" << endl;
 
   fData->event()->setRunNumber(fRunNumber);
   fData->event()->increaseEventNumber();
@@ -520,10 +525,12 @@ RunGenerator::saveEvent()
   //  Write the PMT data to file
   /* FIXME: hardcoded number of triggers 
      -- can there be more than 1 trigger per event? */
+  cout << endl << "Checkpoint 11.1 (save event)" << endl;
   Int_t ntrig   = 1;
   for (Int_t ipmt=0; ipmt<fEventGen->pmt()->GetEntries(); ipmt++) {
     for (Int_t itrig=0; itrig<ntrig; itrig++) {
       //cout << "found a pmt:  " << endl;
+      cout << endl << "Checkpoint 11.2 (save event)" << endl;
       new(  (*fData->event()->rawScopeData())[itrig] ) ScopeWaveformData(*fEventGen->pmt(ipmt)->wf(itrig));
     } // loop over triggers
   } // loop over PMTs
@@ -532,8 +539,9 @@ RunGenerator::saveEvent()
   //cout<<"NENTRIES SCOPE&&&&&&&&&&&&&&&&&&&&&: "<<fEventGen->scope()->GetEntries()<<endl;
   
   //Store the waveform data TJ
+  cout << endl << "Checkpoint 11.3 (save event)" << endl;
   new(  (*fData->event()->rawScopeData())[0] ) ScopeWaveformData(*fEventGen->scope(0)->wf(0));
-
+  cout << endl << "Checkpoint 11.4 (save event)" << endl;
 // new( (*fData->event()->scopeDataInfo())[0] ) ScopeDataInfo(dataInfo(0));
 
 cout<<"size of data info: "<<dataInfo(0)<<endl;
@@ -1602,8 +1610,11 @@ RunGenerator::run(Bool_t empty)
       if (i % 1 == 0) 
         //cout <<"Event "<< i<<" of "<<fNEvents<<endl;
 	cout << i << " " << flush;
+      cout << endl << "Checkpoint 0 (RunGen)" << endl;
       recoilEvent();
+      cout << endl << "Checkpoint 11 (RunGen)" << endl;
       saveEvent();
+      cout << endl << "Checkpoint 12 (RunGen)" << endl;
     }
     
     cout << endl;

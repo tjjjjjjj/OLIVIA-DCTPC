@@ -31,15 +31,6 @@ public:
   //runs a waveform simulation from an initialized instance of SimMesh
 
 
-  void SetFinalPosition(int ifin){final_position = ifin;}
-  int GetFinalPosition(){return final_position;}
-  //returns last used index of fRecoilZ. Used for compatibility with EventGenerator's double alphas.                                                  
-  void SetPlotOffset(int poff){plot_offset = poff;}
-  int GetPlotOffset(){return plot_offset;}
-  //used for aligning multiple particles' signals onto one waveform  
-
-  void plotfinish();
-  //discretizes, adds noise to, and vertically shifts waveform
 
 private:
 
@@ -71,14 +62,22 @@ private:
   
   void plot();
   //plots waveform
+  
+  void plotfinish();
+  //adds noise, vertically shifts, and discretizes waveform
 
   void noisify();
-  //adds noise to waveform (Unused: has been replaced by plotfinish).
+  //adds noise to waveform (Has been replaced by plotfinish).
   
   void allocate();
   //allocates space to Q,R
 
+  int SetFinalPosition(ifin){final_position = ifin;}
+  int GetFinalPosition(){return final_position;}
+  //returns last used index of fRecoilZ. Used for compatibility with EventGenerator's double alphas.
 
+  int SetPlotOffset(poff){plot_offset = poff;}
+  int GetPlotOffset(){return plot_offset;}
 
   //see v1/runParameters/LittleDCTPC_far/scopeProperties.temp for more info on those of the variables here that are tune-able
   double t;  //current time

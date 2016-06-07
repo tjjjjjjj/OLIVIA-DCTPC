@@ -948,7 +948,10 @@ RunGenerator::readScopeProperties(TString filename)
       double vertical_offset;
       linestr >> vertical_offset;
       fEventGen->scope(nscope)->setVerticalOffset(vertical_offset);
-    
+    } else if (name == "DecayOffset"){
+      int decay_offset;
+      linestr >> decay_offset;
+      fEventGen->scope(nscope)->setDecayOffset(decay_offset);
       //end TJ's variables
 
 

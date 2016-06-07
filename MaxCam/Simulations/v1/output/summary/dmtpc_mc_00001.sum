@@ -3,10 +3,10 @@ output/data/dmtpc_mc_00001.root
 #===================================
 
 Run Parameter===================================
-NumberOfEvents		100
+NumberOfEvents		4
 RunType			LittleDCTPC_far
 Config	      	      	normal
-EventType		alpha
+EventType		doublealpha
 ProjectileParticle	alpha
 ProjectileMass		4001506
 RecoilParticle		alpha
@@ -29,7 +29,7 @@ TimeStep		1
 DirectionOption		collimated
 SourcePosition		-35	0.0	50.0
 SourceDirection		1.0	0.0	0.0
-ThetaMax		8
+ThetaMax		4
 SpecialOption		none
 FissionSpectrumENDF	ENDF_Cf-252_n_spectrum
 TotalCS_ENDF		ENDF_CS_n_on_19F

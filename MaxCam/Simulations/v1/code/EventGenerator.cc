@@ -39,7 +39,6 @@ EventGenerator::EventGenerator()
   fCamera          = new TObjArray();
   fPMT             = new TObjArray();
   fScope           = new TObjArray();
-  fMesh            = new SimMesh();
   fStepSize        = 0.0005;//mm 0.005 is default. this is an important number!! 
   fMinEnergy       = 0.2;
   //fSrimName        = "SRIM_He_in_75TorrCF4_525TorrHe_Aug2014";
@@ -954,6 +953,7 @@ if (fUseDoubleAlpha)
   fTempEnergy = fPartGen->getRecoilEnergy2();
   //Generate straggling
   E = fTempEnergy;
+  Second_Energy = E;
   
   R = fSrim->getRangeVsEnergy()->Eval(E);
 //   double lstraggle = fRnd->Gaus(R,fSrim->getLStraggleVsEnergy()->Eval(E));
@@ -1031,13 +1031,28 @@ if (fUseDoubleAlpha)
   
  
 
-  SimMesh ThisSimMesh = SimMesh::SimMesh(Initial_Energy, fStepSize, scope(0), 0, fMinEnergy, fRecoilZ, fRecoilEn, fChamber);
+  SimMesh SimMesh1 = SimMesh::SimMesh(-1, 0, Initial_Energy, fStepSize, scope(0), fMinEnergy, fRecoilZ, fRecoilEn, fChamber);
 
-  ThisSimMesh.simulate();
+  SimMesh1.simulate();
+  cout << endl << "Checkpoint 6.1 (EventGen)" << endl;
+  int final_position = SimMesh1.GetFinalPosition();
+  int plot_offset = SimMesh1.GetPlotOffset();
+  cout << endl << "Checkpoint 6.2 (EventGen)" << endl;
+  
+  if (fUseDoubleAlpha)
+    {
+      SimMesh SimMesh2 = SimMesh::SimMesh(plot_offset, final_position, Second_Energy, fStepSize, scope(0), fMinEnergy, fRecoilZ, fRecoilEn, fChamber);  
+      SimMesh2.simulate();
+    }
 
+  SimMesh1.plotfinish();
+
+  cout << endl << "Checkpoint 9 (EventGen)" << endl;
 
   fRecoilX.clear();
   fRecoilY.clear();
   fRecoilZ.clear();
   fRecoilEn.clear();
+
+  cout << endl << "Checkpoint 10 (EventGen Finished)" << endl;
 }
