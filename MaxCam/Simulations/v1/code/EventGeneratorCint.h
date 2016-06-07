@@ -137,6 +137,7 @@ extern G__linked_taginfo G__EventGeneratorCintLN_SimCamera;
 extern G__linked_taginfo G__EventGeneratorCintLN_SimScope;
 extern G__linked_taginfo G__EventGeneratorCintLN_SimPMT;
 extern G__linked_taginfo G__EventGeneratorCintLN_SimChamber;
+extern G__linked_taginfo G__EventGeneratorCintLN_SimMesh;
 extern G__linked_taginfo G__EventGeneratorCintLN_EventGenerator;
 
 /* STUB derived class for protected member access */

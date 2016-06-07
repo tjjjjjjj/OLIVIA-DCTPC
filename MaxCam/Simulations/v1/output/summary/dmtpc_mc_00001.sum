@@ -3,7 +3,7 @@ output/data/dmtpc_mc_00001.root
 #===================================
 
 Run Parameter===================================
-NumberOfEvents		120
+NumberOfEvents		100
 RunType			LittleDCTPC_far
 Config	      	      	normal
 EventType		alpha
@@ -83,7 +83,7 @@ EMGain			0	1
 # for board types, see Scope.cc
 BoardType	0	ALAZAR_ATS860
 # Clock rate in GHz
-# (I'm setting in Hz to match my code... Hopefully nothing breaks)
+# (I'm setting this in Hz to match my code... Hopefully nothing breaks)
 ClockRate       0       2.5e8
 RecordLength	0	12288 #12*1024
 RecordPreSize	0	4096  #4*1024

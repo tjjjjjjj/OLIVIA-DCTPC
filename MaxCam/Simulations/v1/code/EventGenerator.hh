@@ -11,6 +11,8 @@
 #include "SimScope.hh"
 #include "SimChamber.hh"
 
+#include "SimMesh.hh"
+
 #include "TH1D.h"
 #include "TH2F.h"
 #include "TString.h"
@@ -26,6 +28,7 @@
 #include <vector>
 using std::vector;
 
+class SimMesh;
 class EventGenerator : public TObject {
 
 public:
@@ -44,6 +47,8 @@ public:
 
   TObjArray*            scope() {return fScope;}
   SimScope*             scope(int i); 
+
+  SimMesh*              mesh(){return fMesh;}
 
   void 		reset();
   void 		setStepSize(double step){fStepSize = step;}
@@ -97,10 +102,8 @@ public:
   Double_t acceptance(Double_t D, Double_t h);
   Double_t solidAngleSphericalCap(Double_t D, Double_t h);
 
-  void clusterfunction(double En, double dx, vector<double>& fRecoilZ, vector<double>& fRecoilEn);
-
 private:
-  
+
   TFile *f;
   TH1D *hist;
   ParticleGenerator *fPartGen;    //ParticleGenerator Object
@@ -110,6 +113,7 @@ private:
   TObjArray *fCamera;             //SimCamera Object
   TObjArray *fPMT;                //SimPMT Object
   TObjArray *fScope;              //SimScope Object
+  SimMesh *fMesh;
 //  TH1F *fSignal;                  //Electronic signal
   //TF1 *fLongStraggle;             //Longitudinal straggling profile
   double fStepSize;               //Step size in mm

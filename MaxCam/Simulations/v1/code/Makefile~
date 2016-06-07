@@ -64,8 +64,7 @@ OBJS = SimTools.o SimToolsCint.o \
 	ParticleGenerator.o ParticleGeneratorCint.o \
 	EventGenerator.o EventGeneratorCint.o \
 	RunGenerator.o RunGeneratorCint.o\
-	SimRings.o SimRingsCint.o \
-	SimMesh.o SimMeshCint.o
+	SimRings.o SimRingsCint.o
 
 
 ### ... for all Linux machines and MACOSX compile as analysis

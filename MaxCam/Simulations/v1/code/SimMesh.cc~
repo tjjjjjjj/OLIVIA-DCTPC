@@ -6,50 +6,63 @@
 
 ClassImp(SimMesh)
 
-  SimMesh::SimMesh(double Initial_Energy_EG, double StepSize_EG, SimScope* scope_EG, int nscope_EG, EventGenerator* fEventGen_EG)
+  SimMesh::SimMesh() {/*empty constructor*/};
+SimMesh::SimMesh(double Initial_Energy_EG, double StepSize_EG, SimScope* scope_EG, int nscope_EG, double fMinEnergy_EG, vector<double>& fRecoilZ_EG, vector<double>& fRecoilEn_EG, SimChamber* fChamber_EG)
 {
   //Constructor
-  mass = 3.727e6 / (9 * 10^22); // alpha in keV/c^2, c in mm/s
-  fEventGen = fEventGen_EG;
-  nscope = 0; //magic number for now, since we only have one
+  mass = 3.727e6 / (9e22); // alpha in keV/c^2, c in mm/s
+  fRecoilEn = fRecoilEn_EG;
+  fRecoilZ = fRecoilZ_EG;
+  fMinEnergy = fMinEnergy_EG;
+  nscope = 0; //I think this is never used
   scope = scope_EG;
-  Td = scope(0)->getDecayTime();
-  Tr = scope(0)->getRiseTime();
-  vd = scope(0)->getDriftVel();
-  Scale = scope(0)->getScale();
-  scoperes = scope(0)->getScopeRes();
-  SD = scope(0)->getVoltageNoise() * scoperes/Scale;
-  rate = scope(0)->getClockRate();
+  fChamber = fChamber_EG;
+  Td = scope->getDecayTime();
+  Tr = scope->getRiseTime();
+  vd = scope->getDriftVel();
+  Scale = scope->getScale();
+  scoperes = scope->getScopeRes();
+  SD = scope->getVoltageNoise() * scoperes/Scale;
+  rate = scope->getClockRate();
   dt = 1./rate;
-  a1 = scope(0)->getTimeNoise1();
-  a2 = scope(0)->getTimeNoise2();
-  zero_offset = scope(0)->getZeroOffset();
-  Nsamples = scope(0)->getNSamples();
-  vertical_offset = scope(0)->getVerticalOffset() * 1/Scale;
-  jmax_init = 20000; //Magic number, not in .tmp files since value isn't very important. Could theoretically cause out-of-range errors if it is too low.
-  Q = new vector<double>(jmax_init,0);
-  R = new vector<double>(jmax_init,0);
+  a1 = scope->getTimeNoise1();
+  a2 = scope->getTimeNoise2();
+  zero_offset = scope->getZeroOffset();
+  zero_offset_var = scope->getZeroOffsetVar();
+  zero_offset += int(pow(fRecoilZ.at(0),0.5)*zero_offset_var);
+  Nsamples = scope->getNSamples();
+  vertical_offset = scope->getVerticalOffset() * 1/Scale;
+  jmax_init = 20000; //Magic number since value isn't very important. Could theoretically cause out-of-range errors if it is too low.
   dx = StepSize_EG;
   Initial_Energy = Initial_Energy_EG;
+  En = Initial_Energy;
   rand = new TRandom3(0);
   imin = 0;
-  imax = imin + fEventGen->fRecoilZ.size();
-  j_init = int(j(0,fEventGen->fRecoilZ.at(0));
+  imax = imin + fRecoilZ.size();
+  j_init = int(j(fRecoilZ.at(0)));
+  jmax = jmax_init + j_init;
+  // cout << "#############" << jmax << "############";
+  Q = vector<double>(jmax,0);
+  R = vector<double>(jmax,0);
+  // cout << "$$$$$$$$$$$$$$" << Q.size() << "$$$$$$$";
   t = 0;
 }
+    SimMesh::~SimMesh()
+    {
+    }
 
     void SimMesh::simulate()
     {
-      for(int i = imin; fEventGen->fRecoilEn.at(i)>fEventGen->fMinEnergy && i < imax-1 && fEventGen->fRecoilZ.at(i)>0 && fEventGen->fRecoilZ.at(i)<fChamber->getDriftLength(); i++)
+      for(int i = imin; En>fMinEnergy && i < imax-1 && fRecoilZ.at(i)>0 && fRecoilZ.at(i)<fChamber->getDriftLength(); i++)
 	{
-	  SimMesh::step();
+	  SimMesh::step(i);
 	  if(need_space == 1) SimMesh::allocate();
 	}
       SimMesh::decay();
-      SimMish::noisify();
+      SimMesh::noisify();
       SimMesh::plot();
     }
-  void SimMesh::step()
+  void SimMesh::step(int i)
   {
     double sz; //z-position                                    
     double jD; //expected arrival time   
@@ -57,15 +70,16 @@ ClassImp(SimMesh)
     double tSD; //uncertainty of arrival time             
     double El; //energy loss                                
     need_space = 0; //vectors are almost out of allocated space  
-    sz = fEventGen->fRecoilZ.at(i);
-    El = fEventGen->fRecoilEn.at(i);
-    t += dx/v(En);
+    sz = fRecoilZ.at(i);
+    El = fRecoilEn.at(i);
+    En -= fRecoilEn.at(i);
+    t += dx/vel();
     tSD = timenoise(sz);
     jD = j(sz);
-
+    
     for (int samples = 0; samples < Nsamples; samples++)//randomly drops electrons onto the mesh at times around jI                                     
       {
-	jI = int(jD + 0.5 + noise(tSD));
+	jI = int(round(jD + noise(tSD),1));
 	if (jI < 1) jI = 1;
 	jmin = (jI < jmin) ? jI : jmin;
 	if (jI > (jmax - jmax_init)) need_space = 1;
@@ -74,6 +88,15 @@ ClassImp(SimMesh)
       }
     En -= fRecoilEn.at(i);
   }
+
+double SimMesh::vecsum(vector<double>& B, int risesteps)
+{
+  double sum = 0;
+  for(int r=0;r<risesteps;r++)
+    sum+=B.at(r);
+  return sum;
+}
+
 
   void SimMesh::allocate()
   {
@@ -92,7 +115,6 @@ ClassImp(SimMesh)
     int risesteps = int(Tr/dt) + 1;
     double DecayConst = std::exp(-dt/Td);
     vector<double> B(risesteps,0.); //used as a "buffer" for the rise time  
-
     for(int i=1;i<jmax;i++)
       {
         B.at(i%risesteps) = Q.at(i);
@@ -103,20 +125,27 @@ ClassImp(SimMesh)
   void SimMesh::noisify()
   {
     for(int i=0;i<jmax;i++)
-	R.at(i) = R.at(i) + noise(rand, SD);
+	R.at(i) = R.at(i) + noise(SD);
   }
 
   void SimMesh::plot()
   {
-    int plotmax = scope(0)->getRecordLength()+scope(0)->getRecordPreSize();
-    int presize = scope(0)->getRecordPreSize();
+    int presize = scope->getRecordPreSize();
+    int plotmax = presize + scope->getRecordLength();
     int plotmin = presize + zero_offset;
 
     //Discretizes the waveform to the scope's resolution, and centers the waveform spike near t=0                                                     
-  for (int j = plotmin; j < plotmax; j++)
-    scope(0)->wf(0)->SetBinContent(j,round(Scale*(vertical_offset+S.at(j - (plotmin - jmin))),scoperes));
- for (int j = 1; j < plotmin; j++)
-   scope(0)->wf(0)->SetBinContent(j,round(Scale*(vertical_offset+rand->Gaus(0,SD)),scoperes));
+    for (int j = plotmin; j < plotmax; j++)
+      { scope->wf(0)->SetBinContent(j,round(Scale*(vertical_offset+R.at(j - (plotmin - jmin))),scoperes));
+	cout << endl << round(Scale*(vertical_offset + R.at(j+jmin-plotmin)),scoperes);
+	cout << endl << '#' << Scale* (vertical_offset+R.at(j+jmin-plotmin));
+	/*if (scope->wf(0)->GetBinContent(j)!=0)
+	  cout << endl << scope->wf(0)->GetBinContent(j);
+	if (j%500==0)
+	cout << "500 more...";*/
+      }
+      for (int j = 1; j < plotmin; j++)
+	scope->wf(0)->SetBinContent(j,round(Scale*(vertical_offset+noise(SD)),scoperes));
 
  
   }

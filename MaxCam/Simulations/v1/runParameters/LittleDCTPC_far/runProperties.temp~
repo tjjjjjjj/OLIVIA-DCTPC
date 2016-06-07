@@ -1,5 +1,5 @@
 Run Parameter===================================
-NumberOfEvents		120
+NumberOfEvents		1
 RunType			LittleDCTPC_far
 Config	      	      	normal
 EventType		alpha
@@ -25,7 +25,7 @@ TimeStep		1
 DirectionOption		collimated
 SourcePosition		-35	0.0	50.0
 SourceDirection		1.0	0.0	0.0
-ThetaMax		3
+ThetaMax		8
 SpecialOption		none
 FissionSpectrumENDF	ENDF_Cf-252_n_spectrum
 TotalCS_ENDF		ENDF_CS_n_on_19F

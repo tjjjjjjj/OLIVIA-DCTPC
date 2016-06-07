@@ -5,6 +5,8 @@
 #include "../../../DmtpcDataset.hh"
 #include "EventGenerator.hh"
 
+#include "SimMesh.hh"
+
 #include "TMath.h"
 #include "TFile.h"
 #include "TH1D.h"
@@ -25,190 +27,7 @@
 #include <assert.h>
 
 using namespace std;
-
 ClassImp(EventGenerator);
-
-
-
-double noise(TRandom3* rand, double SD) //Gaussian random value
-{
-  return rand->Gaus(0,SD);
-}
-   
-double timenoise(double a1,double a2,double sz) //uncertainty of electron arrival time
-{
-  if (sz < 0) sz = 0;
-  return a1 + a2 *pow(sz,0.5); 
-}
-
-double j(double t, double sz, double vd, double dt) //expected electron arrival time
-{
-  return t/dt + sz/(vd * dt);
-}
-
-double v(double En)
-{
-  if (En <= 0) En = 1.e-20;
-  return pow(2*En/(3.728e6 / 9.e22),0.5); //magic number is alpha particle mass over c^2.
-}
-  
-int step(int Nsamples, int& jmin, double& En, double dx, double& t, double dt, double a1, double a2, int i, double vd, int jmax, int jmax_init, vector<double>& Q, vector<double>& fRecoilZ, vector<double>& fRecoilEn, TRandom3* rand) //Computes when the electrons hit the mesh.
-{
-
-  double sz; //z-position
-  double jD; //expected arrival time
-  int jI; //rounded to int
-  double tSD; //uncertainty of arrival time
-  double El; //energy loss
-  int need_space = 0; //vectors are almost out of allocated space
-
-  sz = fRecoilZ.at(i);
-  El = fRecoilEn.at(i);
-  //cout << En << " En, " << El << " El." << '\n';
- 
-  t += dx/v(En);
-
-  tSD = timenoise(a1,a2,sz);
-  jD = j(t,sz,vd,dt);
-
-  for (int samples = 0; samples < Nsamples; samples++)//randomly drops electrons onto the mesh at times around jI
-    {
-      jI = int(jD + 0.5 + noise(rand,tSD));
-      if (jI < 0) jI = 1;
-      jmin = (jI < jmin) ? jI : jmin;
-      if (jI > (jmax - jmax_init)) need_space = 1;
-  
-      Q.at(jI)+=El/Nsamples;
-    }  
-  En -= fRecoilEn.at(i);
-return need_space;
-}
-
-double vecsum(vector<double>& B, int risesteps)
-{
-  double sum = 0;
-  for(int r=0;r<risesteps;r++)
-    sum+=B.at(r);
-  return sum;
-}
-
-void decay(int decay_offset, double Tr, double Td, double dt, vector<double>& Q, vector<double>& R, int jmax) //simulates rise, decay times
-{
-  int risesteps = int(Tr/dt) + 1;
-  double DecayConst = 1-std::exp(-dt/Td);
-  vector<double> B(risesteps,0.); //used as a "buffer" for the rise time
-
-    for(int i=1;i<jmax;i++)
-      {
-	B.at(i%risesteps) = Q.at(i);
-	R.at(i) = R.at(i-1);
-	if (i>=decay_offset)
-	  R.at(i) -= DecayConst*R.at(i-decay_offset);
-	R.at(i) += vecsum(B,risesteps)/risesteps;
-      }
-}
-
-void noisify(vector<double>& R, vector<double>& S, TRandom3* rand,double SD, int jmax) //adds final layer of random noise to data
-{
-  for(int i=0;i<jmax;i++)
-{
-    S.at(i) = R.at(i) + noise(rand, SD);
-}
-}
-
-double round(double x, double res)//Rounds x to the nearest multiple of res
-{
-  if (x==0)
-    return 0;
-  else
-    return double(int(x/res + ( x>0 ? .5 : -.5 ) ))*res;
-}
-
-void
-EventGenerator::clusterfunction(double En, double dx, vector<double>& fRecoilZ,vector<double>& fRecoilEn)
-{ 
-  TRandom3 *rand = new TRandom3(0);
-  /*
-  const double Tr = 5.e-9; //rise time (linear, seconds)
-  const double Td = 500.e-9; //decay time (exponential, seconds)
-  const double Scale = .2; //scales final waveform
-  const double vd = 1.646e7; //drift velocity (mm/s)
-  const double scoperes = .016*256; //output voltage resolution
-  const double SD = (.75*scoperes)/Scale; //final noise strength
-  const double rate = 250.e6; //sampling rate (Hz)
-  const double dt = 1./rate; //time resolution (s)
-  const double a1 = 2.; //time noise strength (position independent)
-  const double a2 = 1.; //(position dependent)
-  const int Nsamples = 10; //raising this number increases the accuracy of the Gaussian time-uncertainty. 1 might be fine for small step size.
-  const int zero_offset = 50; //fine-tunes the centering of the waveform on the final plot
-  */
-  
-  double Td = scope(0)->getDecayTime();
-  double Tr = scope(0)->getRiseTime();
-  double vd = scope(0)->getDriftVel();
-  double Scale = scope(0)->getScale();
-  double scoperes = scope(0)->getScopeRes();
-  double SD = scope(0)->getVoltageNoise() * scoperes/Scale;
-  double rate = scope(0)->getClockRate();
-  double dt = 1./rate;
-  double a1 = scope(0)->getTimeNoise1();
-  double a2 = scope(0)->getTimeNoise2();
-  int zero_offset = scope(0)->getZeroOffset();
-  double zero_offset_var = scope(0)->getZeroOffsetVar();
-  zero_offset += int(zero_offset_var*(a1+a2*pow(fRecoilZ.at(0),0.5)));
-  int Nsamples = scope(0)->getNSamples();
-  double vertical_offset = scope(0)->getVerticalOffset() * 1/Scale;
-  int decay_offset = scope(0)->getDecayOffset();
-
-  int need_space;
- 
-  const int jmax_init = 20000; //size of memory allocated when vectors need more space. Should be much larger than the time uncertainty caused by random noise.
-  const int imin = 0; //imin corresponds to t=0
-  const int imax = imin + fRecoilZ.size();
-  const int j_init = int(j(0,fRecoilZ.at(0),vd,dt)); // first electron detected (approximately)
-  int jmax = jmax_init + j_init; //initial length of output vectors.
-  int jmin = j_init; //first electron detected (actual)
-  vector<double> Q(jmax,0); //electrons hit mesh
-  vector<double> R(jmax,0); //signal recorded
-  vector<double> S(jmax,0); //random noise added
-  double t = 0.; //time elapsed
- 
-  for(int i=imin;En>fMinEnergy&&i<imax-1&&fRecoilZ.at(i)>0&&fRecoilZ.at(i)<fChamber->getDriftLength();i++) //main simulation; generates Q (electron arrival at mesh)
- {
-   need_space = step(Nsamples,jmin,En,dx,t,dt,a1,a2,i,vd,jmax,jmax_init,Q,fRecoilZ,fRecoilEn,rand); //step(...) is ugly but I didn't know classes when I wrote it
-      if(need_space == 1) //allocates extra space to vectors if necessary
-	{
-	  jmax+=jmax_init;
-	  Q.reserve(jmax);
-	  R.reserve(jmax);
-	  S.reserve(jmax);
-	  for(int k = 0;k<jmax_init;k++)
-	    {
-	      Q.push_back(0.);
-	      R.push_back(0.);
-	      S.push_back(0.);
-	    }
-	}
-    }
-    
-  decay(decay_offset,Tr,Td,dt,Q,R,jmax); //generates R (output after rise/decay)
-  noisify(R,S,rand,SD,jmax); //generates S (output after random noise)
-  
-  int plotmax = scope(0)->getRecordLength()+scope(0)->getRecordPreSize();
-  int presize = scope(0)->getRecordPreSize();
-  int plotmin = presize + zero_offset; 
- 
- //Discretizes the waveform to the scope's resolution, and centers the waveform spike near t=0
- for (int j = plotmin; j < plotmax; j++) 
-   scope(0)->wf(0)->SetBinContent(j,round(Scale*(vertical_offset+S.at(j - (plotmin - jmin))),scoperes));
- for (int j = 1; j < plotmin; j++)
-   scope(0)->wf(0)->SetBinContent(j,round(Scale*(vertical_offset+rand->Gaus(0,SD)),scoperes));
-
-}
-
-
-
-
 EventGenerator::EventGenerator()
 {
 
@@ -220,6 +39,7 @@ EventGenerator::EventGenerator()
   fCamera          = new TObjArray();
   fPMT             = new TObjArray();
   fScope           = new TObjArray();
+  fMesh            = new SimMesh();
   fStepSize        = 0.0005;//mm 0.005 is default. this is an important number!! 
   fMinEnergy       = 0.2;
   //fSrimName        = "SRIM_He_in_75TorrCF4_525TorrHe_Aug2014";
@@ -318,7 +138,6 @@ void
 EventGenerator::reset()
 {
 
-  //cout<<"Hi TJ"<<endl;
   //cout << "reset()" << endl;
   int ncam = fCamera->GetEntries();
   for (int i = 0; i < ncam; i++) 
@@ -1210,15 +1029,12 @@ if (fUseDoubleAlpha)
     camera(i)->applyNoise();
   }
   
-  clusterfunction(Initial_Energy, fStepSize, fRecoilZ, fRecoilEn);
+ 
 
+  SimMesh ThisSimMesh = SimMesh::SimMesh(Initial_Energy, fStepSize, scope(0), 0, fMinEnergy, fRecoilZ, fRecoilEn, fChamber);
+  ThisSimMesh.simulate();
   fRecoilX.clear();
   fRecoilY.clear();
   fRecoilZ.clear();
   fRecoilEn.clear();
 }
-
-
-
-
-

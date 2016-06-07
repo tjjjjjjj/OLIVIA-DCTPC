@@ -1,7 +1,7 @@
 # for board types, see Scope.cc
 BoardType	0	ALAZAR_ATS860
 # Clock rate in GHz
-# (I'm setting in Hz to match my code... Hopefully nothing breaks)
+# (I'm setting this in Hz to match my code... Hopefully nothing breaks)
 ClockRate       0       2.5e8
 RecordLength	0	12288 #12*1024
 RecordPreSize	0	4096  #4*1024
@@ -19,22 +19,33 @@ VoltageMax	0	0      1.0
 #Added by TJ~~~~~~~~~~~~~~~~~~~~~~~~+
 #                                   V
 
-DecayTime       0       436.e-9
+DecayTime       0       434.e-9 
 RiseTime        0       8.e-9 
 DriftVel        0       1.646e7
-Scale           0       0.099
+Scale           0       0.13
 ScopeRes        0       4.096 
-VoltageNoise    0       0.838
+VoltageNoise    0       0.826
 TimeNoise1      0       1.  
-TimeNoise2      0       4.
-ZeroOffset      0       -152
+TimeNoise2      0       3.9
+ZeroOffset      0       -132
 ZeroOffsetVar   0       -2.05
 NSamples        0       5   
-VerticalOffset  0       -2.11
-DecayOffset     0       1   #the "ringing" model implemented with this variable was incorrect. Setting to 1 is the equivalent of disabling.
+VerticalOffset  0       -2.122
+DecayOffset     0       1
 
-#See EventGenerator.cc for comments
-#on these variables
+#Most of these are applied in v1/code/SimMesh.cc.
+
+#DecayTime: exponential decay constant of waveform.
+#RiseTime: linear rise time of waveform.
+#DriftVel: drift velocity of TPC.
+#Scale: vertical scaling of waveform. Does not affect voltage resolution or noise.
+#TimeNoise1: smears the signal along the time axis.
+#TimeNoise2: smears the signal, proportional to sqrt(distance from mesh).
+#ZeroOffset: centers the waveform on the x-axis.
+#ZeroOffsetVar: Strength of correction to ZeroOffset. (automatically corrected based on values of TimeNoise2 and distance from mesh.)
+#NSamples: Precision of signal smearing. 1 is probably fine for 0.0005mm step size; more may be necessary for a large step size.
+#VerticalOffset: re-centers the waveform along the y-axis.
+#DecayOffset: Not used in current code. Was used earlier in an attempt to model ringing.
 
 #                                   ^
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
