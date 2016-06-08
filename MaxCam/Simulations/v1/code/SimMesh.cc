@@ -10,6 +10,7 @@ ClassImp(SimMesh)
 
 SimMesh::SimMesh(int plot_offset_EG, int imin_EG, double Initial_Energy_EG, double StepSize_EG, SimScope* scope_EG, double fMinEnergy_EG, vector<double>& fRecoilZ_EG, vector<double>& fRecoilEn_EG, SimChamber* fChamber_EG)
 {//Constructor
+  new_plot = 0;
   mass = 3.727e6 / (9e22); //MAGIC NUMBER! alpha mass in keV/c^2, c in mm/s
   fRecoilEn = fRecoilEn_EG; //Energy loss vector
   fRecoilZ = fRecoilZ_EG; //Position vector
@@ -61,7 +62,6 @@ void SimMesh::simulate()// simulates waveforms on an initialized instance of Sim
       if(need_space == 1) SimMesh::allocate();
     }
   SimMesh::decay();
-  //SimMesh::noisify();
   SimMesh::plot();
 }
 
@@ -146,17 +146,14 @@ void SimMesh::plot() //plots results
   int plotmax = presize + scope->getRecordLength();
   int plotmin = presize + zero_offset;
 
-  if (plot_offset == -1) //Resets waveform to 0 for first particle in a batch
+  if (new_plot == 1) //Re-centers and resets waveform for the first particle in a batch
     {
       for (int j = 0; j < plotmax; j++)
         scope->wf(0)->SetBinContent(j,0.);
+
+      plot_offset = jmin - plotmin;
     }
 
-  if (plot_offset == -1) //-1 is used as an input when calling the function to tell the program that this is the first particle in an event. plot_offset is calculated automatically in this case. For additional particles, call the SimMesh constructor with the plot_offset value from the first particle.
-    {
-      plot_offset = jmin - plotmin;
-      if (plot_offset == -1) plot_offset = 0;
-    }
   for (int j = 1; j < plotmax; j++)
     {  
       if (j + plot_offset > 0 && j + plot_offset < R.size()) 
@@ -164,7 +161,7 @@ void SimMesh::plot() //plots results
     }
 }
 
-void SimMesh::plotfinish() //Shifts, adds noise to, and discretizes the voltage.
+void SimMesh::plotfinish() //Shifts, adds noise to, and discretizes the waveform.
 {
   int plotmax = scope->getRecordPreSize()+scope->getRecordLength();
 

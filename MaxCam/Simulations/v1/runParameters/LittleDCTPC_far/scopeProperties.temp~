@@ -27,7 +27,7 @@ ScopeRes        0       4.096
 VoltageNoise    0       0.826
 TimeNoise1      0       1.  
 TimeNoise2      0       3.9
-ZeroOffset      0       -307
+ZeroOffset      0       -230
 ZeroOffsetVar   0       -2.05
 NSamples        0       5   
 VerticalOffset  0       -2.122

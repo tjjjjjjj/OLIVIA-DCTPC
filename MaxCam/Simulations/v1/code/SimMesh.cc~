@@ -9,9 +9,7 @@ ClassImp(SimMesh)
   SimMesh::SimMesh() {/*empty constructor*/};
 
 SimMesh::SimMesh(int plot_offset_EG, int imin_EG, double Initial_Energy_EG, double StepSize_EG, SimScope* scope_EG, double fMinEnergy_EG, vector<double>& fRecoilZ_EG, vector<double>& fRecoilEn_EG, SimChamber* fChamber_EG)
-{
-  //Constructor. See SimMesh.hh for comments.
-
+{//Constructor
   mass = 3.727e6 / (9e22); //MAGIC NUMBER! alpha mass in keV/c^2, c in mm/s
   fRecoilEn = fRecoilEn_EG; //Energy loss vector
   fRecoilZ = fRecoilZ_EG; //Position vector
@@ -53,7 +51,6 @@ SimMesh::SimMesh(int plot_offset_EG, int imin_EG, double Initial_Energy_EG, doub
 SimMesh::~SimMesh(){/*destructor*/}
 
 
-
 void SimMesh::simulate()// simulates waveforms on an initialized instance of SimMesh
 {
   for(int i = imin; En>fMinEnergy && i < imax-1 && fRecoilZ.at(i)>0 && fRecoilZ.at(i)<fChamber->getDriftLength(); i++)
@@ -64,14 +61,13 @@ void SimMesh::simulate()// simulates waveforms on an initialized instance of Sim
       if(need_space == 1) SimMesh::allocate();
     }
   SimMesh::decay();
-  //SimMesh::noisify();
   SimMesh::plot();
 }
 
-void SimMesh::step(int i) //runs one step of simulation
+void SimMesh::step(int i) //runs one step of electron ionization and drift
 {
   double sz; //z-position                                    
-  double jD; //expected arrival time   
+  double jD; //expected arrival time of electrons   
   int jI; //jD rounded to int                                    
   double tSD; //uncertainty of arrival time             
   double El; //energy loss at current stop                                
@@ -148,7 +144,6 @@ void SimMesh::plot() //plots results
   int presize = scope->getRecordPreSize();
   int plotmax = presize + scope->getRecordLength();
   int plotmin = presize + zero_offset;
-  
 
   if (plot_offset == -1) //Resets waveform to 0 for first particle in a batch
     {
@@ -159,7 +154,7 @@ void SimMesh::plot() //plots results
   if (plot_offset == -1) //-1 is used as an input when calling the function to tell the program that this is the first particle in an event. plot_offset is calculated automatically in this case. For additional particles, call the SimMesh constructor with the plot_offset value from the first particle.
     {
       plot_offset = jmin - plotmin;
-      if (plot_offset < 0) plot_offset = 0;
+      if (plot_offset == -1) plot_offset = 0;
     }
   for (int j = 1; j < plotmax; j++)
     {  
@@ -168,7 +163,7 @@ void SimMesh::plot() //plots results
     }
 }
 
-void SimMesh::plotfinish() //Shifts, adds noise to, and discretizes the voltage.
+void SimMesh::plotfinish() //Shifts, adds noise to, and discretizes the waveform.
 {
   int plotmax = scope->getRecordPreSize()+scope->getRecordLength();
 

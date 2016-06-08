@@ -1,8 +1,8 @@
 Run Parameter===================================
-NumberOfEvents		4
+NumberOfEvents		120
 RunType			LittleDCTPC_far
 Config	      	      	normal
-EventType		doublealpha
+EventType		alpha
 ProjectileParticle	alpha
 ProjectileMass		4001506
 RecoilParticle		alpha

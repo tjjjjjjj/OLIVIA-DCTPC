@@ -1031,8 +1031,10 @@ if (fUseDoubleAlpha)
   
  
 
-  SimMesh SimMesh1 = SimMesh::SimMesh(-1, 0, Initial_Energy, fStepSize, scope(0), fMinEnergy, fRecoilZ, fRecoilEn, fChamber);
+  //Waveform simulation
+  SimMesh SimMesh1 = SimMesh::SimMesh(0, 0, Initial_Energy, fStepSize, scope(0), fMinEnergy, fRecoilZ, fRecoilEn, fChamber);
 
+  SimMesh1.NewPlot();
   SimMesh1.simulate();
 
   int final_position = SimMesh1.GetFinalPosition();
@@ -1045,6 +1047,8 @@ if (fUseDoubleAlpha)
     }
 
   SimMesh1.plotfinish();
+  //End waveform simulation
+
 
   fRecoilX.clear();
   fRecoilY.clear();

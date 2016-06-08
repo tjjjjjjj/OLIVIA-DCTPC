@@ -38,6 +38,9 @@ public:
   int GetPlotOffset(){return plot_offset;}
   //used for aligning multiple particles' signals onto one waveform  
 
+  void NewPlot(){new_plot = 1;}
+  //flag used to reset the waveform for a new event
+
   void plotfinish();
   //discretizes, adds noise to, and vertically shifts waveform
 
@@ -81,6 +84,8 @@ private:
 
 
   //values for these parameters are currently stored in v1/runParameters/LittleDCTPC_far/scopeProperties.temp
+  int new_plot; //a flag that this particle is the first one in its event
+
   double t;  //current time
   double Tr; //rise time
   double Td; //decay time
