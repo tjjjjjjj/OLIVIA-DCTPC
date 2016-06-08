@@ -80,7 +80,7 @@ private:
 
 
 
-  //see v1/runParameters/LittleDCTPC_far/scopeProperties.temp for more info on those of the variables here that are tune-able
+  //values for these parameters are currently stored in v1/runParameters/LittleDCTPC_far/scopeProperties.temp
   double t;  //current time
   double Tr; //rise time
   double Td; //decay time
@@ -105,9 +105,9 @@ private:
   int jmax; //current size of Q,R
   int jmin; //earliest detected electron
   double En; //current energy
-  vector<double> Q; //electrons hit mesh               
-  vector<double> R; //signal recorded              
-  double Initial_Energy; //it does what it says. Comes from EventGenerator (a.k.a. EG)
+  vector<double> Q; //The raw waveform of electron arrival times
+  vector<double> R; //The waveform after taking into account rise and decay times
+  double Initial_Energy; //Alpha's initial energy. Comes from EventGenerator (a.k.a. EG)
   double dx; //step size
   int plotmax; //limits of plot
   int presize; //limits of plot
@@ -117,10 +117,10 @@ private:
   TRandom3* rand; //random number generator
   vector<double> fRecoilEn; //energy loss from (EG)
   vector<double> fRecoilZ; //position from (EG)
-  double fMinEnergy; //signals end of simulation (EG)
+  double fMinEnergy; //threshold for end of simulation (EG)
   SimChamber* fChamber; //Contains TPC parameters (EG)
-  int final_position; //the last index of fRecoilZ that was called before exiting step() loop.
-  int plot_offset; //keeps track of the plotmin value used in plotting. Needed for correct double-alpha waveforms.
+  int final_position; //the last index of fRecoilZ that was called before exiting step() loop. Used for combining multiple waveforms.
+  int plot_offset; //keeps track of the plotmin value used in plotting. Used for combining multiple waveforms.
 
   ClassDef(SimMesh,1)
     };

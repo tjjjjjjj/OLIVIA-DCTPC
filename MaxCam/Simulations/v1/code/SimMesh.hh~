@@ -38,6 +38,8 @@ public:
   int GetPlotOffset(){return plot_offset;}
   //used for aligning multiple particles' signals onto one waveform  
 
+  void plotfinish();
+  //discretizes, adds noise to, and vertically shifts waveform
 
 private:
 
@@ -69,12 +71,9 @@ private:
   
   void plot();
   //plots waveform
-  
-  void plotfinish();
-  //adds noise, vertically shifts, and discretizes waveform
 
   void noisify();
-  //adds noise to waveform (Has been replaced by plotfinish).
+  //adds noise to waveform (Unused: has been replaced by plotfinish).
   
   void allocate();
   //allocates space to Q,R
