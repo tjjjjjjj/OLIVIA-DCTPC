@@ -2,7 +2,7 @@
 #include "TObject.h"
 #include "SimScope.hh"
 #include "EventGenerator.hh"
-
+#include "TVector.h"
 
 ClassImp(SimMesh)
 
@@ -10,6 +10,7 @@ ClassImp(SimMesh)
 
 SimMesh::SimMesh(int plot_offset_EG, int imin_EG, double Initial_Energy_EG, double StepSize_EG, SimScope* scope_EG, double fMinEnergy_EG, vector<double>& fRecoilZ_EG, vector<double>& fRecoilEn_EG, SimChamber* fChamber_EG)
 {//Constructor
+  plotname = "null";
   new_plot = 0;
   mass = 3.727e6 / (9e22); //MAGIC NUMBER! alpha mass in keV/c^2, c in mm/s
   fRecoilEn = fRecoilEn_EG; //Energy loss vector
@@ -47,6 +48,9 @@ SimMesh::SimMesh(int plot_offset_EG, int imin_EG, double Initial_Energy_EG, doub
   t = 0; //current time
   plot_offset = plot_offset_EG; //used for centering histogram
 
+  double sz = fRecoilZ.at(imin);
+  double tSD = timenoise(sz);
+  MakeGaussian(ker,tSD,Nsamples);
 }
 
 SimMesh::~SimMesh(){/*destructor*/}
@@ -54,42 +58,71 @@ SimMesh::~SimMesh(){/*destructor*/}
 
 void SimMesh::simulate()// simulates waveforms on an initialized instance of SimMesh
 {
+  TH1D* firsthist = new TH1D("first_"+plotname,"",16384,0,16384);
   for(int i = imin; En>fMinEnergy && i < imax-1 && fRecoilZ.at(i)>0 && fRecoilZ.at(i)<fChamber->getDriftLength(); i++)
     //while the particle still has energy, the index i is in range, and the particle is in the chamber
     {
       final_position = i+1;
-      SimMesh::step(i);
+      SimMesh::step(i,firsthist);
       if(need_space == 1) SimMesh::allocate();
     }
+
+  TString fileoption = (new_plot == 1) ? "recreate" : "update";
+  TFile* waveforms = new TFile("wfs.root",fileoption);
+  firsthist->Write();
+  waveforms->Close();
+
   SimMesh::decay();
   SimMesh::plot();
 }
 
-void SimMesh::step(int i) //runs one step of electron ionization and drift
+double SimMesh::normaldist(double peak, double x, double SD)
+{return exp((x-peak)*(peak-x)/(2*SD*SD)) / (SD * pow(3.141592,0.5));}
+
+void SimMesh::MakeGaussian(vector<double>& kernel, double SD, double acc)
+{
+  kernel.clear();
+  int size = int(acc*SD+1);
+  for (int i = -size; i < size + 1; i++)
+    kernel.push_back((4*normaldist(0.,double(i),SD)+normaldist(0.,double(i)+.5,SD)+normaldist(0.,double(i)-.5,SD))/6.);
+  normalize(ker);
+}
+
+void SimMesh::normalize(vector<double>& vec)
+{
+  double sum = vecsum(vec,vec.size());
+  if (sum == 0) sum = 1;
+  for (int i = 0; i < vec.size(); i++)
+    vec.at(i) /= sum;
+}
+
+void SimMesh::step(int i, TH1D* firsthist) //runs one step of electron ionization and drift
 {
   double sz; //z-position                                    
   double jD; //expected arrival time of electrons   
   int jI; //jD rounded to int                                    
   double tSD; //uncertainty of arrival time             
-  double El; //energy loss at current stop                                
+  double El; //energy loss at current step 
   need_space = 0; //records whether vectors are almost out of allocated space  
   sz = fRecoilZ.at(i);
   El = fRecoilEn.at(i);
   t += dx/vel();
   tSD = timenoise(sz);
   jD = j(sz);
+  jI = int(jD+.5);
+  if (i%20 == 0) MakeGaussian(ker,tSD,Nsamples);
+  int vecsize = (ker.size()-1)/2;
+
+  jmin = (jI - vecsize < jmin) ? jI-vecsize : jmin;
+  if (jI + vecsize + 1000 >= jmax) need_space = 1;
+  firsthist->SetBinContent(jI,firsthist->GetBinContent(jI)+El);
   
-  for (int samples = 0; samples < Nsamples; samples++){
-    //randomly drops electrons onto the mesh at times around jI
-    
-    jI = int(round(jD + noise(tSD),1));
-    if (jI < 1) jI = 1; //prevents underflow
-    jmin = ((jI < jmin) ? jI : jmin); //keeps track of first signal for plotting purposes
-    if (jI > (jmax - jmax_init)) need_space = 1; //Q,R are almost out of space
-    
-    Q.at(jI)+=El/Nsamples; //record electrons' signal
-  }
-  En -= fRecoilEn.at(i);
+  for (int i = -vecsize; i < vecsize+1; i++)
+    {
+      if (jI + i > 0)
+	Q.at(jI+i)+=El * ker.at(i+vecsize); //record electrons' signal
+    }
+  En -= El;
 }
 
 double SimMesh::round(double x, double res) //rounds x to nearest multiple of res
@@ -124,6 +157,15 @@ void SimMesh::allocate() //allocates space to Q,R
 
 void SimMesh::decay() //simulates rise, decay times
 {
+  TString fileoption = (new_plot == 1) ? "update" : "update";
+  TFile* waveforms = new TFile("wfs.root",fileoption);
+  TH1D* bragghist = new TH1D("bragg_"+plotname,"",16384,0,16384);
+  for(int j=0; j<16384; j++)
+    bragghist->SetBinContent(j,Q.at(j));
+  bragghist->Write();
+  waveforms->Close();
+
+
   int risesteps = int(Tr/dt) + 1;
   double DecayConst = std::exp(-dt/Td);
   vector<double> B(risesteps,0.); //used as a "buffer" for the rise time  
@@ -153,21 +195,46 @@ void SimMesh::plot() //plots results
 
       plot_offset = jmin - plotmin;
     }
+  TH1D* hist = new TH1D(plotname,"",16384,0,16384);
 
   for (int j = 1; j < plotmax; j++)
     {  
       if (j + plot_offset > 0 && j + plot_offset < R.size()) 
-	scope->wf(0)->SetBinContent(j,scope->wf(0)->GetBinContent(j)+Scale*R.at(j + plot_offset));
+	{
+	  scope->wf(0)->SetBinContent(j,scope->wf(0)->GetBinContent(j)+Scale*R.at(j + plot_offset));
+	  hist->SetBinContent(j,Scale*(vertical_offset+R.at(j+plot_offset)));
+	}
     }
+
+  TH1I* bizarre_workaround = new TH1I("plot_offset","",1,0,1);
+  TH1D* bizarre_workaround2 = new TH1D("vertical_offset","",1,0,1);
+  bizarre_workaround->SetBinContent(0,plot_offset);
+  bizarre_workaround2->SetBinContent(0,Scale*vertical_offset);
+
+  TFile *waveforms = new TFile("wfs.root", "update");
+  bizarre_workaround->Write();
+  bizarre_workaround2->Write();
+
+  hist->Write();
+  waveforms->Close();
 }
 
 void SimMesh::plotfinish() //Shifts, adds noise to, and discretizes the waveform.
 {
   int plotmax = scope->getRecordPreSize()+scope->getRecordLength();
+  
+  TH1D* histprefinal = new TH1D("hist0","",16384,0,16384);
+  TH1D* histfinal = new TH1D("hist1","",16384,0,16384);
 
   for (int j = 1; j < plotmax; j++)
     {
+      histprefinal->SetBinContent(j,scope->wf(0)->GetBinContent(j) + Scale*vertical_offset);
       scope->wf(0)->SetBinContent(j,scope->wf(0)->GetBinContent(j)+Scale*(vertical_offset+noise(SD)));
       scope->wf(0)->SetBinContent(j,round(scope->wf(0)->GetBinContent(j),scoperes));
+      histfinal->SetBinContent(j,scope->wf(0)->GetBinContent(j));
     }
+  TFile* waveforms = new TFile("wfs.root", "update");
+  histfinal->Write();
+  histprefinal->Write();
+  waveforms->Close();
 }

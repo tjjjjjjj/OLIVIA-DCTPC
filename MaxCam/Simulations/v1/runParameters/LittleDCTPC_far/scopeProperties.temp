@@ -2,7 +2,7 @@
 BoardType	0	ALAZAR_ATS860
 # Clock rate in GHz
 # (I'm setting this in Hz to match my code... Hopefully nothing breaks)
-ClockRate       0       2.5e8
+ClockRate       0       500.e6
 RecordLength	0	12288 #12*1024
 RecordPreSize	0	4096  #4*1024
 # Channels are
@@ -23,13 +23,13 @@ DecayTime       0       434.e-9
 RiseTime        0       8.e-9 
 DriftVel        0       1.646e7
 Scale           0       0.13
-ScopeRes        0       4.096 
+ScopeRes        0       0.256 #4.096 = 8-bit
 VoltageNoise    0       0.826
 TimeNoise1      0       1.  
-TimeNoise2      0       3.9
+TimeNoise2      0       3   #3.9?
 ZeroOffset      0       -155
 ZeroOffsetVar   0       -2.05
-NSamples        0       5   
+NSamples        0       4
 VerticalOffset  0       -2.122
 DecayOffset     0       1
 

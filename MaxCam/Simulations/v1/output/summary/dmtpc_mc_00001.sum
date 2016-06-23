@@ -3,7 +3,7 @@ output/data/dmtpc_mc_00001.root
 #===================================
 
 Run Parameter===================================
-NumberOfEvents		120
+NumberOfEvents		1
 RunType			LittleDCTPC_far
 Config	      	      	normal
 EventType		alpha
@@ -28,7 +28,7 @@ FixTime			2009	6	1	12	0	0
 TimeStep		1
 DirectionOption		collimated
 SourcePosition		-35	0.0	50.0
-SourceDirection		1.0	0.0	0.0
+SourceDirection		0.0	0.0	1.0
 ThetaMax		4
 SpecialOption		none
 FissionSpectrumENDF	ENDF_Cf-252_n_spectrum
@@ -84,7 +84,7 @@ EMGain			0	1
 BoardType	0	ALAZAR_ATS860
 # Clock rate in GHz
 # (I'm setting this in Hz to match my code... Hopefully nothing breaks)
-ClockRate       0       2.5e8
+ClockRate       0       500.e6
 RecordLength	0	12288 #12*1024
 RecordPreSize	0	4096  #4*1024
 # Channels are

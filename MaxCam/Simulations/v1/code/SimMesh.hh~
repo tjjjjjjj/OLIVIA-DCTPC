@@ -38,7 +38,11 @@ public:
   int GetPlotOffset(){return plot_offset;}
   //used for aligning multiple particles' signals onto one waveform  
 
-  void NewPlot(){new_plot = 1};
+  void SetPlotName(TString name){plotname = name;}
+  TString GetPlotName(){return plotname;}
+
+  void NewPlot(){new_plot = 1;}
+  //flag used to reset the waveform for a new event
 
   void plotfinish();
   //discretizes, adds noise to, and vertically shifts waveform
@@ -50,7 +54,7 @@ private:
   double noise(double error) {return rand->Gaus(0,error);} 
   //Mathematical function. Returns gaussian random number.
   
-  double timenoise(double sz) {return (sz>0) ? a1 + a2 * pow(sz,0.5) : a1;} 
+  double timenoise(double sz) {return (sz>0) ? pow(a1**a1 + a2**a2 * sz,0.5) : a1;} 
   //smears waveform on the time axis
   
   double j(double sz){return (t + sz/vd)/dt;} 
@@ -59,7 +63,7 @@ private:
   double vel(){return (En<0) ? 0 : pow(2*En/mass,0.5);} 
   //converts energy to velocity
   
-  void step(int i);
+  void step(int i, TH1D* firsthist);
   //runs one step of simulation
   
   double vecsum(vector<double>& B, int risesteps);
@@ -80,6 +84,14 @@ private:
   void allocate();
   //allocates space to Q,R
 
+  void normalize(vector<double> &vec);
+  //normalizes vector
+
+  void MakeGaussian(vector<double> &ker, double SD, double acc);
+  //generates gaussian kernel
+
+  double normaldist(double peak, double x, double SD);
+  //returns normal distribution evaluated at x
 
 
   //values for these parameters are currently stored in v1/runParameters/LittleDCTPC_far/scopeProperties.temp
@@ -123,8 +135,10 @@ private:
   vector<double> fRecoilZ; //position from (EG)
   double fMinEnergy; //threshold for end of simulation (EG)
   SimChamber* fChamber; //Contains TPC parameters (EG)
+  vector<double> ker; //Used to store kernel for Gaussian smearing
   int final_position; //the last index of fRecoilZ that was called before exiting step() loop. Used for combining multiple waveforms.
   int plot_offset; //keeps track of the plotmin value used in plotting. Used for combining multiple waveforms.
+  TString plotname;
 
   ClassDef(SimMesh,1)
     };

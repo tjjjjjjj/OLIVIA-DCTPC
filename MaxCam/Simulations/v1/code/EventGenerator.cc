@@ -1035,6 +1035,7 @@ if (fUseDoubleAlpha)
   SimMesh SimMesh1 = SimMesh::SimMesh(0, 0, Initial_Energy, fStepSize, scope(0), fMinEnergy, fRecoilZ, fRecoilEn, fChamber);
 
   SimMesh1.NewPlot();
+  SimMesh1.SetPlotName("hist2");
   SimMesh1.simulate();
 
   int final_position = SimMesh1.GetFinalPosition();
@@ -1043,6 +1044,7 @@ if (fUseDoubleAlpha)
   if (fUseDoubleAlpha)
     {
       SimMesh SimMesh2 = SimMesh::SimMesh(plot_offset, final_position, Second_Energy, fStepSize, scope(0), fMinEnergy, fRecoilZ, fRecoilEn, fChamber);  
+      SimMesh2.SetPlotName("hist3");
       SimMesh2.simulate();
     }
 
