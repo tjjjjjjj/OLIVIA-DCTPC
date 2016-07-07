@@ -2,7 +2,7 @@ Run Parameter===================================
 NumberOfEvents		1
 RunType			LittleDCTPC_far
 Config	      	      	normal
-EventType		alpha
+EventType		doublealpha
 ProjectileParticle	alpha
 ProjectileMass		4001506
 RecoilParticle		alpha
@@ -24,7 +24,7 @@ FixTime			2009	6	1	12	0	0
 TimeStep		1
 DirectionOption		collimated
 SourcePosition		-35	0.0	50.0
-SourceDirection		0.0	0.0	1.0
+SourceDirection		0.0	0.0	-1.0
 ThetaMax		4
 SpecialOption		none
 FissionSpectrumENDF	ENDF_Cf-252_n_spectrum

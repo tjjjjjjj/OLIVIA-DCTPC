@@ -60,7 +60,7 @@ private:
   double j(double sz){return (t + sz/vd)/dt;} 
   //arrival time of electron
   
-  double vel(){return (En<0) ? 0 : pow(2*En/mass,0.5);} 
+  double vel(){return (En<0) ? 1e-10 : pow(2*En/mass,0.5);} 
   //converts energy to velocity
   
   void step(int i, TH1D* firsthist);
@@ -108,6 +108,7 @@ private:
   double a1; //smearing (constant)
   double a2; //smearing (position-dependent)
   double SD; // voltage noise
+  double atten; //attenuation of electrons as they drift
   double mass; //alpha mass
   int zero_offset; //horizontal centering
   double zero_offset_var; //hor. centering (position-dependent)

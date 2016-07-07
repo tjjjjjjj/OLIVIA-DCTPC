@@ -23,14 +23,17 @@ DecayTime       0       434.e-9
 RiseTime        0       8.e-9 
 DriftVel        0       1.646e7
 Scale           0       0.13
-ScopeRes        0       0.256 #4.096 = 8-bit
+ScopeRes        0       0.256
+#ScopeRes: 4.096 = 8-bit
 VoltageNoise    0       0.826
 TimeNoise1      0       1.  
-TimeNoise2      0       3   #3.9?
+TimeNoise2      0       3.
+#TimeNoise2: is 3.9 better?
 ZeroOffset      0       -155
 ZeroOffsetVar   0       -2.05
 NSamples        0       4
 VerticalOffset  0       -2.122
+Attenuation     0       0
 DecayOffset     0       1
 
 #Most of these are applied in v1/code/SimMesh.cc.
@@ -45,6 +48,7 @@ DecayOffset     0       1
 #ZeroOffsetVar: Strength of correction to ZeroOffset. (automatically corrected based on values of TimeNoise2 and distance from mesh.)
 #NSamples: Precision of signal smearing. 1 is probably fine for 0.0005mm step size; more may be necessary for a large step size.
 #VerticalOffset: re-centers the waveform along the y-axis.
+#Attenuation: Attenuation scale length. Causes signal to weaken exponentially as z increases.
 #DecayOffset: Not used in current code. Was used earlier in an attempt to model ringing.
 
 #                                   ^

@@ -6,7 +6,7 @@
 
 ClassImp(SimMesh)
 
-  SimMesh::SimMesh() {/*empty constructor*/};
+  SimMesh::SimMesh() {/*empty constructor*/}
 
 SimMesh::SimMesh(int plot_offset_EG, int imin_EG, double Initial_Energy_EG, double StepSize_EG, SimScope* scope_EG, double fMinEnergy_EG, vector<double>& fRecoilZ_EG, vector<double>& fRecoilEn_EG, SimChamber* fChamber_EG)
 {//Constructor
@@ -24,6 +24,7 @@ SimMesh::SimMesh(int plot_offset_EG, int imin_EG, double Initial_Energy_EG, doub
   Scale = scope->getScale(); //final scale factor for the y-axis
   scoperes = scope->getScopeRes(); //resolution of scope
   SD = scope->getVoltageNoise() * scoperes/Scale; //amplitude of y-axis noise
+  atten = scope->getAttenuation();
   rate = scope->getClockRate();
   dt = 1./rate;
   a1 = scope->getTimeNoise1(); //smearing of electron signal due to uncertainty in electronics
@@ -105,6 +106,7 @@ void SimMesh::step(int i, TH1D* firsthist) //runs one step of electron ionizatio
   double El; //energy loss at current step 
   need_space = 0; //records whether vectors are almost out of allocated space  
   sz = fRecoilZ.at(i);
+  //if (i%1000 == 0) cout << sz << " | " << i << "|" << vel() << endl;
   El = fRecoilEn.at(i);
   t += dx/vel();
   tSD = timenoise(sz);
@@ -120,9 +122,9 @@ void SimMesh::step(int i, TH1D* firsthist) //runs one step of electron ionizatio
   for (int i = -vecsize; i < vecsize+1; i++)
     {
       if (jI + i > 0)
-	Q.at(jI+i)+=El * ker.at(i+vecsize); //record electrons' signal
+	Q.at(jI+i)+= exp(-1. * sz * atten) * El * ker.at(i+vecsize); //record electrons' signal
     }
-  En -= El;
+  En -= /*pow(10,1.5)*/El;
 }
 
 double SimMesh::round(double x, double res) //rounds x to nearest multiple of res

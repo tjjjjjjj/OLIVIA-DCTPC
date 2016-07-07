@@ -54,13 +54,13 @@ private:
   double noise(double error) {return rand->Gaus(0,error);} 
   //Mathematical function. Returns gaussian random number.
   
-  double timenoise(double sz) {return (sz>0) ? pow(a1**a1 + a2**a2 * sz,0.5) : a1;} 
+  double timenoise(double sz) {return (sz>0) ? pow(a1*a1 + a2*a2 * sz,0.5) : a1;} 
   //smears waveform on the time axis
   
   double j(double sz){return (t + sz/vd)/dt;} 
   //arrival time of electron
   
-  double vel(){return (En<0) ? 0 : pow(2*En/mass,0.5);} 
+  double vel(){return (En<0) ? 1e-10 : pow(2*En/mass,0.5);} 
   //converts energy to velocity
   
   void step(int i, TH1D* firsthist);
@@ -108,6 +108,7 @@ private:
   double a1; //smearing (constant)
   double a2; //smearing (position-dependent)
   double SD; // voltage noise
+  double attenuation; //attenuation of electrons as they drift
   double mass; //alpha mass
   int zero_offset; //horizontal centering
   double zero_offset_var; //hor. centering (position-dependent)

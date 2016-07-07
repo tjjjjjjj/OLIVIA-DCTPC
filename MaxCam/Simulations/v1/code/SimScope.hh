@@ -40,7 +40,9 @@ public:
   void setNSamples(int Nsamples){fNSamples = Nsamples;}
   void setVerticalOffset(double vertical_offset){fVerticalOffset = vertical_offset;}
   void setDecayOffset(int decay_offset){fDecayOffset = decay_offset;}
+  void setAttenuation(int atten){fAttenuation = atten;}
 
+  double getAttenuation(){return fAttenuation;}
   double getDecayTime(){return fDecayTime;}
   double getRiseTime(){return fRiseTime;}
   double getDriftVel(){return fDriftVel;}
@@ -106,6 +108,7 @@ private:
   int fNSamples;
   double fVerticalOffset;
   int fDecayOffset;
+  double fAttenuation;
 
   ClassDef(SimScope,1)
 };

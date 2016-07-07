@@ -925,6 +925,10 @@ RunGenerator::readScopeProperties(TString filename)
       double SD;
       linestr >> SD;
       fEventGen->scope(nscope)->setVoltageNoise(SD);
+    } else if (name == "Attenuation"){
+      double atten;
+      linestr >> atten;
+      fEventGen->scope(nscope)->setAttenuation(atten);
     } else if (name == "TimeNoise1"){
       double a1;
       linestr >> a1;

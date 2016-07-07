@@ -6,7 +6,7 @@
 
 ClassImp(SimMesh)
 
-  SimMesh::SimMesh() {/*empty constructor*/};
+  SimMesh::SimMesh() {/*empty constructor*/}
 
 SimMesh::SimMesh(int plot_offset_EG, int imin_EG, double Initial_Energy_EG, double StepSize_EG, SimScope* scope_EG, double fMinEnergy_EG, vector<double>& fRecoilZ_EG, vector<double>& fRecoilEn_EG, SimChamber* fChamber_EG)
 {//Constructor
@@ -105,6 +105,7 @@ void SimMesh::step(int i, TH1D* firsthist) //runs one step of electron ionizatio
   double El; //energy loss at current step 
   need_space = 0; //records whether vectors are almost out of allocated space  
   sz = fRecoilZ.at(i);
+  //if (i%1000 == 0) cout << sz << " | " << i << "|" << vel() << endl;
   El = fRecoilEn.at(i);
   t += dx/vel();
   tSD = timenoise(sz);
@@ -112,9 +113,9 @@ void SimMesh::step(int i, TH1D* firsthist) //runs one step of electron ionizatio
   jI = int(jD+.5);
   if (i%20 == 0) MakeGaussian(ker,tSD,Nsamples);
   int vecsize = (ker.size()-1)/2;
-  
+
   jmin = (jI - vecsize < jmin) ? jI-vecsize : jmin;
-  if (jI + vecsize >= jmax) need_space = 1;
+  if (jI + vecsize + 1000 >= jmax) need_space = 1;
   firsthist->SetBinContent(jI,firsthist->GetBinContent(jI)+El);
   
   for (int i = -vecsize; i < vecsize+1; i++)
@@ -122,7 +123,7 @@ void SimMesh::step(int i, TH1D* firsthist) //runs one step of electron ionizatio
       if (jI + i > 0)
 	Q.at(jI+i)+=El * ker.at(i+vecsize); //record electrons' signal
     }
-  En -= El;
+  En -= /*pow(10,1.5)*/El;
 }
 
 double SimMesh::round(double x, double res) //rounds x to nearest multiple of res

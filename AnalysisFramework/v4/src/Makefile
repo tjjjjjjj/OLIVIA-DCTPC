@@ -1,8 +1,7 @@
 CC=g++
 
 CFLAGS=-O3 -g -I$(TMVADIR)/inc `root-config --cflags` -Wall -Wextra -I../../../MaxCam -I../../MaxCam/waveformtools -I../../../MaxCam/waveformtools/include
-LFLAGS= `root-config --libs` -lGeom -lSpectrum -L../../../MaxCam -lMaxCam -L../../../MaxCam/waveformtools/lib -lWaveformTools -L ../../../tmva/lib -lTMVA 
-
+LFLAGS= `root-config --libs` -lGeom -lSpectrum -L../../../MaxCam -lMaxCam -L../../../MaxCam/waveformtools/lib -lWaveformTools -L ../../../tmva/lib -lTMVA -I$/app/d-Chooz/Software/root/
 
 cleanSkim: cleanSkim.o cleanSkimConfig.o cleanSkimProcessor.o
 	$(CC) $? -o $@  $(LFLAGS) -lMinuit -lMLP -lXMLIO -lTreePlayer
@@ -22,7 +21,7 @@ convert_skim: convert_skim.o cleanSkimConfig.o cleanSkimProcessor.o
 
 
 clusterCount: clusterCount.o
-	$(CC) $? -o $@  $(LFLAGS)
+	$(CC) $? -o $@  $(LFLAGS) -lMinuit -lMLP -lXMLIO -lTreePlayer
 	mv $@ ../bin/
 
 MCClusterCompare: MCClusterCompare.o
