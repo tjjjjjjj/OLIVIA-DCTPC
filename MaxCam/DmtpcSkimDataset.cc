@@ -319,9 +319,56 @@ DmtpcSkimDataset::mergeTempTrees( TTree * tmpskim, list<vector<vector<vector<Bur
   double  image_rms[ncam] ; bool image_rmsBr=0;
   int  pixels_killed[ncam] ; bool pixels_killedBr=0;
   vector < string >* cameraSerialNumber=0; bool cameraSerialNumberBr=0;
-  
+
+  /* waveform stuff because idk how else to accomplish this */
+  int leftint[ncam] ; bool leftintBr=0;
+  int leftint2[ncam] ; bool leftint2Br=0;
+  int rightint[ncam] ; bool rightintBr=0;
+  int rightint2[ncam] ; bool rightint2Br=0;
+  int jmin[ncam] ; bool jminBr=0;
+  int jbragg[ncam] ; bool jbraggBr=0;
+  int jterm[ncam] ; bool jtermBr=0;
+  int jterm2[ncam] ; bool jterm2Br=0;
+  int jterm3[ncam] ; bool jterm3Br=0;
+  int origin[ncam] ; bool originBr=0;
+  vector<int> termmatch[ncam] ; bool termmatchBr=0;
+  double rec_SD[ncam] ; bool rec_SDBr=0;
+  int wfd_delta[ncam] ; bool wfd_deltaBr=0;
+  int peak1[ncam] ; bool peak1Br=0;
+  int peak2[ncam] ; bool peak2Br=0;
+  double peak1val[ncam] ; bool peak1valBr=0;
+  double peak2val[ncam] ; bool peak2valBr=0;
+  int half1[ncam] ; bool half1Br=0;
+  int half2[ncam] ; bool half2Br=0;
+  double termdist[ncam] ; bool termdistBr=0;
+  int maxdevloc[ncam] ; bool maxdevlocBr=0;
+  double rms_left[ncam] ; bool rms_leftBr=0;
+  double rms_right[ncam] ; bool rms_rightBr=0;
+  double rms_outer[ncam] ; bool rms_outerBr=0;
+  double rms_full[ncam] ; bool rms_fullBr=0;
+  double dt[ncam] ; bool dtBr=0;
+
+  if(tmpskim->FindBranch("leftint"))
+    {tmpskim->SetBranchAddress("leftint", leftint); leftintBr=true;}
+  if(tmpskim->FindBranch("leftint2"))
+    {tmpskim->SetBranchAddress("leftint2",leftint2);leftint2Br=true;}
+  if(tmpskim->FindBranch("rightint"))
+    {tmpskim->SetBranchAddress("rightint",rightint);rightintBr=true;}
+  if(tmpskim->FindBranch("rightint2"))
+    {tmpskim->SetBranchAddress("rightint2",rightint2);rightint2Br=true;}
+  if(tmpskim->FindBranch("jmin"))
+    {tmpskim->SetBranchAddress("jmin",jmin);jminBr=true;}
+  if(tmpskim->FindBranch("jbragg"))
+    {tmpskim->SetBranchAddress("jbragg",jbragg);jbraggBr=true;}
+  if(tmpskim->FindBranch("jterm"))
+    {tmpskim->SetBranchAddress("jterm",jterm);jtermBr=true;}
+
+  //Not yet finished...
+
+  /* end waveform stuff */
+
   if(tmpskim->FindBranch("theta"))
-  {tmpskim->SetBranchAddress("theta",  theta); thetaBr=true;}
+    {tmpskim->SetBranchAddress("theta",  theta); thetaBr=true;}
 
   if(tmpskim->FindBranch("timenow"))
   {tmpskim->SetBranchAddress("timenow",  timenow); timenowBr=true;}

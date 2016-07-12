@@ -1,6 +1,6 @@
 #include "DmtpcSkimEvent.hh"
 #include "MaxCamImage.hh"
-#include "MaxCamCluserImage.hh"
+#include "MaxCamClusterImage.hh"
 #include "TDatime.h"
 #include "TTimeStamp.h"
 #include "MaxCamConfig.hh"

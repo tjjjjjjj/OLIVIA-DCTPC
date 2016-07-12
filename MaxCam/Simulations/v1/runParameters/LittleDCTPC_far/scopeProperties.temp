@@ -24,7 +24,8 @@ RiseTime        0       8.e-9
 DriftVel        0       1.646e7
 Scale           0       0.13
 ScopeRes        0       0.256
-#ScopeRes: 4.096 = 8-bit
+#ScopeRes: 4.096 = 8 -bit
+#          0.256 = 12-bit
 VoltageNoise    0       0.826
 TimeNoise1      0       1.  
 TimeNoise2      0       3.

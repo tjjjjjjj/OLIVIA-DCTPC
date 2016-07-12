@@ -60,7 +60,7 @@
 
 using namespace std;
 
-/********* Global Variables ******/ 
+/********* Global Variables *********/ 
 
 /* Waveform reconstruction variables/functions */
 
@@ -1033,11 +1033,9 @@ int cleanSkim(DmtpcDataset & d, TString & key, TTree * rawtree, int runnum,
   /* Define Temporary out files and trees */
   TFile* tmpoutfile = new TFile(tmpoutfilename,"RECREATE");
   TTree* tmpskimtree;
-  TTree* tmpskimtree2;
   TH2F* tempimg=0;
   TH2F* os_tempimg=0;
 
-  /*^*/
 
   /* Get some eventwide information */
   d.getEvent(0);
@@ -1120,6 +1118,9 @@ int cleanSkim(DmtpcDataset & d, TString & key, TTree * rawtree, int runnum,
   //  std::cout << "waveform_vectors->GetEntries()=" << waveform_vectors->GetEntries() << std::endl;
   //  std::cout << "waveform_vectors->GetSize()=" << waveform_vectors->GetSize() << std::endl;
 
+
+  /*^^^
+
   cout << "CHECKPOINT 1" << endl;
 
   knobfile = "runParameters/LittleDCTPC_far/WfKnobs.temp";
@@ -1130,45 +1131,47 @@ int cleanSkim(DmtpcDataset & d, TString & key, TTree * rawtree, int runnum,
   tmpskimtree2 = new TTree("wf"+key,"waveform analyses");
   cout << "CHECKPOINT 2" << endl;
 
-  tmpskimtree2->Branch("nwaveform",&ncam);
+  //tmpskimtree->Branch("nwaveform",&ncam);
   cout << "CHECKPOINT 3" << endl;
-  tmpskimtree2->Branch("leftint",&leftint);
+  tmpskimtree->Branch("leftint",&leftint);
   cout << "CHECKPOINT 3.1" << endl;
-  tmpskimtree2->Branch("leftint2",&leftint2);
-  tmpskimtree2->Branch("rightint",&rightint);
-  tmpskimtree2->Branch("rightint2",&rightint2);
-  tmpskimtree2->Branch("jmin",&jmin);
-  tmpskimtree2->Branch("jbragg",&jbragg);
-  tmpskimtree2->Branch("jterm",&jterm);
-  tmpskimtree2->Branch("jterm2",&jterm2);
-  tmpskimtree2->Branch("jterm3",&jterm3);
-  tmpskimtree2->Branch("maxdevloc",&maxdevloc);
-  tmpskimtree2->Branch("origin",&origin);
+  tmpskimtree->Branch("leftint2",&leftint2);
+  tmpskimtree->Branch("rightint",&rightint);
+  tmpskimtree->Branch("rightint2",&rightint2);
+  tmpskimtree->Branch("jmin",&jmin);
+  tmpskimtree->Branch("jbragg",&jbragg);
+  tmpskimtree->Branch("jterm",&jterm);
+  tmpskimtree->Branch("jterm2",&jterm2);
+  tmpskimtree->Branch("jterm3",&jterm3);
+  tmpskimtree->Branch("origin",&origin);
   cout << "CHECKPOINT 4" << endl;
 
   if (terminator_results.size() > 0)
   {
     for (int i = 0; i < terminator_results.size(); i++)
-      tmpskimtree2->Branch("termmatch" + i,&terminator_results.at(i));
+      tmpskimtree->Branch("termmatch" + i,&terminator_results.at(i));
   }
  
- tmpskimtree2->Branch("rec_SD",&rec_SD);
- tmpskimtree2->Branch("wfd_delta",&wfd_delta);
- tmpskimtree2->Branch("peak1",&peak1);
- tmpskimtree2->Branch("peak2",&peak2);
- tmpskimtree2->Branch("peak1val",&peak1val);
- tmpskimtree2->Branch("peak2val",&peak2val);
- tmpskimtree2->Branch("half1",&half1);
- tmpskimtree2->Branch("half2",&half2);
- tmpskimtree2->Branch("termdist",&termdist);
- tmpskimtree2->Branch("maxdevloc",&maxdevloc);
- tmpskimtree2->Branch("rms_left",&rms_left);
- tmpskimtree2->Branch("rms_right",&rms_right);
- tmpskimtree2->Branch("rms_outer",&rms_outer);
- tmpskimtree2->Branch("rms_full",&rms_full);
- tmpskimtree2->Branch("dt",&dt);
+ tmpskimtree->Branch("rec_SD",&rec_SD);
+ tmpskimtree->Branch("wfd_delta",&wfd_delta);
+ tmpskimtree->Branch("peak1",&peak1);
+ tmpskimtree->Branch("peak2",&peak2);
+ tmpskimtree->Branch("peak1val",&peak1val);
+ tmpskimtree->Branch("peak2val",&peak2val);
+ tmpskimtree->Branch("half1",&half1);
+ tmpskimtree->Branch("half2",&half2);
+ tmpskimtree->Branch("termdist",&termdist);
+ tmpskimtree->Branch("maxdevloc",&maxdevloc);
+ tmpskimtree->Branch("rms_left",&rms_left);
+ tmpskimtree->Branch("rms_right",&rms_right);
+ tmpskimtree->Branch("rms_outer",&rms_outer);
+ tmpskimtree->Branch("rms_full",&rms_full);
+ tmpskimtree->Branch("dt",&dt);
 
  cout << endl << endl << endl << "HEY LOOK OVER HERE @@@@@@@@@@@@@@@@@@@@@@@@@@@" << endl << endl << endl;
+
+ ^^^*/
+
 
  tmpskimtree->Branch("ncamera",&ncam,"ncamera/I");
   tmpskimtree->Branch("spark",&spark,"spark[ncamera]/O");
@@ -2052,7 +2055,7 @@ int cleanSkim(DmtpcDataset & d, TString & key, TTree * rawtree, int runnum,
       eventnum=i;
       skimevent = d.event();
       tmpoutfile->cd();
-      tmpskimtree2->Fill();
+      //tmpskimtree2->Fill();
       tmpskimtree->Fill();
       gROOT->cd();
       cameraSerialNumber->clear();
@@ -2129,7 +2132,7 @@ int cleanSkim(DmtpcDataset & d, TString & key, TTree * rawtree, int runnum,
   //Write out and clean up
   tmpoutfile->cd();
   tmpskimtree->Write();
-  tmpskimtree2->Write();
+  //tmpskimtree2->Write();
   if (algo_index == 0)
     {
       biasoutfile->cd();
@@ -2173,7 +2176,7 @@ int cleanSkim(DmtpcDataset & d, TString & key, TTree * rawtree, int runnum,
     }
   
   delete tmpskimtree;
-  delete tmpskimtree2;
+  //delete tmpskimtree2;
   tmpoutfile->Close();
   
   delete biastree;

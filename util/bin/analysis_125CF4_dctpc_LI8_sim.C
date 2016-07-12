@@ -14,8 +14,9 @@
 // All of the cuts that are utilized are explained in arXiv:1108.4894
 #include <iomanip>;
 #include <sys/stat.h>;
+
 void analysis_125CF4_dctpc_LI8_sim(int firstrun, int lastrun){//inclusive 
-  
+ 
   //It is necessary to employ calibration constants in creating the reduced file because we only associate one waveform to one CCD track per event. The matching is based off of energy reconstruction agreement. 	
 
   double lightCalib = 0.48;
@@ -108,7 +109,32 @@ void analysis_125CF4_dctpc_LI8_sim(int firstrun, int lastrun){//inclusive
   int badrunflag;
   int totaltrack=0;
   int totaltrig=0;
-  
+
+  double leftint=0;
+  double leftint2=0;
+  double rightint=0;
+  double rightint2=0;
+  int jmin=0;
+  int jbragg=0;
+  int jterm=0;
+  int jterm2=0;
+  int jterm3=0;
+  int origin=0;
+  double rec_SD=0;
+  int wfd_delta=0;
+  int peak1=0;
+  int peak2=0;
+  double peak1val=0;
+  double peak2val=0;
+  int half1=0;
+  int half2=0;
+  double termdist=0;
+  int maxdevloc=0;
+  double rms_left=0;
+  double rms_right=0;
+  double rms_outer=0;
+  double rms_full=0;
+
   double truth_phi_deg=-10.;
   double truth_x_start_mm=0.;
   double truth_y_start_mm=0.;
@@ -161,6 +187,32 @@ long int new_filesize2=0;
   
   TFile *histfile=new TFile(Form("outtree_%s_%s.root",out1filename.c_str(),out2filename.c_str()), "RECREATE");
   tree = new TTree("dctpc_eventinfo", "Event info");
+
+  tree->Branch("LeftInt", &leftint, "leftint/D");
+  tree->Branch("LeftInt2", &leftint2, "leftint2/D");
+  tree->Branch("RightInt", &rightint, "rightint/D");
+  tree->Branch("RightInt2", &rightint2, "rightint2/D");
+  tree->Branch("jMin", &jmin, "jmin/I");
+  tree->Branch("jBragg", &jbragg, "jbragg/I");
+  tree->Branch("jTerm", &jterm, "jterm/I");
+  tree->Branch("jTerm2", &jterm2, "jterm2/I");
+  tree->Branch("jTerm3", &jterm3, "jterm3/I");
+  tree->Branch("Origin", &origin, "origin/I");
+  tree->Branch("RecSD", &rec_SD, "rec_SD/D");
+  tree->Branch("WfdDelta", &wfd_delta, "wfd_delta/I");
+  tree->Branch("Peak1", &peak1, "peak1/I");
+  tree->Branch("Peak2", &peak2, "peak2/I");
+  tree->Branch("Peak1Val", &peak1val, "peak1val/D");
+  tree->Branch("Peak2Val", &peak2val, "peak2val/D");
+  tree->Branch("Half1", &half1, "half1/I");
+  tree->Branch("Half2", &half2, "half2/I");
+  tree->Branch("TermDist", &termdist, "termdist/D");
+  tree->Branch("MaxDevLoc", &maxdevloc, "maxdevloc/D");
+  tree->Branch("RMSLeft", &rms_left, "rms_left/D");
+  tree->Branch("RMSRight", &rms_right, "rms_right/D");
+  tree->Branch("RMSFull", &rms_full, "rms_full/D");
+  tree->Branch("RMSOuter", &rms_outer, "rms_outer/D");
+
   tree->Branch("RunNum", &runnum, "runnum/I");
   tree->Branch("SetNum", &setnum, "setnum/I");
   tree->Branch("SequenceNum", &seqnum, "seqnum/I");
@@ -268,7 +320,7 @@ for (int x = firstrun; x <= lastrun; x++)
 totaltrack=0;
 totaltrig=0;
 
-cout<<"here"<<endl;
+
       if(BATCH==0)
       {
       string origfile = "/net/hisrv0001/home/spitzj/tj/DCTPC_soft/MaxCam/Simulations/v1/dmtpc_mc_";
@@ -418,6 +470,31 @@ ntrig=mesh->size();
 	for (int nt = 0; nt < mesh->size(); nt++)
 	{
 	  mesh_peak=mesh->at(nt,0).getPeak();
+	 
+	  leftint=mesh->at(nt).getLeftInt();
+	  leftint2=mesh->at(nt).getLeftInt2();
+	  rightint=mesh->at(nt).getRightInt();
+	  rightint2=mesh->at(nt).getRightInt2();
+	  jmin=mesh->at(nt).getjMin();
+	  jbragg=mesh->at(nt).getjBragg();
+	  jterm=mesh->at(nt).getjTerm();
+	  jterm2=mesh->at(nt).getjTerm2();
+	  jterm3=mesh->at(nt).getjTerm3();
+	  origin=mesh->at(nt).getOrigin();
+	  rec_SD=mesh->at(nt).getRecSD();
+	  wfd_delta=mesh->at(nt).getWfdDelta();
+	  peak1=mesh->at(nt).getPeak1();
+	  peak2=mesh->at(nt).getPeak2();
+	  peak1val=mesh->at(nt).getPeak1Val();
+	  peak2val=mesh->at(nt).getPeak2Val();
+	  half1=mesh->at(nt).getHalf1();
+	  half2=mesh->at(nt).getHalf2();
+	  termdist=mesh->at(nt).getTermDist();
+	  maxdevloc=mesh->at(nt).getMaxDevLoc();
+	  rms_left=mesh->at(nt).getRMSLeft();
+	  rms_right=mesh->at(nt).getRMSRight();
+	  rms_outer=mesh->at(nt).getRMSOuter();
+	  rms_full=mesh->at(nt).getRMSFull();
 
 	  mesh_R0=mesh->at(nt,0).getRise0();
 	  mesh_R10=mesh->at(nt,0).getRise10();
