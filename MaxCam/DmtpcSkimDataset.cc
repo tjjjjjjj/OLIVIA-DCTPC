@@ -363,7 +363,7 @@ DmtpcSkimDataset::mergeTempTrees( TTree * tmpskim, list<vector<vector<vector<Bur
   if(tmpskim->FindBranch("jterm"))
     {tmpskim->SetBranchAddress("jterm",jterm);jtermBr=true;}
 
-  //Not yet finished...
+  //Not yet finished... do I even need this stuff here? Not sure what I needed this for in the first place, actually.
 
   /* end waveform stuff */
 

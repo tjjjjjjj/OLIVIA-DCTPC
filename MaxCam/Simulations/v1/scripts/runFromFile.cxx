@@ -27,7 +27,9 @@ int runFromFile(TString filename)
   //gSystem->Setenv("MCTABLES","../../tables");
 
   cout <<"Starting run"<<endl;
+
   RunGenerator rungen;
+  std::system("rm waveforms/*");
   rungen.readParametersFromFile(filename);
   rungen.findFileNames();
   rungen.initialize();

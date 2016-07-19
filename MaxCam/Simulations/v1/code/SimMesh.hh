@@ -21,7 +21,7 @@ public:
   SimMesh();
   //empty constructor
 
-  SimMesh(int plot_offset_EG, int imin_EG, double Initial_Energy_EG, double StepSize_EG, SimScope* scope_EG, double fMinEnergy_EG, vector<double>& fRecoilZ_EG, vector<double>& fRecoilEn_EG, SimChamber* fChamber_EG);
+  SimMesh(int plot_offset_EG, int imin_EG, double Initial_Energy_EG, double StepSize_EG, SimScope* scope_EG, double fMinEnergy_EG, vector<double>& fRecoilZ_EG, vector<double>& fRecoilEn_EG, SimChamber* fChamber_EG, int New_Plot_EG);
   //full constructor
 
   virtual ~SimMesh();
@@ -140,6 +140,9 @@ private:
   int final_position; //the last index of fRecoilZ that was called before exiting step() loop. Used for combining multiple waveforms.
   int plot_offset; //keeps track of the plotmin value used in plotting. Used for combining multiple waveforms.
   TString plotname;
+
+  TString rootfilename;
+  int runnum;
 
   ClassDef(SimMesh,1)
     };

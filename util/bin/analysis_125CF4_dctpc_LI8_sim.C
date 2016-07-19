@@ -134,6 +134,9 @@ void analysis_125CF4_dctpc_LI8_sim(int firstrun, int lastrun){//inclusive
   double rms_right=0;
   double rms_outer=0;
   double rms_full=0;
+  
+  int estimate=0;
+  int estimate_error=0;
 
   double truth_phi_deg=-10.;
   double truth_x_start_mm=0.;
@@ -207,11 +210,14 @@ long int new_filesize2=0;
   tree->Branch("Half1", &half1, "half1/I");
   tree->Branch("Half2", &half2, "half2/I");
   tree->Branch("TermDist", &termdist, "termdist/D");
-  tree->Branch("MaxDevLoc", &maxdevloc, "maxdevloc/D");
+  tree->Branch("MaxDevLoc", &maxdevloc, "maxdevloc/I");
   tree->Branch("RMSLeft", &rms_left, "rms_left/D");
   tree->Branch("RMSRight", &rms_right, "rms_right/D");
   tree->Branch("RMSFull", &rms_full, "rms_full/D");
   tree->Branch("RMSOuter", &rms_outer, "rms_outer/D");
+  tree->Branch("Origin_rec", &estimate, "estimate/I");
+  tree->Branch("Origin_err", &estimate_error, "estimate_error/I");
+  
 
   tree->Branch("RunNum", &runnum, "runnum/I");
   tree->Branch("SetNum", &setnum, "setnum/I");
@@ -495,6 +501,8 @@ ntrig=mesh->size();
 	  rms_right=mesh->at(nt).getRMSRight();
 	  rms_outer=mesh->at(nt).getRMSOuter();
 	  rms_full=mesh->at(nt).getRMSFull();
+	  estimate=jterm;
+	  estimate_error=estimate-origin;
 
 	  mesh_R0=mesh->at(nt,0).getRise0();
 	  mesh_R10=mesh->at(nt,0).getRise10();

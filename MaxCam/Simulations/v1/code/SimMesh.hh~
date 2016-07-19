@@ -108,7 +108,7 @@ private:
   double a1; //smearing (constant)
   double a2; //smearing (position-dependent)
   double SD; // voltage noise
-  double attenuation; //attenuation of electrons as they drift
+  double atten; //attenuation of electrons as they drift
   double mass; //alpha mass
   int zero_offset; //horizontal centering
   double zero_offset_var; //hor. centering (position-dependent)
@@ -140,6 +140,9 @@ private:
   int final_position; //the last index of fRecoilZ that was called before exiting step() loop. Used for combining multiple waveforms.
   int plot_offset; //keeps track of the plotmin value used in plotting. Used for combining multiple waveforms.
   TString plotname;
+
+  TString rootfilename;
+  int runnum;
 
   ClassDef(SimMesh,1)
     };

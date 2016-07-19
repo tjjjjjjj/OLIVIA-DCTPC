@@ -62,7 +62,7 @@ class FastWaveform : public TObject
   void setRightInt(double x){rightint=x;}
   void setRightInt2(double x){rightint2=x;}
   void setjMin(int n){jmin=n;}
-  void setjBragg(int n){jmin=n;}
+  void setjBragg(int n){jbragg=n;}
   void setjTerm(int n){jterm=n;}
   void setjTerm2(int n){jterm2=n;}
   void setjTerm3(int n){jterm3=n;}
@@ -134,7 +134,7 @@ protected:
   int half1;
   int half2;
   double termdist;
-  double maxdevloc;
+  int maxdevloc;
   double rms_left;
   double rms_right;
   double rms_outer;

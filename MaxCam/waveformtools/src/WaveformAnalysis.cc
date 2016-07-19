@@ -147,8 +147,7 @@ int jterm;
 int jterm2;
 int jterm3;
 
-void TurnKnobs();
-void TurnKnobs(TString);
+void TurnKnobs(int runnum);
 void analyze();
 double findRMS(int, int, TH1D*, TH1D*, TH1D*);
 double maxdevsearch(int, int, TH1D*, TH1D*, TH1D*);
@@ -180,7 +179,7 @@ void correct(TH1D*,double,double,double);
 void shifthist(TH1D*,int);
 double histspline(TH1D*,int,int,int,double,double);
 
-void TurnKnobs()
+void TurnKnobs(int runnum)
 {
   ifstream ifstr(knobfile);
   if (!ifstr.is_open()){
@@ -196,9 +195,16 @@ void TurnKnobs()
     if (line[0]=='#' || line=="") continue;
     istringstream linestr(line);
     linestr >> name;
+
     if (name == "RootFile"){
+
+      std::stringstream tmpstr;
+      tmpstr.str("");
       linestr >> s;
-      rootfile = s;
+      tmpstr << s << runnum << ".root";
+      rootfile = tmpstr.str();
+
+      cout << endl << endl << endl << rootfile << endl << endl << endl;
     }
     else if (name == "BraggFile"){
       linestr >> s;
@@ -212,10 +218,13 @@ void TurnKnobs()
       linestr >> d;
       dt = d;
     }
-    
     else if (name == "BraggPeak"){
       linestr >> d;
       peakstd = d;
+    }
+    else if (name == "BraggMax"){
+      linestr >> d;
+      braggmaxval = d;
     }
     else if (name == "xScale"){
       linestr >> d;
@@ -344,12 +353,6 @@ void TurnKnobs()
   }
 }
 
-
-void TurnKnobs(TString knobfile_)
-{knobfile = knobfile_;
-  TurnKnobs();}
-//Automatically sets the settings below                                                                                   
-
 void analyze()
 //runs analysis                                                                                                           
 {
@@ -359,8 +362,8 @@ void analyze()
   TFile fbragg(braggfile);
   bragghist = (TH1D*)fbragg.Get("bragghist");
   bragghist2 = (TH1D*)fbragg.Get("bragghist2");
-  bragghist3 = new TH1D("","",16384,0,16384);
-  bragghist4 = new TH1D("","",16384,0,16384);
+  bragghist3 = new TH1D("asdf1","jkl1",16384,0,16384);
+  bragghist4 = new TH1D("asdf2","jkl2",16384,0,16384);
 
   TFile f(rootfile);
   rough_wf = (TH1D*)f.Get("hist1");
@@ -375,19 +378,18 @@ void analyze()
   shifthist(histA3,plotoff);
   shifthist(histB3,plotoff);
 
-  histsum3 = new TH1D("","",16384,0,16384);
+  histsum3 = new TH1D("asdf3","jkl3",16384,0,16384);
   for (int i = 0; i < 16384; i++)
     histsum3->SetBinContent(i,histA3->GetBinContent(i)+histB3->GetBinContent(i));
 
-  test_rec_wf = new TH1D("test_rec_wf","",16384,0,16384);
+  test_rec_wf = new TH1D("test_rec_wf","jkl4",16384,0,16384);
   for (int j = 0; j < 16384; j++) test_rec_wf->SetBinContent(j,rough_wf->GetBinContent(j));
   for (int j = 0; j < 1; j++) smooth(test_rec_wf,rec_SD,gaus_acc);
   for (int j = 0; j < 1; j++) correct(test_rec_wf,rec_cwidth * rec_SD,gaus_acc,rec_cor);
 
-  test_minfinder_curve = new TH1D("","",16384,0,16384);
+  test_minfinder_curve = new TH1D("asdf5","jkl5",16384,0,16384);
   minprepare(test_rec_wf,test_minfinder_curve);
   wfd_delta2 = int(wfd_delta * dt * 1e9);
-  cout << endl << "OISDJGOISJDOGIJSDOGIJSDG" << wfd_delta2 << endl;
   if (rec_SD_override == 0)
     {
       if (wfd_delta2 < 500)
@@ -401,7 +403,7 @@ void analyze()
       rec_SD *= rec_SD_mult;
     }
 
-  rec_wf = new TH1D("rec_wf","",16384,0,16384);
+  rec_wf = new TH1D("rec_wf","jkl6",16384,0,16384);
   for (int j = 0; j < 16384; j++) rec_wf->SetBinContent(j,rough_wf->GetBinContent(j));
   for (int j = 0; j < 1; j++) smooth(rec_wf,rec_SD,gaus_acc);
   for (int j = 0; j < 1; j++) correct(rec_wf,rec_cwidth * rec_SD,gaus_acc,rec_cor);
@@ -409,10 +411,10 @@ void analyze()
   jmin = 0;
   jbragg = 0;
   jdiff = 0;
-  minfinder_curve = new TH1D("","",16384,0,16384);
+  minfinder_curve = new TH1D("asdf7","jkl7",16384,0,16384);
   minprepare(rec_wf, minfinder_curve);
   jmin = minfinder(rec_wf,minfinder_curve);
-  mfc2 = new TH1D("","",16384,0,16384);
+  mfc2 = new TH1D("asdf8","jkl8",16384,0,16384);
   for (int i = 0; i < 16384; i++)
     mfc2->SetBinContent(i,minfinder_curve->GetBinContent(i));
   if (decon_on == 1)
@@ -421,7 +423,7 @@ void analyze()
       smooth(mfc2,finalsmooth,gaus_acc);
       correct(mfc2,finalsmooth*1.05,gaus_acc,.96);
     }
-  mfcdiff = new TH1D("","",16384,0,16384);
+  mfcdiff = new TH1D("asdf9","jkl9",16384,0,16384);
   for (int i = 0; i < 16384; i++)
     mfcdiff->SetBinContent(i,mfc2->GetBinContent(i)- mfcfactor*minfinder_curve->GetBinContent(i));
 
@@ -435,7 +437,7 @@ void analyze()
   minima.push_back(jmin);
   minima.push_back(jdiff);
   jpeaksearch = jbragg;
-  //jpeaksearch = int(median(minima) + .5);                                                                               
+  //jpeaksearch = int(median(minima) + .5);   
   peak1 = maxsearch (mfc2,2000,jpeaksearch);
   peak2 = maxsearch (mfc2,jpeaksearch,7000);
   peak1val = mfc2->GetBinContent(peak1);
@@ -462,6 +464,7 @@ void analyze()
   jterm3 = terminatorsearch3(bragghist3,bragghist4,peak1,peak2);
 
   maxdev = maxdevsearch(peak1,peak2,bragghist3,bragghist4,mfc2);
+
   zeroA = 0;
   zeroB = 0;
   origin = 0;
@@ -489,6 +492,26 @@ void analyze()
   rms_right = findRMS(half1 + 3*(half2 - half1)/4, half2, mfc2, bragghist3, bragghist4);
   rms_outer = sqrt((rms_left*rms_left + rms_right*rms_right)/2);
   rms_full = findRMS(half1,half2,mfc2,bragghist3,bragghist4);
+
+  delete bragghist;
+  delete bragghist2;
+  delete bragghist3;
+  delete bragghist4;
+  delete rough_wf;
+  delete histA3;
+  delete histB3;
+  delete overkill_histogram;
+  delete overkill_histogram2;
+  delete histsum3;
+  delete test_rec_wf;
+  delete test_minfinder_curve;
+  delete rec_wf;
+  delete minfinder_curve;
+  delete mfc2;
+  delete mfcdiff;
+
+  fbragg.Close();
+  f.Close();
 }
 
 /*~~~~~ (*o,o) lots of cool waveform analysis functions! ~~~~~*/
@@ -669,7 +692,10 @@ void plotbragg(TH1D* bragghist3, TH1D* bragghist2, double xscaletrue, double xsc
 //Scales and shifts a bragg curve to match the observed event.
 {
   for (int x = 1; x < 16384 - xoff; x++)
-    bragghist3->SetBinContent(x-1 + xoff,histspline(bragghist2,0,0,x,1/xscaletrue,yscale / xscale));
+    {
+      bragghist3->SetBinContent(x-1 + xoff,histspline(bragghist2,0,0,x,1/xscaletrue,yscale / xscale));
+      //if (x%10 == 0) cout << x << '|' << bragghist3->GetBinContent(x) << endl;
+    }
 }
 
 
@@ -750,7 +776,7 @@ double deriv(TH1D* hist, int n, int k, double h)
 }void deconvolve(TH1D* hist, double SD, int order)
  //Un-does Gaussian smearing. May contain traces of sorcery.
 {
-  TH1D* hist2 = new TH1D("","",16384,0,16384);
+  TH1D* hist2 = new TH1D("asdf10","jkl10",16384,0,16384);
   for (int i = 2000; i < 10000; i++)
     {
       if (order == 2)
@@ -780,7 +806,7 @@ double deriv4(TH1D* hist, int n, int k, double h)
 int minfinder(TH1D* wfder)
 {
   double thresh = .2 * wfder->GetBinContent(wfder->GetMaximumBin());
-  TH1D* dummy = new TH1D("","",16384,0,16384);
+  TH1D* dummy = new TH1D("asdf11","jkl11",16384,0,16384);
   for (int i = 0; i < 16384; i++)
     if (wfder->GetBinContent(i) > thresh)
       dummy->SetBinContent(i,1e6);
@@ -810,7 +836,7 @@ void minprepare(TH1D* wf, TH1D* minfinder_curve)
 {
   double k = 1/Td;
 
-  TH1D* wfder = new TH1D("","",16384,0,16384);
+  TH1D* wfder = new TH1D("asdf12","jkl12",16384,0,16384);
 
   for(int j = 100;j < 16300; j++)
     wfder->SetBinContent(j-1,k*(wf->GetBinContent(j)-vertoff)+deriv(wf,j,deriv_step,dt));
@@ -851,6 +877,7 @@ void minprepare(TH1D* wf, TH1D* minfinder_curve)
     }
   for(int j=0;j<16384;j++)
     minfinder_curve->SetBinContent(j,wfder->GetBinContent(j));
+  delete wfder;
 }
 
 double average(int j, vector<double>& vec, TH1D* hist)
@@ -906,7 +933,7 @@ void makekernel(vector<double>&vec, double SD, double acc)
 void smooth(TH1D* hist, double SD, double acc)
 //Applies Gaussian blur to a histogram. Used as a low-pass filter. 
 {
-  TH1D* hist2 = new TH1D("","",16384,0,16384);
+  TH1D* hist2 = new TH1D("asdf13","jkl13",16384,0,16384);
   vector<double> vec;
   makekernel(vec,SD,acc);
 
@@ -914,18 +941,20 @@ void smooth(TH1D* hist, double SD, double acc)
     hist2->SetBinContent(j,average(j,vec,hist));
   for(int j=1; j < 16384; j++)
     hist->SetBinContent(j,hist2->GetBinContent(j));
+  delete hist2;
 }
 
 void correct(TH1D* hist, double SD, double acc, double factor)
 //Un-does some of the undesirable effects of smooth(). 
 {
-  TH1D* hist2 = new TH1D("","",16384,0,16384);
+  TH1D* hist2 = new TH1D("asdf14","jkl14",16384,0,16384);
   vector<double> vec;
   makekernel(vec,SD,acc);
   for(int j=2000; j < 10200; j++)
     hist2->SetBinContent(j,(1+factor)*hist->GetBinContent(j)-factor*average(j,vec,hist));
   for(int j=1; j < 16384; j++)
     hist->SetBinContent(j,hist2->GetBinContent(j));
+  delete hist2;
 }
 
 void shifthist(TH1D* hist, int plot_offset)
@@ -1704,11 +1733,11 @@ analysis::analyzePMT(const TH1F* h, PMTWaveform& wf, Double_t gausConvSigma)
 }
 
 void
-analysis::analyzeFast(const TH1F* h, FastWaveform& wf)
+analysis::analyzeFast(const TH1F* h, FastWaveform& wf, int runnum)
 {
 
   knobfile = "runParameters/LittleDCTPC_far/WfKnobs.temp";
-  TurnKnobs();
+  TurnKnobs(runnum);
   analyze();
 
   
@@ -1810,7 +1839,6 @@ analysis::analyzeFast(const TH1F* h, FastWaveform& wf)
   wf.setRMSOuter(rms_outer);
   wf.setRMSFull(rms_full);
   wf.setdt(dt);
-
 
   //Pulse parameters: only allow 1 pulse per waveform for CSP
 

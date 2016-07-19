@@ -1,4 +1,4 @@
-RootFile      wfs.root
+RootFile      waveforms/wfs
 BraggFile     bragghist.root
 DecayTime     434.e-9
 TimeStep      2.e-9

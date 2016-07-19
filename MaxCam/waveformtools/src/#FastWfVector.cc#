@@ -1,0 +1,107 @@
+
+#include "FastWfVector.hh"
+#include "FastPulse.hh"
+#include "FastWaveform.hh"
+#include <vector>
+#include <string>
+#include "TObject.h"
+using std::vector;
+
+
+ClassImp(FastWfVector)
+
+FastWfVector::FastWfVector(int n,int bid, int cid, const char* nm) :
+name(nm),boardID(bid),chanID(cid), N(n), wf(n){;}
+
+FastWfVector::FastWfVector(const FastWfVector& w) : TObject(w)
+{
+  name = w.name;
+  boardID = w.boardID;
+  chanID = w.chanID;
+  N = w.N;
+  wf = w.wf;
+}
+
+
+void
+FastWfVector::add(const FastWaveform& w)
+{
+  N++;
+  wf.push_back(w);
+
+}
+
+void
+FastWfVector::insert(int i, const FastWaveform& w)
+{
+  N++;
+  wf.insert(wf.begin()+i,w);
+}
+
+void
+FastWfVector::swap(int i, const FastWaveform& w)
+{
+  wf[i] = w;
+}
+
+void
+FastWfVector::rm(int i)
+{
+  N--;
+  wf.erase(wf.begin()+i);
+}
+
+void
+FastWfVector::clearWf()
+{
+  N=0;
+  wf.clear();
+}
+
+void
+FastWfVector::resize(int i)
+{
+  N=i;
+  wf.resize(i);
+}
+
+FastWfVector&
+FastWfVector::operator=(const FastWfVector& v)
+{
+  if (&v==this) return *this;
+  N = v.N;
+  name=v.name;
+  wf=v.wf;
+  return *this;
+}
+
+const FastWaveform& 
+FastWfVector::at(int i) const{return wf[i];}
+
+const FastWaveform& 
+FastWfVector::operator()(int i) const{return wf[i];}
+
+const FastWaveform& 
+FastWfVector::operator[](int i) const{return wf[i];}
+
+FastWaveform& 
+FastWfVector::at(int i) {return wf[i];}
+
+FastWaveform& 
+FastWfVector::operator()(int i) {return wf[i];}
+
+FastWaveform& 
+FastWfVector::operator[](int i) {return wf[i];}
+
+const FastPulse& 
+FastWfVector::at(int i, int j) const{return wf[i][j];}
+
+const FastPulse& 
+FastWfVector::operator()(int i, int j) const{return wf[i][j];}
+
+FastPulse& 
+FastWfVector::at(int i, int j){return wf[i][j];}
+
+FastPulse& 
+FastWfVector::operator()(int i, int j){return wf[i][j];}
+

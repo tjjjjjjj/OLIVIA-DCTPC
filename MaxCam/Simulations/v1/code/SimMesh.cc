@@ -8,10 +8,10 @@ ClassImp(SimMesh)
 
   SimMesh::SimMesh() {/*empty constructor*/}
 
-SimMesh::SimMesh(int plot_offset_EG, int imin_EG, double Initial_Energy_EG, double StepSize_EG, SimScope* scope_EG, double fMinEnergy_EG, vector<double>& fRecoilZ_EG, vector<double>& fRecoilEn_EG, SimChamber* fChamber_EG)
+SimMesh::SimMesh(int plot_offset_EG, int imin_EG, double Initial_Energy_EG, double StepSize_EG, SimScope* scope_EG, double fMinEnergy_EG, vector<double>& fRecoilZ_EG, vector<double>& fRecoilEn_EG, SimChamber* fChamber_EG, int New_Plot_EG)
 {//Constructor
   plotname = "null";
-  new_plot = 0;
+  new_plot = New_Plot_EG;
   mass = 3.727e6 / (9e22); //MAGIC NUMBER! alpha mass in keV/c^2, c in mm/s
   fRecoilEn = fRecoilEn_EG; //Energy loss vector
   fRecoilZ = fRecoilZ_EG; //Position vector
@@ -52,6 +52,35 @@ SimMesh::SimMesh(int plot_offset_EG, int imin_EG, double Initial_Energy_EG, doub
   double sz = fRecoilZ.at(imin);
   double tSD = timenoise(sz);
   MakeGaussian(ker,tSD,Nsamples);
+
+  int runnumberfound = 0;
+  runnum = 0;
+
+  std::stringstream nametmp;
+  nametmp.str("");
+
+  for (int n = 0; runnumberfound == 0; n++)
+    {
+      std::stringstream nametmp2;
+      nametmp2.str("");
+      nametmp2 << "waveforms/wfs" << n << ".root";
+
+      TString nametmp3 = nametmp2.str();
+
+      TFile* tmpfile = new TFile(nametmp3,"read");
+      //tmpfile->Open();
+
+      if(!tmpfile->IsOpen())
+      {
+	cout << "Ignore this error message. Idk how to make it go away but it's not a problem.";
+	runnumberfound = 1;
+        runnum = n-1;
+	if (new_plot == 1) runnum += 1;
+      }	
+      tmpfile->Close();
+    }
+  nametmp << "waveforms/wfs" << runnum << ".root";
+  rootfilename = nametmp.str();
 }
 
 SimMesh::~SimMesh(){/*destructor*/}
@@ -69,8 +98,9 @@ void SimMesh::simulate()// simulates waveforms on an initialized instance of Sim
     }
 
   TString fileoption = (new_plot == 1) ? "recreate" : "update";
-  TFile* waveforms = new TFile("wfs.root",fileoption);
+  TFile* waveforms = new TFile(rootfilename,fileoption);
   firsthist->Write();
+  delete firsthist;
   waveforms->Close();
 
   SimMesh::decay();
@@ -160,11 +190,12 @@ void SimMesh::allocate() //allocates space to Q,R
 void SimMesh::decay() //simulates rise, decay times
 {
   TString fileoption = (new_plot == 1) ? "update" : "update";
-  TFile* waveforms = new TFile("wfs.root",fileoption);
+  TFile* waveforms = new TFile(rootfilename,fileoption);
   TH1D* bragghist = new TH1D("bragg_"+plotname,"",16384,0,16384);
   for(int j=0; j<16384; j++)
     bragghist->SetBinContent(j,Q.at(j));
   bragghist->Write();
+  delete bragghist;
   waveforms->Close();
 
 
@@ -213,11 +244,13 @@ void SimMesh::plot() //plots results
   bizarre_workaround->SetBinContent(0,plot_offset);
   bizarre_workaround2->SetBinContent(0,Scale*vertical_offset);
 
-  TFile *waveforms = new TFile("wfs.root", "update");
+  TFile *waveforms = new TFile(rootfilename, "update");
   bizarre_workaround->Write();
   bizarre_workaround2->Write();
-
   hist->Write();
+  delete bizarre_workaround;
+  delete bizarre_workaround2;
+  delete hist;
   waveforms->Close();
 }
 
@@ -235,8 +268,10 @@ void SimMesh::plotfinish() //Shifts, adds noise to, and discretizes the waveform
       scope->wf(0)->SetBinContent(j,round(scope->wf(0)->GetBinContent(j),scoperes));
       histfinal->SetBinContent(j,scope->wf(0)->GetBinContent(j));
     }
-  TFile* waveforms = new TFile("wfs.root", "update");
+  TFile* waveforms = new TFile(rootfilename, "update");
   histfinal->Write();
   histprefinal->Write();
+  delete histfinal;
+  delete histprefinal;
   waveforms->Close();
 }

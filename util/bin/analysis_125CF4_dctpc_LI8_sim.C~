@@ -26,7 +26,6 @@ void analysis_125CF4_dctpc_LI8_sim(int firstrun, int lastrun){//inclusive
   
   int BATCH=0;//0 if running interactively, 1 if running batch
   
-  gSystem->Load("MaxCam/waveformtools/include/FastWaveform.hh")
   gSystem->Load("libMaxCam");
   gSystem->Load("libWaveformTools.so");
 
@@ -208,7 +207,7 @@ long int new_filesize2=0;
   tree->Branch("Half1", &half1, "half1/I");
   tree->Branch("Half2", &half2, "half2/I");
   tree->Branch("TermDist", &termdist, "termdist/D");
-  tree->Branch("MaxDevLoc", &maxdevloc, "maxdevloc/D");
+  tree->Branch("MaxDevLoc", &maxdevloc, "maxdevloc/I");
   tree->Branch("RMSLeft", &rms_left, "rms_left/D");
   tree->Branch("RMSRight", &rms_right, "rms_right/D");
   tree->Branch("RMSFull", &rms_full, "rms_full/D");

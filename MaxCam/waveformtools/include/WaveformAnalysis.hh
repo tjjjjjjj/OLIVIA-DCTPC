@@ -180,7 +180,7 @@ This namespace contains functions to extract waveform analysis parameters.
 
     void analyzePMT(const TH1F* h, PMTWaveform& wf,Double_t gausConvSigma=1.0);
 
-    void analyzeFast(const TH1F* h, FastWaveform& wf);
+    void analyzeFast(const TH1F* h, FastWaveform& wf, int runnum);
 
   }
 

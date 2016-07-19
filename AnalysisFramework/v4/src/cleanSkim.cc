@@ -7,7 +7,7 @@
 #include "../../../MaxCam/waveformtools/include/FastWfVector.hh"
 #include "../../../MaxCam/waveformtools/include/FastWaveform.hh"
 #include "../../../MaxCam/waveformtools/include/FastPulse.hh"
-//  for analysis of charge sensitive pre-amp waveforms
+//  for analysisd of charge sensitive pre-amp waveforms
 #include "../../../MaxCam/waveformtools/include/CspWfVector.hh"
 #include "../../../MaxCam/waveformtools/include/CspWaveform.hh"
 #include "../../../MaxCam/waveformtools/include/CspPulse.hh"
@@ -67,6 +67,8 @@ using namespace std;
 /*~~~~~ (o.o*) Whoa. I wonder what all these variables do...? ~~~~~*/
 
 /*~~~~~\(^.^*)/ I know! I'll go read WFknobs.temp! ~~~~~*/
+
+/*
 
 TString rootfile;
 TString braggfile;
@@ -525,7 +527,7 @@ void analyze()
   rms_full = findRMS(half1,half2,mfc2,bragghist3,bragghist4);
 }
 
-/*~~~~~ (*o,o) lots of cool waveform analysis functions! ~~~~~*/
+/*~~~~~ (*o,o) lots of cool waveform analysis functions! ~~~~~*//*
 
 double findRMS(int xmin, int xmax, TH1D* curve, TH1D* hist1, TH1D* hist2)
 //compute RMS error of curve. (Error is based on whichever of hist1 or hist2 is closer.)                                  
@@ -987,6 +989,8 @@ int terminatorsearch3(TH1D* bragghist3, TH1D* bragghist4, int xmin, int xmax)
     return value * yscale;
   }
 
+*/
+
 /* End Waveform Reconstruction vars/fns */
 
 //Printout levels: | together 
@@ -1013,10 +1017,10 @@ static bool burnin_test( double xdelta, double ydelta, CleanSkimConfig * conf);
 /******** end prototypes ******/
 
 /******** Waveform analysis prototypes **********/
-int fillWaveformVectorsInTObjArray( DmtpcDataset & d, TObjArray * wfvlist );
+int fillWaveformVectorsInTObjArray( DmtpcDataset & d, TObjArray * wfvlist , int i);
 int fillCspWfVector(DmtpcDataset & d, CspWfVector *cspwv, int ich, int nch);
 int fillPMTWfVector(DmtpcDataset & d, PMTWfVector *cspwv, int ich, int nch);
-int fillFastWfVector(DmtpcDataset & d, FastWfVector *fastwv, int ich, int nch);
+int fillFastWfVector(DmtpcDataset & d, FastWfVector *fastwv, int ich, int nch, int i);
 /******** end waveform analysis prototypes ******/
 
 /******** cleanSkim *********/
@@ -1442,7 +1446,7 @@ int cleanSkim(DmtpcDataset & d, TString & key, TTree * rawtree, int runnum,
     
 
     if (algo_index == 0 )
-      fillWaveformVectorsInTObjArray( d , waveform_vectors );
+      fillWaveformVectorsInTObjArray( d , waveform_vectors, i );
     
 
 // if(d.event()->scopeDataInfo(0)!=NULL)
@@ -2202,6 +2206,7 @@ static const int nreqmod = 0;
 
 int main(int argn, char ** argv)
 {
+
    int return_val = 0; 
 
   /* Argument Parsing */ 
@@ -2337,7 +2342,7 @@ static int parse_args( int nargs, char ** args, TString * files, TString * keys,
   return 0; 
 }
 
-int fillWaveformVectorsInTObjArray( DmtpcDataset & d, TObjArray * wfvlist ){
+int fillWaveformVectorsInTObjArray( DmtpcDataset & d, TObjArray * wfvlist , int i){
 
     std::cout << "inside fillWaveformVectorsInTObjArray( "
   	    << &d
@@ -2426,7 +2431,7 @@ break;
 
       wv->setBoard(boardID);
       wv->setChan(channelID);
-      fillFastWfVector(d, wv, ich, nch);
+      fillFastWfVector(d, wv, ich, nch, i);
       
     } else if ( tsTempWaveformVectorClassType == (TString)"PMTWfVector" ) {
       
@@ -2521,7 +2526,7 @@ int fillPMTWfVector(DmtpcDataset & d, PMTWfVector *pmtwv, int ich, int nch)
   return 0;
 }
 
-int fillFastWfVector(DmtpcDataset & d, FastWfVector *fastwv, int ich, int nch)
+int fillFastWfVector(DmtpcDataset & d, FastWfVector *fastwv, int ich, int nch, int i)
 {
   //  std::cout << "inside fillFastWfVector( ... ) ..." << std::endl;
   
@@ -2542,7 +2547,7 @@ int fillFastWfVector(DmtpcDataset & d, FastWfVector *fastwv, int ich, int nch)
     //    std::cout << "hwf=" << hwf << std::endl;
     //    std::cout << "ich=" << ich << std::endl;
     //    std::cout << "itr=" << itr << std::endl;
-    waveform::analysis::analyzeFast( hwf , fastwf );
+    waveform::analysis::analyzeFast( hwf , fastwf , i);
     //    std::cout << "just got done with analyzeFast( ... ) ... " << std::endl;
     
     // push this SkimWaveform object onto the WaveformVector for this channel
