@@ -1,4 +1,4 @@
-// Note that the 'skimmed' runs need to exist before this macro will run
+if // Note that the 'skimmed' runs need to exist before this macro will run
 
 //The official list of physics runs will soon be made available. For now, it is ok to assume that all Big DCTPC runs >=955 are physics runs. The Big DCTPC logbook can be viewed at ($BIGDCTPC_RUNLOG): /net/hisrv0001/home/spitzj/runlog
 
@@ -501,7 +501,8 @@ ntrig=mesh->size();
 	  rms_right=mesh->at(nt).getRMSRight();
 	  rms_outer=mesh->at(nt).getRMSOuter();
 	  rms_full=mesh->at(nt).getRMSFull();
-	  estimate = jterm - 1;
+	  estimate=jterm;
+	  //if (termdist == 0.) estimate = jterm2;
 	  estimate_error=estimate-origin;
 
 	  mesh_R0=mesh->at(nt,0).getRise0();

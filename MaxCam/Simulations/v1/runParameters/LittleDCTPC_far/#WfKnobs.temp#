@@ -16,13 +16,13 @@ TermDerFac    0
 DMFCFac       0
 DMFCFac2      0
 DMFCFac3      0
-DriftCor      -0.0098
+DriftCor      -0.0097
 HeightMult    1.006
 Deconvolution 1
 DeconSD       30
 DeconOrder    4
 DerivOrder    2
-DerivStep     2
+DerivStep     3
 Der2Step      2
 Der4Step      2
 Der6Step      2
@@ -36,6 +36,6 @@ MinSDMult     0
 MinCWidth     1.04
 MinCorrection 0.961
 GaussAcc      5.5
-FinalSD       4
+FinalSD       6
 MFCfactor     1
 DiffFactor    1

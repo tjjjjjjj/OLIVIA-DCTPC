@@ -7,7 +7,7 @@
 #include "../../../MaxCam/waveformtools/include/FastWfVector.hh"
 #include "../../../MaxCam/waveformtools/include/FastWaveform.hh"
 #include "../../../MaxCam/waveformtools/include/FastPulse.hh"
-//  for analysis of charge sensitive pre-amp waveforms
+//  for analysisd of charge sensitive pre-amp waveforms
 #include "../../../MaxCam/waveformtools/include/CspWfVector.hh"
 #include "../../../MaxCam/waveformtools/include/CspWaveform.hh"
 #include "../../../MaxCam/waveformtools/include/CspPulse.hh"
@@ -60,7 +60,7 @@
 
 using namespace std;
 
-/********* Global Variables ******/ 
+/********* Global Variables *********/ 
 
 //Printout levels: | together 
 
@@ -186,11 +186,8 @@ int cleanSkim(DmtpcDataset & d, TString & key, TTree * rawtree, int runnum,
   }
 
   waveform_vectors->SetOwner(kTRUE);
-  //  std::cout << "conf->getNChannelsPerTrigger()=" <<  conf->getNChannelsPerTrigger() << std::endl;
-  //  std::cout << "waveform_vectors->GetEntries()=" << waveform_vectors->GetEntries() << std::endl;
-  //  std::cout << "waveform_vectors->GetSize()=" << waveform_vectors->GetSize() << std::endl;
-  
-  tmpskimtree->Branch("ncamera",&ncam,"ncamera/I");
+
+ tmpskimtree->Branch("ncamera",&ncam,"ncamera/I");
   tmpskimtree->Branch("spark",&spark,"spark[ncamera]/O");
   tmpskimtree->Branch("lastspark",&lastspark,"lastspark[ncamera]/I");
   tmpskimtree->Branch("integral",&integral,"integral[ncamera]/D");
@@ -422,6 +419,7 @@ int cleanSkim(DmtpcDataset & d, TString & key, TTree * rawtree, int runnum,
       gainmaps[u]=  ser == "" ? 0 : (DmtpcGainMap*) gfile.Get(ser.c_str())->Clone();
       if (conf->normalizeGainMap()) 
       {
+	cout << "IF THIS IS 0, SOMETHING IS BROKEN PROBABLY IDK IM JUST AN UNDERGRAD" << endl << gainmaps[u]->getGainMap()->Integral() << endl;
         gainmaps[u]->getGainMap()->Scale(gainmaps[u]->getGainMap()->GetNbinsX()*gainmaps[u]->getGainMap()->GetNbinsY()/gainmaps[u]->getGainMap()->Integral());
       }
       sd.addGainMap((DmtpcGainMap*)gainmaps[u]->Clone());
@@ -447,7 +445,7 @@ int cleanSkim(DmtpcDataset & d, TString & key, TTree * rawtree, int runnum,
     myBench->Start("Event");
 
     if (dbg_level & dbg_progress) std::cout << "Processing event " << i << std::endl;
-    d.getEvent(i);
+    d.getEvent(i); //This line causes a weird bytecount error after my changes?
     int sumtracks=0;
     int sparks=0;
     clust->Clear();
@@ -459,7 +457,7 @@ int cleanSkim(DmtpcDataset & d, TString & key, TTree * rawtree, int runnum,
     
 
     if (algo_index == 0 )
-      fillWaveformVectorsInTObjArray( d , waveform_vectors , i);
+      fillWaveformVectorsInTObjArray( d , waveform_vectors, i );
     
 
 // if(d.event()->scopeDataInfo(0)!=NULL)
@@ -1072,6 +1070,7 @@ int cleanSkim(DmtpcDataset & d, TString & key, TTree * rawtree, int runnum,
       eventnum=i;
       skimevent = d.event();
       tmpoutfile->cd();
+      //tmpskimtree2->Fill();
       tmpskimtree->Fill();
       gROOT->cd();
       cameraSerialNumber->clear();
@@ -1148,7 +1147,7 @@ int cleanSkim(DmtpcDataset & d, TString & key, TTree * rawtree, int runnum,
   //Write out and clean up
   tmpoutfile->cd();
   tmpskimtree->Write();
-  
+  //tmpskimtree2->Write();
   if (algo_index == 0)
     {
       biasoutfile->cd();
@@ -1192,6 +1191,7 @@ int cleanSkim(DmtpcDataset & d, TString & key, TTree * rawtree, int runnum,
     }
   
   delete tmpskimtree;
+  //delete tmpskimtree2;
   tmpoutfile->Close();
   
   delete biastree;
@@ -1200,7 +1200,7 @@ int cleanSkim(DmtpcDataset & d, TString & key, TTree * rawtree, int runnum,
       biasoutfile->Close();
     }
   
- std:cout << "delete_intermediate" << std::endl;
+  std::cout << "delete_intermediate" << std::endl;
   
   if (delete_intermediate)
     {
@@ -1217,6 +1217,7 @@ static const int nreqmod = 0;
 
 int main(int argn, char ** argv)
 {
+
    int return_val = 0; 
 
   /* Argument Parsing */ 
@@ -1557,7 +1558,7 @@ int fillFastWfVector(DmtpcDataset & d, FastWfVector *fastwv, int ich, int nch, i
     //    std::cout << "hwf=" << hwf << std::endl;
     //    std::cout << "ich=" << ich << std::endl;
     //    std::cout << "itr=" << itr << std::endl;
-    waveform::analysis::analyzeFast( hwf , fastwf , i );
+    waveform::analysis::analyzeFast( hwf , fastwf , i);
     //    std::cout << "just got done with analyzeFast( ... ) ... " << std::endl;
     
     // push this SkimWaveform object onto the WaveformVector for this channel

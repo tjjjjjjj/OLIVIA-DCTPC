@@ -320,7 +320,7 @@ DmtpcSkimDataset::mergeTempTrees( TTree * tmpskim, list<vector<vector<vector<Bur
   int  pixels_killed[ncam] ; bool pixels_killedBr=0;
   vector < string >* cameraSerialNumber=0; bool cameraSerialNumberBr=0;
 
-  /* waveform stuff because idk how else to accomplish this */
+  /* waveform stuff because idk how else to accomplish this
   int leftint[ncam] ; bool leftintBr=0;
   int leftint2[ncam] ; bool leftint2Br=0;
   int rightint[ncam] ; bool rightintBr=0;
@@ -364,6 +364,7 @@ DmtpcSkimDataset::mergeTempTrees( TTree * tmpskim, list<vector<vector<vector<Bur
     {tmpskim->SetBranchAddress("jterm",jterm);jtermBr=true;}
 
   //Not yet finished... do I even need this stuff here? Not sure what I needed this for in the first place, actually.
+  */
 
   /* end waveform stuff */
 
