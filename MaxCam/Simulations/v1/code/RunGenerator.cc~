@@ -172,6 +172,8 @@ RunGenerator::dataSetup(){
   fSim->Branch("Sequence",&fSeq,"sequence/I");
   fSim->Branch("E",&fSimEnergy,"E/F");
   fSim->Branch("Escint",&SimEsc,"Escint[ncamera]/F");
+  fSim->Branch("E2",&fSimEnergy2,"E2/F");
+  //fSim->Branch("Escint2",&fSimEsc2,"Escint2[ncamera]/F"); 
   fSim->Branch("phi",&fSimPhi,"phi/F");
   fSim->Branch("theta",&fSimTheta,"theta/F");
   fSim->Branch("x",&fSimX,"x/F");
@@ -386,6 +388,7 @@ RunGenerator::emptyEvent()
   fSimMass = 0;
   fSeq=0;
   fSimEnergy = 0;
+  fSimEnergy2 = 0;
   fSimPhi = 0;
   fSimTheta = 0;
   fSimX = 0;
@@ -421,8 +424,10 @@ RunGenerator::recoilEvent()
   fSeq = 1+fEventGen->particleGen()->getSeqNum();
   
   fSimEnergy = fEventGen->particleGen()->getRecoilEnergy();
+  fSimEnergy2= fEventGen->particleGen()->getRecoilEnergy2();
   for (Int_t i = 0; i < fEventGen->camera()->GetEntries(); i++){
     fSimEscint[i] = fEventGen->camera(i)->getCountBeforeSpacers();
+    //fSimEscint2[i]= ;
     fSimIntegral[i] = fEventGen->camera(i)->getFinalCount();
     fTotalGain[i] = fEventGen->camera(i)->getGain()*fEventGen->camera(i)->getEMGain();
   }
@@ -925,6 +930,10 @@ RunGenerator::readScopeProperties(TString filename)
       double SD;
       linestr >> SD;
       fEventGen->scope(nscope)->setVoltageNoise(SD);
+    } else if (name == "Attenuation"){
+      double atten;
+      linestr >> atten;
+      fEventGen->scope(nscope)->setAttenuation(atten);
     } else if (name == "TimeNoise1"){
       double a1;
       linestr >> a1;

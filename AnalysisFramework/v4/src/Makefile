@@ -1,7 +1,8 @@
 CC=g++
 
 CFLAGS=-O3 -g -I$(TMVADIR)/inc `root-config --cflags` -Wall -Wextra -I../../../MaxCam -I../../MaxCam/waveformtools -I../../../MaxCam/waveformtools/include
-LFLAGS= `root-config --libs` -lGeom -lSpectrum -L../../../MaxCam -lMaxCam -L../../../MaxCam/waveformtools/lib -lWaveformTools -L ../../../tmva/lib -lTMVA -I$/app/d-Chooz/Software/root/
+LFLAGS= `root-config --libs` -lGeom -lSpectrum -L../../../MaxCam -lMaxCam -L../../../MaxCam/waveformtools/lib -lWaveformTools -L ../../../tmva/lib -lTMVA
+
 
 cleanSkim: cleanSkim.o cleanSkimConfig.o cleanSkimProcessor.o
 	$(CC) $? -o $@  $(LFLAGS) -lMinuit -lMLP -lXMLIO -lTreePlayer

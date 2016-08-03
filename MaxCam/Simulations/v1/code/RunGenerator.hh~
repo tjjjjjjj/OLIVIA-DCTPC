@@ -117,6 +117,7 @@ private:
   Float_t fSimMass;
   Int_t fSeq;
   Float_t fSimEnergy;
+  Float_t fSimEnergy2;
   Float_t fTrackTheta;
   Float_t fTrackPhi;
   vector<Float_t> fSimEscint;

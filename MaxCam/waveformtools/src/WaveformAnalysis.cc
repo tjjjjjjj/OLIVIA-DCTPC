@@ -195,7 +195,7 @@ void TurnKnobs(int runnum)
   TString name;
   TString s;
   Int_t n;
-  double_t d;
+  Double_t d;
   while (!ifstr.eof()){
     getline(ifstr,line);
     if (line[0]=='#' || line=="") continue;
@@ -499,8 +499,8 @@ void analyze()
 
   jcent = jterm;
 
-  leftint  = histspline(bragghist,half1,halfheight,jcent,1/(cos1true * xscalestd),1);
-  rightint = histspline(bragghist,half2,halfheight,jcent,-1/(cos2true * xscalestd),1);
+  leftint  = histspline(bragghist,half1,halfheight,jcent,1/(cos1 * xscalestd),1);
+  rightint = histspline(bragghist,half2,halfheight,jcent,-1/(cos2 * xscalestd),1);
   leftint *= energy_mult;
   rightint *= energy_mult;
 

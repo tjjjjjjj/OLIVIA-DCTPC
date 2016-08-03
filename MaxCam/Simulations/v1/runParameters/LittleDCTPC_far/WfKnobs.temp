@@ -16,7 +16,8 @@ TermDerFac    0
 DMFCFac       0
 DMFCFac2      0
 DMFCFac3      0
-DriftCor      -0.0098
+#DriftCor should be (?) -0.0098
+DriftCor      -.0098
 HeightMult    1.006
 Deconvolution 1
 DeconSD       30

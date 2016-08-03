@@ -58,6 +58,10 @@ EventGenerator::EventGenerator()
   //fLongStraggle->SetNpx(1000);
   fTrackPhi = 0;
   fTrackTheta = 0;
+  fTrackPhi1 = 0;
+  fTrackTheta1 = 0;
+  fTrackPhi2 = 0;
+  fTrackTheta2 = 0;
   fTrueClusterArray = new TObjArray();
   fTrueClusterArray->SetOwner(kTRUE);
   fRecoilZ_min = 1e10;
@@ -926,6 +930,8 @@ EventGenerator::runEvent(bool resetImage)
   fTempRecoil = stepVec.Unit();
   fTrackPhi = stepVec.Phi();
   fTrackTheta = stepVec.Theta();
+  fTrackPhi1 = fTrackPhi;
+  fTrackTheta1 = fTrackTheta;
 //   fTempEnergy = (E*lstraggle/R);//definitely not really correct but
 //   //included in MaxCamMC
 
@@ -941,9 +947,17 @@ EventGenerator::runEvent(bool resetImage)
   
   
   while(propagateRecoil()) {}
+
+
+  Int_t npoints = fRecoilX.size();
+  //get length of track                                                                                                          
+  fLength = sqrt(pow(fRecoilX[0] - fRecoilX[npoints-1],2)+pow(fRecoilY[0]-fRecoilY[npoints-1],2) + pow(fRecoilZ[0] - fRecoilZ[npoints-1],2));
+  fZLength = sqrt(pow(fRecoilZ[0] -fRecoilZ[npoints-1],2));
+
   
  //////////////////////////
- 
+
+
 if (fUseDoubleAlpha)
  {
   
@@ -972,6 +986,8 @@ if (fUseDoubleAlpha)
   fTempRecoil = stepVec.Unit();
   fTrackPhi = stepVec.Phi();
   fTrackTheta = stepVec.Theta();
+  fTrackPhi2 = fTrackPhi;
+  fTrackTheta2 = fTrackTheta;
 //   fTempEnergy = (E*lstraggle/R);//definitely not really correct but
 //   //included in MaxCamMC
 
@@ -992,14 +1008,12 @@ if (fUseDoubleAlpha)
   ////////////////////
   
   
-  
+ Int_t npoints2 = fRecoilX.size();
+ //get length of track. Added haphazardly by TJ - may not be correct values.                                  
+   fLength2 = sqrt(pow(fRecoilX[0] - fRecoilX[npoints2-1],2)+pow(fRecoilY[0]-fRecoilY[npoints2-1],2) + pow(fRecoilZ[0] - fRecoilZ[npoints2-1],2));
+   fZLength2 = sqrt(pow(fRecoilZ[0] -fRecoilZ[npoints2-1],2));
+   
  
-  
-  
-  Int_t npoints = fRecoilX.size();
-//get length of track
-  fLength = sqrt(pow(fRecoilX[0] - fRecoilX[npoints-1],2)+pow(fRecoilY[0]-fRecoilY[npoints-1],2) + pow(fRecoilZ[0] - fRecoilZ[npoints-1],2));
-  fZLength = sqrt(pow(fRecoilZ[0] -fRecoilZ[npoints-1],2));
   
   
   // std::cout<<"Z Length: "<<fZLength<<std::endl;
@@ -1045,6 +1059,8 @@ if (fUseDoubleAlpha)
       SimMesh SimMesh2 = SimMesh::SimMesh(plot_offset, final_position, Second_Energy, fStepSize, scope(0), fMinEnergy, fRecoilZ, fRecoilEn, fChamber,0);  
       SimMesh2.SetPlotName("hist3");
       SimMesh2.simulate();
+
+
     }
 
   SimMesh1.plotfinish();

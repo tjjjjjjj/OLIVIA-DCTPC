@@ -64,8 +64,13 @@ bool DmtpcMCDataset::loadFile(const char * filename, bool load_true_clusters)
   tree->SetBranchAddress("trackPhi",&phi); 
   tree->SetBranchAddress("trackTheta",&theta); 
   tree->SetBranchAddress("length",&length);
-  tree->SetBranchAddress("zlength",&zlength); 
-  tree->SetBranchAddress("E",&E); 
+  tree->SetBranchAddress("zlength",&zlength);
+  tree->SetBranchAddress("trackPhi2",&phi2);
+  tree->SetBranchAddress("trackTheta2",&theta2);
+  tree->SetBranchAddress("length2",&length2);
+  tree->SetBranchAddress("zlength2",&zlength2);
+  tree->SetBranchAddress("E",&E);
+  tree->SetBranchAddress("E2",&E2);
   tree->SetBranchAddress("Escint",&Escint); 
   tree->SetBranchAddress("Sequence",&sequence); 
   tree->SetBranchAddress("x",&x); 

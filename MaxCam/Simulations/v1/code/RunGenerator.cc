@@ -172,6 +172,8 @@ RunGenerator::dataSetup(){
   fSim->Branch("Sequence",&fSeq,"sequence/I");
   fSim->Branch("E",&fSimEnergy,"E/F");
   fSim->Branch("Escint",&SimEsc,"Escint[ncamera]/F");
+  fSim->Branch("E2",&fSimEnergy2,"E2/F");
+  //fSim->Branch("Escint2",&fSimEsc2,"Escint2[ncamera]/F"); 
   fSim->Branch("phi",&fSimPhi,"phi/F");
   fSim->Branch("theta",&fSimTheta,"theta/F");
   fSim->Branch("x",&fSimX,"x/F");
@@ -179,6 +181,8 @@ RunGenerator::dataSetup(){
   fSim->Branch("z",&fSimZ,"z/F");
   fSim->Branch("length",&fSimLength,"length/F");
   fSim->Branch("zlength",&fSimZLength,"zlength/F");
+  fSim->Branch("length2",&fSimLength2,"length2/F");
+  fSim->Branch("zlength2",&fSimZLength2,"zlength2/F");
   fSim->Branch("deltaZ",&fSimDeltaZ,"deltaZ/F");
   fSim->Branch("time","TDatime",&fSimTime);
   fSim->Branch("eventnum",&fSimEventNum,"eventnum/I");
@@ -190,6 +194,8 @@ RunGenerator::dataSetup(){
   fSim->Branch("totalGain",TotGain,"totalGain[ncamera]/F");
   fSim->Branch("trackPhi",&fTrackPhi,"trackPhi/F");
   fSim->Branch("trackTheta",&fTrackTheta,"trackTheta/F");
+  fSim->Branch("trackPhi2",&fTrackPhi2,"trackPhi2/F");
+  fSim->Branch("trackTheta2",&fTrackTheta2,"trackTheta2/F");
   fSim->Branch("cosCygnus",&fCosCygnus,"cosCygnus/F");
   cout << "fSaveTrueClusters=" << fSaveTrueClusters << endl;
   if(fSaveTrueClusters){
@@ -386,6 +392,7 @@ RunGenerator::emptyEvent()
   fSimMass = 0;
   fSeq=0;
   fSimEnergy = 0;
+  fSimEnergy2 = 0;
   fSimPhi = 0;
   fSimTheta = 0;
   fSimX = 0;
@@ -393,12 +400,16 @@ RunGenerator::emptyEvent()
   fSimZ = 0;
   fSimLength = 0;
   fSimZLength = 0;
+  fSimLength2 = 0;
+  fSimZLength2 = 0;
   fSimProjE = 0;
   fSimProjPhi = 0;
   fSimProjTheta = 0;
   fSimProjMass = 0;
   fTrackPhi = 0;
   fTrackTheta = 0;
+  fTrackPhi2 = 0;
+  fTrackTheta2 = 0;
   fCosCygnus = 0;
 }
 
@@ -421,8 +432,10 @@ RunGenerator::recoilEvent()
   fSeq = 1+fEventGen->particleGen()->getSeqNum();
   
   fSimEnergy = fEventGen->particleGen()->getRecoilEnergy();
+  fSimEnergy2= fEventGen->particleGen()->getRecoilEnergy2();
   for (Int_t i = 0; i < fEventGen->camera()->GetEntries(); i++){
     fSimEscint[i] = fEventGen->camera(i)->getCountBeforeSpacers();
+    //fSimEscint2[i]= ;
     fSimIntegral[i] = fEventGen->camera(i)->getFinalCount();
     fTotalGain[i] = fEventGen->camera(i)->getGain()*fEventGen->camera(i)->getEMGain();
   }
@@ -439,11 +452,15 @@ RunGenerator::recoilEvent()
   fSimTime = fEventGen->particleGen()->getTDatime();
   fSimLength = fEventGen->getLength();
   fSimZLength = fEventGen->getZLength();
+  fTrackTheta = fEventGen->getTrackTheta(); 
   fTrackPhi = fEventGen->getTrackPhi();
+  fSimLength2 = fEventGen->getLength2();
+  fSimZLength2 = fEventGen->getZLength2();
+  fTrackTheta2 = fEventGen->getTrackTheta2();
+  fTrackPhi2 = fEventGen->getTrackPhi2();
   //  cout << "fEventGen->getTrueClusterArray()=" << fEventGen->getTrueClusterArray() << endl;
   //  cout << "fEventGen->getTrueClusterArray()->GetEntries()=" << fEventGen->getTrueClusterArray()->GetEntries() << endl;
   fSimTrueClusterArray = fEventGen->getTrueClusterArray();
-  fTrackTheta = fEventGen->getTrackTheta();
   fCosCygnus = fEventGen->particleGen()->getCosCygnus();
 }
 

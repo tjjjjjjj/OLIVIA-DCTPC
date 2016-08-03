@@ -67,8 +67,13 @@ public:
 
   double 	getLength(){return fLength;}
   double        getZLength(){return fZLength;}
-  double	getTrackTheta(){return fTrackTheta;}
-  double	getTrackPhi(){return fTrackPhi;}
+  double	getTrackTheta(){return fTrackTheta1;}
+  double	getTrackPhi(){return fTrackPhi1;}
+
+  double        getLength2(){return fLength2;}
+  double        getZLength2(){return fZLength2;}
+  double        getTrackTheta2(){return fTrackTheta2;}
+  double        getTrackPhi2(){return fTrackPhi2;}
 
   void 		setTimeResolution(double tr){fTimeResolution = tr;}
   double 	getTimeResolution(){return fTimeResolution;}
@@ -125,10 +130,16 @@ private:
   //double fTimeResolutionPMT;      //PMT electronics time resolution in ns
   double fLength;                 //length of track in mm (dist from start to finish)
   double fZLength;                //length of z part of track in in mm 
+  double fLength2;
+  double fZLength2;
   double fSkew;
   double fLengthScaleFactor;      //Multiply all lengths in the recoil by this to account for straggling
   double fTrackPhi;               //Azimuth angle on (-pi,pi] where +x=0, +y=pi/2, -x=pi [rad]
   double fTrackTheta;             //Polar angle on [0,pi] where +z is 0 and -z is pi. [rad]
+  double fTrackPhi1;
+  double fTrackTheta1;
+  double fTrackPhi2;
+  double fTrackTheta2;
   double fStraggle;
   TString fSrimName;              //Title of SRIM file
   vector<double> fRecoilX;        //x of each step in track [mm]

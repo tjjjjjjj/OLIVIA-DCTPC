@@ -408,7 +408,7 @@ void MaxCamClusterImage::getEllipseAxes(int i, double& a, double& b)
   double varx = xsq - meanx*meanx;//x-variance
   double vary = ysq - meany*meany;//y-variance
   double cov  = xy - meanx*meany;//covariance
-  cout<<"covariance "<<cov <<endl;
+  cout<<"covariance "<<cov<<endl;
   a = (varx+vary)/2 + sqrt((varx-vary)*(varx-vary)/4-cov*cov);
   //a = (varx+vary) + sqrt((varx-vary)*(varx-vary)-(4*cov*cov)); 
   a = sqrt(a);
