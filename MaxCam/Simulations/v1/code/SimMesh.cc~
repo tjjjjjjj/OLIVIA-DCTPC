@@ -76,11 +76,11 @@ SimMesh::SimMesh(int plot_offset_EG, int imin_EG, double Initial_Energy_EG, doub
 	runnumberfound = 1;
         runnum = n-1;
 	if (new_plot == 1) runnum += 1;
-      }
+      }	
+      tmpfile->Close();
     }
   nametmp << "waveforms/wfs" << runnum << ".root";
   rootfilename = nametmp.str();
-  tmpfile->Close();
 }
 
 SimMesh::~SimMesh(){/*destructor*/}
@@ -142,7 +142,7 @@ void SimMesh::step(int i, TH1D* firsthist) //runs one step of electron ionizatio
   tSD = timenoise(sz);
   jD = j(sz);
   jI = int(jD+.5);
-  if (i%20 == 0) MakeGaussian(ker,tSD,Nsamples);
+  if (i%20 == 0) MakeGaussian(ker,tSD,Nsamples); //This is the most CPU-intensive part of the code, but isn't very sensitive to a small time step, so it makes sense to run it only once every few steps.
   int vecsize = (ker.size()-1)/2;
 
   jmin = (jI - vecsize < jmin) ? jI-vecsize : jmin;

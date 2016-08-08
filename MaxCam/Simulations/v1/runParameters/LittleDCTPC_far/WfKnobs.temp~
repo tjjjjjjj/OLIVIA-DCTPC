@@ -5,7 +5,7 @@ TimeStep      2.e-9
 BraggPeak     173.7e6
 BraggMax      .002026
 xScale        .7594
-EnergyMult    950
+EnergyMult    1000
 HalfHeight    260
 TermThresh    0
 TermThresh2   0.02
@@ -16,9 +16,9 @@ TermDerFac    0
 DMFCFac       0
 DMFCFac2      0
 DMFCFac3      0
-#DriftCor should be (?) -0.0098
+#DriftCor formerly set to -0.0098
 DriftCor      0
-HeightMult    1.006
+HeightMult    1.0055
 Deconvolution 1
 DeconSD       30
 DeconOrder    4

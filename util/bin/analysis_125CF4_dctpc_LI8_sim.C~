@@ -141,6 +141,7 @@ void analysis_125CF4_dctpc_LI8_sim(int firstrun, int lastrun){//inclusive
   double delta_E_true=0;
   double delta_E_err=0;
   double delta_E_cheat=0;
+  double delta_E_cheat_err=0;
 
   double truth_phi_deg=-10.;
   double truth_x_start_mm=0.;
@@ -221,7 +222,8 @@ long int new_filesize2=0;
   tree->Branch("wfr_DeltaE_Guess",&delta_E,"delta_E/D");
   tree->Branch("wfr_DeltaE_Truth",&delta_E_true,"delta_E_true/D");
   tree->Branch("wfr_DeltaE_Error",&delta_E_err,"delta_E_err/D");
-  tree->Branch("wfr_DeltaE_Cheating",&delta_E_cheat,"delta_E_cheat/D");
+  tree->Branch("wfr_DeltaE_Cheating_Guess",&delta_E_cheat,"delta_E_cheat/D");
+  tree->Branch("wfr_DeltaE_Cheating_Error",&delta_E_cheat_err,"delta_E_cheat_err/D");
   tree->Branch("wfr_Origin_Est._A", &jmin, "jmin/I");
   tree->Branch("wfr_Origin_Est._B", &jbragg, "jbragg/I");
   tree->Branch("wfr_Origin_Est._C", &jterm, "jterm/I");
@@ -578,13 +580,13 @@ ntrig=mesh->size();
 	  rms_right=mesh->at(nt).getRMSRight();
 	  rms_outer=mesh->at(nt).getRMSOuter();
 	  rms_full=mesh->at(nt).getRMSFull();
-	  estimate = jterm - 2;
+	  estimate = jterm;
 	  estimate_error=estimate-origin;
-	  delta_E=fabs(leftint-rightint);
-	  delta_E_cheat=fabs(leftint2-rightint2);
+	  delta_E=fabs(leftint-rightint) * 1/.95;
+	  delta_E_cheat=fabs(leftint2-rightint2) * 1/.95;
           delta_E_true=fabs(truth_particlee_kev-truth_particlee_kev2);
 	  delta_E_err= delta_E - delta_E_true;
-
+	  delta_E_cheat_err = delta_E_cheat - delta_E_true;
 
 	  mesh_R0=mesh->at(nt,0).getRise0();
 	  mesh_R10=mesh->at(nt,0).getRise10();

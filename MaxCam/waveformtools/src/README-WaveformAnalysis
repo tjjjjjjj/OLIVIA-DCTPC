@@ -1,0 +1,193 @@
+Overview of TJ's code
+Last updated: August 8, 2016
+
+
+Hi there!
+You're probably reading this because you have to deal with some undergrad's awful imitation of C++ code and the in-line comments weren't helpful enough.
+Well, I'm gonna explain how this waveform reconstruction works right now, in like, reasonably okay detail, so hold firmly onto your socks before they get completely knocked off.
+
+
+For context, we need to understand the simulation code (run in Simulations/v1/code/SimMesh.cc and called by EventGenerator.cc in the same directory). Here's an overview of what it does:
+
+
+********** S I M U L A T I O N ***********\
+*
+* 1. Read in the kinematics of each alpha from EventGenerator   
+*
+* 2. At each point of each alpha's trajectory, electrons are "emitted" from the alpha, in an amount proportional to the energy lost by the alpha at that timestep. Taking into account the height of the alpha, the drift velocity, and longitudinal diffusion, the time when the electrons hit the mesh is computed. The strength of this signal is added stored into a temporary vector (let's call it "Vector 1"). Each element of Vector 1 holds a value proportional to the number of electrons reaching the mesh at a given time step.
+*
+* 3. The linear rise times and exponential decay times are used to produce a new "Vector 2" from the original Vector 1. Vector 2 represents the ideal waveform that would be produced without any experimental or electronic errors.
+*
+* 4. Random gaussian noise is added to Vector 2, and the vector is discretized to a certain number of output levels. (for example, on a 12-bit scope, the scope signal will be rounded to the nearest multiple of 2^-12 volts.)
+*
+*
+*
+*
+*
+* The final waveform is saved to a separate .root file from the rest of the event information because I couldn't figure out a better way to do it. Sorry, physics person of the future. :( Currently these files are saved to Simulations/v1/waveforms/wfs_.root for use by the reconstruction. Many intermediate vectors/histograms are also saved so that the reconstruction can be calibrated by how well it reconstructs this information.
+*                                         /
+******************************************
+
+
+
+
+The double-alpha reconstruction (primarily contained in the first half of WaveformAnalysis.cc) essentially works by running the simulation in reverse.
+
+Here's an brief overview of the text-wall below:
+
+0.   Index of functions used in code
+I.   Reading in information from file
+II.  Un-doing the noise/discretization
+III. Un-doing the rise/decay response
+IV.  Un-doing Gaussian smearing
+V.   Fitting Bragg curves to the resulting histogram
+VI.  Running numerical algorithms to determine the vertex, delta-E, etc.
+VII. Notes and advice
+
+----------------------------------------\
+*****************************************\
+0. Index of Functions |-------------------\
+----------------------'
+Functions are listed alphabetically along with the section of this Readme in which descriptions can be found. (Scroll down a page or so to see the list of objects.)
+A section of " -- " means that the function is straightforward enough that the comments in WaveformAnalysis.cc are probably sufficient.
+
+,---------.---------------,
+| Section | Function name |
+'---------'---------------'
+
+--   absmin()
+0.   analyze()
+0.   average()
+0.   correct()     (See also smooth().)
+IV.  deconvolve()
+--   deriv()
+IV.  deriv2(), deriv4(), deriv6(), deriv8()
+--   histspline()
+VI.  findRMS()
+V.   halfsearch()
+--   integrate()
+--   makekernel()
+VI.  maxdevsearch()
+--   median()
+VI.  minfinder()
+III. minprepare()
+--   normaldist()
+--   normalize()
+V.   plottbrag(), plotbraggrev()
+--   shifthist()
+0.   smooth()
+VI.  terminatorsearch() and similar-named functions
+I.   TurnKnobs()
+
+ ^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
+ *  D E S C R I P T I O N S  *
+ v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
+
+analyze(): runs the bulk of the reconstruction. Calls pretty much everything except for reading in tuned variable values (See I.) and saving output variables (See VI.).
+
+average(int j, vector<double>& vec, TH1D* hist): Instead of returning a single bin from a histogram, this allows you to get a weighted average of the bins near bin "j" in the histogram. For example, if "vec" is {1,0,0,0,1}, then this function will return the average of bins j-2 and j+2.
+
+correct(TH1D* hist, double SD, double acc, double factor): For use after smooth(). Essentially, it tries to un-do the "widening" effect that gaussian blurring has, while still keeping the curve smooth. The "factor" variable multiplies the strength of this filter. Typically the SD should be the same as or slightly larger than the SD used in smooth(). Using factor = 1 should work fine if you're not sure.
+
+smooth(TH1D* hist,double SD,double acc): Applies Gaussian blurring with standard deviation SD, and computes the tails of the bell curve out to acc standard deviations. Used extensively in the code as a low-pass filter.
+
+------------------------------------------/
+*****************************************{
+I. Reading From File |--------------------\
+---------------------'
+
+TurnKnobs() reads in the values from a .temp file, currently Simulations/v1/runParameters/LittleDCTPC_far/WfKnobs.temp.
+
+analyze() uses the "braggfile" to read in bragghist and bragghist2. It uses the "rootfile" to read in rough_wf, histA3, and histB3, as well as horizontal and vertical positions of the waveform (plotoff/vertoff)
+
+bragghist: a spline curve used to look up the energy of an alpha based on its track length.
+bragghist2: an experimentally-determined bragg curve for an alpha in this gas mixture.
+(See Section VI for more.)
+
+histA3/B3: the "true" bragg curves produced during simulation, used for calibrating the reconstruction.
+
+------------------------------------------/
+*****************************************{
+II. Waveform Filtering |------------------\
+-----------------------'
+
+First, we apply a low-pass filter in order to deal with noise and limited resolution of the scope. Currently, this is just implemented as smooth() followed by correct(). The best choice of standard deviation of this gaussian filter depends on the width of the waveform; see step III for more on this point.
+
+------------------------------------------/
+*****************************************{
+III. Signal Response |--------------------\
+---------------------'
+
+Next, we peel off the rise and decay responses of the scope to reveal the "true" signal received at the mesh.
+
+
+The function minprepare(TH1D* wf, TH1D* minfinder_curve) takes in a waveform wf, and spits out a waveform minfinder_curve which can then be analyzed by minfinder() (See VI.). minfinder_curve is also the version of the waveform needed to continue with steps IV./V.
+
+The decay time is exponential, i.e. the waveform will fall by an amount proportional to its height. Based on this we can solve for the "true" signal just from the height and slope of the waveform at each point.
+
+The rise time is very short (~10 ns on the scopes I'm modeling), so I have implemented it simply by shifting the histogram over by a couple bins in minprepare(). There is also a slight "box blur" effect from the rise time, but this is negligible since the Guassian blur caused by the electrons' longitudinal diffusion is much stronger.
+
+minprepare() also computes the width of the waveform at 30% height (wfd_delta), which it uses to set values for rec_SD and termderivfactor.
+
+The first time that minprepare() is run, it generates test_minfinder_curve just to get a rough estimate of the width of the waveform. This is used to calculate a new value of rec_SD; step II is run a second time with this rec_SD value. The resulting waveform is put into step III to generate minfinder_curve; this is the final output of step III.
+
+The value termderivfactor is used later, in step VI.
+
+It is crucial to have reasonably close estimates of the decay time (Td) and time resolution (dt) of the scope for step III to work properly. Currently these values are set to the same ones in the simulation.
+
+------------------------------------------/
+*****************************************{
+IV. Gaussian Deconvolution |--------------\
+---------------------------'
+
+The last major waveform-related step in the reconstruction is to un-do the first step in the simulation: smearing of the signal caused by longitudinal diffusion of the electrons.
+
+Surprisingly, it turns out that Gaussian blurring is perfectly reversible in many cases. Numerically, it gets very messy very fast, so this step will only work well if the scope has a high resolution in both time and voltage. Most of the vertex-finding algorithms described in (VI.) depend on this step, but the minfinder() algorithm can be run without any deconvolution for a rough estimate of the vertex.
+
+I have come across three methods for removing Gaussian blur: (1.) Infinite series of Hermite polynomials; (2.) Fourier analysis; and (3.) Infinite series of differential operators. An excellent reference is doi:10.1088/0266-5611/26/8/085002 .
+
+I implemented the differential operator formula as deconvolve(), where the derivatives deriv_() are estimated with the finite difference method (https://en.wikipedia.org/wiki/Finite_difference).
+
+In theory, the deconvolved waveform should be very close to the "Vector 1" described in the simulation. It should look like a pair of Bragg curves, since "electrons arriving over time" is directly tied to "energy lost by alphas as they travel through space".
+
+There are several settings in the .temp file to tune this step; the most important is DeconSD, which is the standard deviation of the Gaussian blur you want to remove. The best approach to find this value is probably trial-and-error, but it is useful to note that DeconSD should be proportional to the square root of the distance of the alpha from the mesh. DeconOrder, which determines how many terms to include from the infinite series. Larger numbers are more effective but also introduce high-frequency artifacts. The Der_Step settings change the step size used to calculate derivatives of the waveform; these are not very sensitive.
+
+,-------,
+| TL;DR |
+'-------'  
+deconvolve() is a formula that is evaluated at every point of the waveform, in order to generate a new waveform. If you suspect you are having problems because of this algorithm, try changing DeconOrder (valid values:2,4,6,8) and DeconSD in the temp file.
+
+------------------------------------------/
+*****************************************{
+V. Bragg Curves |-------------------------\
+----------------'
+
+
+
+------------------------------------------/
+*****************************************{
+VI. Analysis |----------------------------\
+-------------'
+
+[Not written yet...]
+
+------------------------------------------/
+*****************************************{
+VII. Misc. Notes |------------------------\
+-----------------'
+
+* The low-pass Gaussian filter is a simple trick I just came up with and did not intend as a long-term solution (although it works well enough for now). Other methods, such as Fourier analysis, may be better, but I have not tried them.
+
+* Electron attenuation is currently disabled in the simulation and not accounted for in the reconstruction.
+
+* The deconvolution uses a single, constant standard deviation; ideally, it should be based on how far the alpha is from the mesh, which can change significantly during an event.
+
+* There are quite a vew hard-coded variables. The most worrying is the limits of histograms, from 0 to 16384. Using a substantially different timestep or drift velocity could break the code as a result.
+
+* The reconstruction (as well as the simulation) spends most of its CPU time computing Gaussian blurs for various functions. Therefore it runs in roughly O(f^2 * z^.5) time, where f is the frequency of the scope and z is the average height of the alphas. Extremely high-frequency scopes will give better results with this algorithm, but they will also take a very long time to analyze.
+
+* There are plenty of weird experimental effects and electronic quirks that will cause data events to differ significantly from simulated events, in ways that may completely ruin the algorithms used in this code. If anyone in the future is reading this file because my code gives bad results, I would recommend going through the same procedure that I did to make this code in the first place: save a bunch of intermediate steps from the simulation to see what they "should" look like. Run the reconstruction code on data waveforms and plot histograms at each major step. When the reconstructed histograms start to differ significantly from what you expect, you can either (1) improve the algorithm that produced the bad histogram, or (2) introduce a new step that filters/processes the "bad" histogram into one that can be used by the next step in the reconstruction, or (3) throw out the remaining steps of the code, and try to re-implement the general idea of the code with more robust methods.
+
+------------------------------------------/
+**************** E N D ******************/
+----------------------------------------/
