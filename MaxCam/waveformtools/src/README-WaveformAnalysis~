@@ -1,6 +1,6 @@
 Overview of TJ's code
-Last updated: August 5, 2016
-
+Last updated: August 8, 2016
+A version of WaveformAnalysis.cc, as it appeared when this Readme was last updated, should be in the same directory as this file under the name README-WaveformAnalysis_cc.
 
 Hi there!
 You're probably reading this because you have to deal with some undergrad's awful imitation of C++ code and the in-line comments weren't helpful enough.
@@ -29,13 +29,11 @@ For context, we need to understand the simulation code (run in Simulations/v1/co
 ******************************************
 
 
-
-
 The double-alpha reconstruction (primarily contained in the first half of WaveformAnalysis.cc) essentially works by running the simulation in reverse.
 
 Here's an brief overview of the text-wall below:
 
-0.   Index of functions/objects used in code
+0.   Index of functions used in code
 I.   Reading in information from file
 II.  Un-doing the noise/discretization
 III. Un-doing the rise/decay response
@@ -48,7 +46,7 @@ VII. Notes and advice
 *****************************************\
 0. Index of Functions |-------------------\
 ----------------------'
-Functions are listed alphabetically along with the section of this Readme in which descriptions can be found.
+Functions are listed alphabetically along with the section of this Readme in which descriptions can be found. (Scroll down a page or so to see the list of objects.)
 A section of " -- " means that the function is straightforward enough that the comments in WaveformAnalysis.cc are probably sufficient.
 
 ,---------.---------------,
@@ -91,15 +89,20 @@ correct(TH1D* hist, double SD, double acc, double factor): For use after smooth(
 
 smooth(TH1D* hist,double SD,double acc): Applies Gaussian blurring with standard deviation SD, and computes the tails of the bell curve out to acc standard deviations. Used extensively in the code as a low-pass filter.
 
-[Need descriptions of histograms here...]
-
 ------------------------------------------/
 *****************************************{
 I. Reading From File |--------------------\
 ---------------------'
 
 TurnKnobs() reads in the values from a .temp file, currently Simulations/v1/runParameters/LittleDCTPC_far/WfKnobs.temp.
-analyze() uses the "braggfile" to read in bragghist and bragghist2 (See section 0.). It uses the "rootfile" to read in rough_wf, histA3, and histB3, as well as horizontal and vertical positions of the waveform (plotoff/vertoff).
+
+analyze() uses the "braggfile" to read in bragghist and bragghist2. It uses the "rootfile" to read in rough_wf, histA3, and histB3, as well as horizontal and vertical positions of the waveform (plotoff/vertoff)
+
+bragghist: a spline curve used to look up the energy of an alpha based on its track length.
+bragghist2: an experimentally-determined bragg curve for an alpha in this gas mixture.
+(See Section VI for more.)
+
+histA3/B3: the "true" bragg curves produced during simulation, used for calibrating the reconstruction.
 
 ------------------------------------------/
 *****************************************{
@@ -143,7 +146,7 @@ I have come across three methods for removing Gaussian blur: (1.) Infinite serie
 
 I implemented the differential operator formula as deconvolve(), where the derivatives deriv_() are estimated with the finite difference method (https://en.wikipedia.org/wiki/Finite_difference).
 
-In theory, the deconvolved waveform should be very close to the "Vector 1" described in the simulation. It should look like a pair of Bragg curves, since "electrons arriving over time" is directly tied to "energy lost by alphas as they travel through space".
+In theory, the deconvolved waveform (mfc2, short for "minfindercurve2") should be very close to the "Vector 1" described in the simulation. It should look like a pair of Bragg curves, since "electrons arriving over time" is directly tied to "energy lost by alphas as they travel through space".
 
 There are several settings in the .temp file to tune this step; the most important is DeconSD, which is the standard deviation of the Gaussian blur you want to remove. The best approach to find this value is probably trial-and-error, but it is useful to note that DeconSD should be proportional to the square root of the distance of the alpha from the mesh. DeconOrder, which determines how many terms to include from the infinite series. Larger numbers are more effective but also introduce high-frequency artifacts. The Der_Step settings change the step size used to calculate derivatives of the waveform; these are not very sensitive.
 
@@ -157,7 +160,13 @@ deconvolve() is a formula that is evaluated at every point of the waveform, in o
 V. Bragg Curves |-------------------------\
 ----------------'
 
-[Not written yet...]
+Many of the vertex-finding algorithms, as well as the energy reconstruction, work by fitting a pair of Bragg curves to the energy curve "mfc2" described in IV.
+
+These are created by plotbragg() and plotbraggrev() and stored in bragghist3 and bragghist4. The vertical and horizontal scale of each curve can be determined by the peak bin of mfc2 corresponding to each alpha's bragg peak. In principle the location of the peaks can be used to determine the position of the bragg curves on the x-axis; in pratice, taking a point on the steep end of the curve (currently the point of 75% height) has been more accurate.
+
+The vertical height of each reconstructed bragg curve is a good estimate of the secant of each particle's angle from the z-axis. This means that, given the z-length of each alpha's path alone, we can determine the total length of each path in order to determine their energies. (See VI.)
+
+The function findRMS() provides quick estimates of the RMS-error between the mfc2 curve and the reconstructed bragg curves. Unusually large values here may indicate that the bragg curves are a poor fit. The middle part of the mfc2 curve is excluded from the calculations of rms_left, rms_right, and rms_outer because otherwise the transition between the two bragg curves would dominate the RMS value.
 
 ------------------------------------------/
 *****************************************{
@@ -172,7 +181,7 @@ VII. Misc. Notes |------------------------\
 -----------------'
 
 * The low-pass Gaussian filter is a simple trick I just came up with and did not intend as a long-term solution (although it works well enough for now). Other methods, such as Fourier analysis, may be better, but I have not tried them.
-
+A
 * Electron attenuation is currently disabled in the simulation and not accounted for in the reconstruction.
 
 * The deconvolution uses a single, constant standard deviation; ideally, it should be based on how far the alpha is from the mesh, which can change significantly during an event.

@@ -53,7 +53,7 @@ int peak2;
 double peak1val;
 //Height of the first bragg curve's peak.
 double peak2val;
-// ~~~ second peak
+// ~~~ second ~~~
 int half1;
 // Location of the half-height point of the first bragg curve. (Currently implemented as 75% height, actually.)
 int half2;

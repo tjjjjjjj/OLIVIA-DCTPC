@@ -1,6 +1,6 @@
 Overview of TJ's code
 Last updated: August 8, 2016
-
+A version of WaveformAnalysis.cc, as it appeared when this Readme was last updated, should be in the same directory as this file under the name README-WaveformAnalysis_cc.
 
 Hi there!
 You're probably reading this because you have to deal with some undergrad's awful imitation of C++ code and the in-line comments weren't helpful enough.
@@ -27,8 +27,6 @@ For context, we need to understand the simulation code (run in Simulations/v1/co
 * The final waveform is saved to a separate .root file from the rest of the event information because I couldn't figure out a better way to do it. Sorry, physics person of the future. :( Currently these files are saved to Simulations/v1/waveforms/wfs_.root for use by the reconstruction. Many intermediate vectors/histograms are also saved so that the reconstruction can be calibrated by how well it reconstructs this information.
 *                                         /
 ******************************************
-
-
 
 
 The double-alpha reconstruction (primarily contained in the first half of WaveformAnalysis.cc) essentially works by running the simulation in reverse.
@@ -64,7 +62,7 @@ IV.  deconvolve()
 IV.  deriv2(), deriv4(), deriv6(), deriv8()
 --   histspline()
 VI.  findRMS()
-V.   halfsearch()
+--   halfsearch()
 --   integrate()
 --   makekernel()
 VI.  maxdevsearch()
@@ -148,7 +146,7 @@ I have come across three methods for removing Gaussian blur: (1.) Infinite serie
 
 I implemented the differential operator formula as deconvolve(), where the derivatives deriv_() are estimated with the finite difference method (https://en.wikipedia.org/wiki/Finite_difference).
 
-In theory, the deconvolved waveform should be very close to the "Vector 1" described in the simulation. It should look like a pair of Bragg curves, since "electrons arriving over time" is directly tied to "energy lost by alphas as they travel through space".
+In theory, the deconvolved waveform (mfc2, short for "minfindercurve2") should be very close to the "Vector 1" described in the simulation. It should look like a pair of Bragg curves, since "electrons arriving over time" is directly tied to "energy lost by alphas as they travel through space".
 
 There are several settings in the .temp file to tune this step; the most important is DeconSD, which is the standard deviation of the Gaussian blur you want to remove. The best approach to find this value is probably trial-and-error, but it is useful to note that DeconSD should be proportional to the square root of the distance of the alpha from the mesh. DeconOrder, which determines how many terms to include from the infinite series. Larger numbers are more effective but also introduce high-frequency artifacts. The Der_Step settings change the step size used to calculate derivatives of the waveform; these are not very sensitive.
 
@@ -162,7 +160,13 @@ deconvolve() is a formula that is evaluated at every point of the waveform, in o
 V. Bragg Curves |-------------------------\
 ----------------'
 
+Many of the vertex-finding algorithms, as well as the energy reconstruction, work by fitting a pair of Bragg curves to the energy curve "mfc2" described in IV.
 
+These are created by plotbragg() and plotbraggrev() and stored in bragghist3 and bragghist4. The vertical and horizontal scale of each curve can be determined by the peak bin of mfc2 corresponding to each alpha's bragg peak. In principle the location of the peaks can be used to determine the position of the bragg curves on the x-axis; in pratice, taking a point on the steep end of the curve (currently the point of 75% height) has been more accurate. (This is done by the halfsearch() function).
+
+The vertical height of each reconstructed bragg curve is a good estimate of the secant of each particle's angle from the z-axis. This means that, given the z-length of each alpha's path alone, we can determine the total length of each path in order to determine their energies. (See VI.)
+
+The function findRMS() provides quick estimates of the RMS-error between the mfc2 curve and the reconstructed bragg curves. Unusually large values here may indicate that the bragg curves are a poor fit. The middle part of the mfc2 curve is excluded from the calculations of rms_left, rms_right, and rms_outer because otherwise the transition between the two bragg curves would dominate the RMS value.
 
 ------------------------------------------/
 *****************************************{
@@ -171,13 +175,17 @@ VI. Analysis |----------------------------\
 
 [Not written yet...]
 
+jmin / jbragg / jdiff
+termsearch 1/B/2/3
+maxdevsearch
+
 ------------------------------------------/
 *****************************************{
 VII. Misc. Notes |------------------------\
 -----------------'
 
 * The low-pass Gaussian filter is a simple trick I just came up with and did not intend as a long-term solution (although it works well enough for now). Other methods, such as Fourier analysis, may be better, but I have not tried them.
-
+A
 * Electron attenuation is currently disabled in the simulation and not accounted for in the reconstruction.
 
 * The deconvolution uses a single, constant standard deviation; ideally, it should be based on how far the alpha is from the mesh, which can change significantly during an event.
