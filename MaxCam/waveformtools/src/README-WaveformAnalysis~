@@ -1,5 +1,5 @@
 Overview of TJ's code
-Last updated: August 8, 2016
+Last updated: August 10, 2016
 A version of WaveformAnalysis.cc, as it appeared when this Readme was last updated, should be in the same directory as this file under the name README-WaveformAnalysis_cc.
 
 Hi there!
@@ -62,7 +62,7 @@ IV.  deconvolve()
 IV.  deriv2(), deriv4(), deriv6(), deriv8()
 --   histspline()
 VI.  findRMS()
-V.   halfsearch()
+--   halfsearch()
 --   integrate()
 --   makekernel()
 VI.  maxdevsearch()
@@ -162,7 +162,7 @@ V. Bragg Curves |-------------------------\
 
 Many of the vertex-finding algorithms, as well as the energy reconstruction, work by fitting a pair of Bragg curves to the energy curve "mfc2" described in IV.
 
-These are created by plotbragg() and plotbraggrev() and stored in bragghist3 and bragghist4. The vertical and horizontal scale of each curve can be determined by the peak bin of mfc2 corresponding to each alpha's bragg peak. In principle the location of the peaks can be used to determine the position of the bragg curves on the x-axis; in pratice, taking a point on the steep end of the curve (currently the point of 75% height) has been more accurate.
+These are created by plotbragg() and plotbraggrev() and stored in bragghist3 and bragghist4. The vertical and horizontal scale of each curve can be determined by the peak bin of mfc2 corresponding to each alpha's bragg peak. In principle the location of the peaks can be used to determine the position of the bragg curves on the x-axis; in pratice, taking a point on the steep end of the curve (currently the point of 75% height) has been more accurate. (This is done by the halfsearch() function).
 
 The vertical height of each reconstructed bragg curve is a good estimate of the secant of each particle's angle from the z-axis. This means that, given the z-length of each alpha's path alone, we can determine the total length of each path in order to determine their energies. (See VI.)
 
@@ -173,7 +173,10 @@ The function findRMS() provides quick estimates of the RMS-error between the mfc
 VI. Analysis |----------------------------\
 -------------'
 
-[Not written yet...]
+jmin / jbragg / jdiff
+termsearch 1/B/2/3
+maxdevsearch
+DE
 
 ------------------------------------------/
 *****************************************{

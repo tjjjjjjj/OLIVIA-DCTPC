@@ -947,9 +947,17 @@ EventGenerator::runEvent(bool resetImage)
   
   
   while(propagateRecoil()) {}
+
+
+  Int_t npoints = fRecoilX.size();
+  //get length of track                                                                                                          
+  fLength = sqrt(pow(fRecoilX[0] - fRecoilX[npoints-1],2)+pow(fRecoilY[0]-fRecoilY[npoints-1],2) + pow(fRecoilZ[0] - fRecoilZ[npoints-1],2));
+  fZLength = sqrt(pow(fRecoilZ[0] -fRecoilZ[npoints-1],2));
+
   
  //////////////////////////
- 
+
+
 if (fUseDoubleAlpha)
  {
   
@@ -1000,14 +1008,12 @@ if (fUseDoubleAlpha)
   ////////////////////
   
   
-  
+ Int_t npoints2 = fRecoilX.size();
+ //get length of track. Added haphazardly by TJ - may not be correct values.                                  
+   fLength2 = sqrt(pow(fRecoilX[0] - fRecoilX[npoints2-1],2)+pow(fRecoilY[0]-fRecoilY[npoints2-1],2) + pow(fRecoilZ[0] - fRecoilZ[npoints2-1],2));
+   fZLength2 = sqrt(pow(fRecoilZ[0] -fRecoilZ[npoints2-1],2));
+   
  
-  
-  
-  Int_t npoints = fRecoilX.size();
-//get length of track
-  fLength = sqrt(pow(fRecoilX[0] - fRecoilX[npoints-1],2)+pow(fRecoilY[0]-fRecoilY[npoints-1],2) + pow(fRecoilZ[0] - fRecoilZ[npoints-1],2));
-  fZLength = sqrt(pow(fRecoilZ[0] -fRecoilZ[npoints-1],2));
   
   
   // std::cout<<"Z Length: "<<fZLength<<std::endl;
@@ -1053,11 +1059,6 @@ if (fUseDoubleAlpha)
       SimMesh SimMesh2 = SimMesh::SimMesh(plot_offset, final_position, Second_Energy, fStepSize, scope(0), fMinEnergy, fRecoilZ, fRecoilEn, fChamber,0);  
       SimMesh2.SetPlotName("hist3");
       SimMesh2.simulate();
-
-      Int_t npoints2 = fRecoilX.size();
-      //get length of track. Added haphazardly by TJ - may not be correct values.                                                                                                          
-      fLength2 = sqrt(pow(fRecoilX[0] - fRecoilX[npoints2-1],2)+pow(fRecoilY[0]-fRecoilY[npoints2-1],2) + pow(fRecoilZ[0] - fRecoilZ[npoints2-1],2));
-      fZLength2 = sqrt(pow(fRecoilZ[0] -fRecoilZ[npoints2-1],2));
 
 
     }

@@ -72,7 +72,7 @@ SimMesh::SimMesh(int plot_offset_EG, int imin_EG, double Initial_Energy_EG, doub
 
       if(!tmpfile->IsOpen())
       {
-	cout << "Ignore this error message. Idk how to make it go away but it's not a problem.";
+	//cout << "Ignore this error message. Idk how to make it go away but it's not a problem.";
 	runnumberfound = 1;
         runnum = n-1;
 	if (new_plot == 1) runnum += 1;

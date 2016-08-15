@@ -181,6 +181,8 @@ RunGenerator::dataSetup(){
   fSim->Branch("z",&fSimZ,"z/F");
   fSim->Branch("length",&fSimLength,"length/F");
   fSim->Branch("zlength",&fSimZLength,"zlength/F");
+  fSim->Branch("length2",&fSimLength2,"length2/F");
+  fSim->Branch("zlength2",&fSimZLength2,"zlength2/F");
   fSim->Branch("deltaZ",&fSimDeltaZ,"deltaZ/F");
   fSim->Branch("time","TDatime",&fSimTime);
   fSim->Branch("eventnum",&fSimEventNum,"eventnum/I");
@@ -192,6 +194,8 @@ RunGenerator::dataSetup(){
   fSim->Branch("totalGain",TotGain,"totalGain[ncamera]/F");
   fSim->Branch("trackPhi",&fTrackPhi,"trackPhi/F");
   fSim->Branch("trackTheta",&fTrackTheta,"trackTheta/F");
+  fSim->Branch("trackPhi2",&fTrackPhi2,"trackPhi2/F");
+  fSim->Branch("trackTheta2",&fTrackTheta2,"trackTheta2/F");
   fSim->Branch("cosCygnus",&fCosCygnus,"cosCygnus/F");
   cout << "fSaveTrueClusters=" << fSaveTrueClusters << endl;
   if(fSaveTrueClusters){
@@ -396,12 +400,16 @@ RunGenerator::emptyEvent()
   fSimZ = 0;
   fSimLength = 0;
   fSimZLength = 0;
+  fSimLength2 = 0;
+  fSimZLength2 = 0;
   fSimProjE = 0;
   fSimProjPhi = 0;
   fSimProjTheta = 0;
   fSimProjMass = 0;
   fTrackPhi = 0;
   fTrackTheta = 0;
+  fTrackPhi2 = 0;
+  fTrackTheta2 = 0;
   fCosCygnus = 0;
 }
 
@@ -444,11 +452,15 @@ RunGenerator::recoilEvent()
   fSimTime = fEventGen->particleGen()->getTDatime();
   fSimLength = fEventGen->getLength();
   fSimZLength = fEventGen->getZLength();
+  fTrackTheta = fEventGen->getTrackTheta(); 
   fTrackPhi = fEventGen->getTrackPhi();
+  fSimLength2 = fEventGen->getLength2();
+  fSimZLength2 = fEventGen->getZLength2();
+  fTrackTheta2 = fEventGen->getTrackTheta2();
+  fTrackPhi2 = fEventGen->getTrackPhi2();
   //  cout << "fEventGen->getTrueClusterArray()=" << fEventGen->getTrueClusterArray() << endl;
   //  cout << "fEventGen->getTrueClusterArray()->GetEntries()=" << fEventGen->getTrueClusterArray()->GetEntries() << endl;
   fSimTrueClusterArray = fEventGen->getTrueClusterArray();
-  fTrackTheta = fEventGen->getTrackTheta();
   fCosCygnus = fEventGen->particleGen()->getCosCygnus();
 }
 
@@ -542,7 +554,7 @@ cout<<"size of data info: "<<dataInfo(0)<<endl;
 
 //addScopeDataInfo(0);
 getScopeDataInfo()->setNTriggers(1);
-cout<<"Get N triggers: "<<getScopeDataInfo()->getNTriggers()<<endl;
+//cout<<"Get N triggers: "<<getScopeDataInfo()->getNTriggers()<<endl;
 
 // new( (*fData->event()->scopeDataInfo())[0] ) ScopeDataInfo(*dataInfo(0));
 

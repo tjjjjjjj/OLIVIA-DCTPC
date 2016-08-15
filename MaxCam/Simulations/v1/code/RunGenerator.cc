@@ -550,11 +550,11 @@ RunGenerator::saveEvent()
   new(  (*fData->event()->rawScopeData())[0] ) ScopeWaveformData(*fEventGen->scope(0)->wf(0));
 // new( (*fData->event()->scopeDataInfo())[0] ) ScopeDataInfo(dataInfo(0));
 
-cout<<"size of data info: "<<dataInfo(0)<<endl;
+//cout<<"size of data info: "<<dataInfo(0)<<endl;
 
 //addScopeDataInfo(0);
 getScopeDataInfo()->setNTriggers(1);
-cout<<"Get N triggers: "<<getScopeDataInfo()->getNTriggers()<<endl;
+//cout<<"Get N triggers: "<<getScopeDataInfo()->getNTriggers()<<endl;
 
 // new( (*fData->event()->scopeDataInfo())[0] ) ScopeDataInfo(*dataInfo(0));
 

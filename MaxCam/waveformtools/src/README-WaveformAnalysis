@@ -1,10 +1,28 @@
 Overview of TJ's code
-Last updated: August 8, 2016
-A version of WaveformAnalysis.cc, as it appeared when this Readme was last updated, should be in the same directory as this file under the name README-WaveformAnalysis_cc.
+Last updated: August 15, 2016
+A version of WaveformAnalysis.cc, as it appeared when this Readme was last updated, should be in the same directory as this file under the name README-WaveformAnalysis_cc. Currently this reconstruction corresponds to lines 30~1120 of that file, in ~/tj/DCTPC_soft/MaxCam/waveformtools/src .
 
 Hi there!
 You're probably reading this because you have to deal with some undergrad's awful imitation of C++ code and the in-line comments weren't helpful enough.
 Well, I'm gonna explain how this waveform reconstruction works right now, in like, reasonably okay detail, so hold firmly onto your socks before they get completely knocked off.
+
+
+
+If this Readme is too long, you can probably get away with just:
+
+-Simulation
+-First couple sentences of each section
+-The description of terminatorsearch() in section VI
+
+
+
+
+
+
+
+
+
+
 
 
 For context, we need to understand the simulation code (run in Simulations/v1/code/SimMesh.cc and called by EventGenerator.cc in the same directory). Here's an overview of what it does:
@@ -19,8 +37,6 @@ For context, we need to understand the simulation code (run in Simulations/v1/co
 * 3. The linear rise times and exponential decay times are used to produce a new "Vector 2" from the original Vector 1. Vector 2 represents the ideal waveform that would be produced without any experimental or electronic errors.
 *
 * 4. Random gaussian noise is added to Vector 2, and the vector is discretized to a certain number of output levels. (for example, on a 12-bit scope, the scope signal will be rounded to the nearest multiple of 2^-12 volts.)
-*
-*
 *
 *
 *
@@ -94,9 +110,9 @@ smooth(TH1D* hist,double SD,double acc): Applies Gaussian blurring with standard
 I. Reading From File |--------------------\
 ---------------------'
 
-TurnKnobs() reads in the values from a .temp file, currently Simulations/v1/runParameters/LittleDCTPC_far/WfKnobs.temp.
+TurnKnobs() reads in the values from a .temp file, currently Simulations/v1/runParameters/LittleDCTPC_far/WfKnobs.temp. (NOTE: a couple of these values (currently TermDerFac, RecSD) are overwritten by the code, so these knobs actually can't be tuned in this file.)
 
-analyze() uses the "braggfile" to read in bragghist and bragghist2. It uses the "rootfile" to read in rough_wf, histA3, and histB3, as well as horizontal and vertical positions of the waveform (plotoff/vertoff)
+analyze() uses the "braggfile" to read in bragghist and bragghist2. It uses the "rootfile" (currently Simulations/v1/waveforms/wfs_.root) to read in rough_wf, histA3, and histB3, as well as horizontal and vertical positions of the waveform (plotoff/vertoff)
 
 bragghist: a spline curve used to look up the energy of an alpha based on its track length.
 bragghist2: an experimentally-determined bragg curve for an alpha in this gas mixture.
@@ -173,11 +189,80 @@ The function findRMS() provides quick estimates of the RMS-error between the mfc
 VI. Analysis |----------------------------\
 -------------'
 
-[Not written yet...]
+,------------,
+| Algorithms |
+'------------'
 
-jmin / jbragg / jdiff
-termsearch 1/B/2/3
-maxdevsearch
+minfinder(TH1D* wf, TH1D* wfder):
+
+wf is the original waveform. wfder is the processed version produced by minprepare() (see III).
+
+Essentially, the algorithm waits for wfder to rise up to a peak, and then locates the first minimum after that peak.
+
+The variables wf, cooldownmax, coolfactor, and threshold are all used in order to ignore "false positives" caused by noisy data or other unexpected errors.
+
+---
+terminatorsearch(TH1D* bragghist3, TH1D* bragghist4, TH1D* mfc2, int xmin, int xmax, double threshold, vector<int>& vec, vector<double>& vec2):
+
+This algorithm assumes that the curve mfc2 smoothly transitions from bragghist3 to bragghist4 somewhere near the center of the waveform. In order to find the vertex, it looks for the bin where mfc2 is halfway between the two bragg histograms.
+
+If the variable dermfc is set to a non-zero value, then the algorithm also takes into account the derivative of mfc2 relative to the derivatives of the bragg hists. dermfc is proportional how strongly the derivative of the mfc2 is weighted relatively to the value of mfc2.
+
+There are several other knobs inside this algorithm, but none of them turned out to very well, so I've kept them set to zero (turned off) in WfKnobs.temp.
+
+"(thisval * lastval == -1)" means that thisval has just changed sign; i.e. that there is a zero in the function being calculated at that bin.
+
+vec stores all of the recorded zeroes; vec2 records the distance between the two histograms at each zero, which is used as a heuristic of how good that guess is. (Typically the hists are far apart at the vertex, and false positives are often returned when the hists are close together.) The value in vec which corresponds to the largest value in vec2 is returned as output from this algorithm.
+
+If vec is empty at the end of the algorithm, terminatorsearchbackup() is called instead.
+
+---
+terminatorsearchbackup(stuff):
+
+This algorithm pretty much looks for the bin where terminatorsearch() would have come the closest to finding a zero.
+
+It's a bit outdated (e.g. it doesn't take into account the derivatives of the histograms, which was a recent change to terminatorsearch()), and it also has some knobs (TSB_coeff/TSB_pow) that I haven't tested. I haven't gotten around to fixing this algorithm because after some recent changes, it rarely gets called by terminatorsearch() anyway.
+
+---
+terminatorsearch2(stuff):
+
+This is basically just a variation of terminatorsearchbackup(). It uses slightly different formulas to determine what value to minimize. This probably also needs updated.
+
+---
+terminatorsearch3(stuff):
+
+This simply returns the point where two histograms intersect - in this case, the two bragg curves.
+
+---
+maxdevsearch(int xmin, int xmax, TH1D* bragghist3, TH1D* bragghist4, TH1D* mfc2):
+
+This finds the bin where the lesser of "distance between mfc2 and bragghist3" and "distance between mfc2 and bragghist4" is maximized. (distance refers to relative "error", e.g. the distance from 201 to 200 is (201-200)/200 = .005)
+
+,------------------,
+| Origin estimates |
+'------------------'
+
+jmin: minfinder() applied to minfinder_curve. Pretty robust and works on low-resolution scopes, but not accurate even in theory.
+
+jbragg: minfinder() applied to mfc2. Almost always better as long as deconvolution (IV) works reasonably well on the waveform.
+
+jdiff: minfinder() applied to mfcdiff, which is a histogram simply defined bin-by-bin as minfinder_curve - mfc2.
+
+jterm: terminatorsearch() applied to mfc2 and the best-fit bragg curves. Currently the most reliable estimate by far when using a high-resolution scope.
+
+jterm2: terminatorsearch2() applied to mfc2 and the bragg curves.
+
+jterm3: terminatorsearch3() applied just to the bragg curves. Not a good way to actually get the vertex but is a useful piece of information, for example, to make a single estimate using multiple of the other estimates as input.
+
+maxdevloc: maxdevsearch() applied to mfc2. Also "useful-but-not-a-good-estimate."
+
+,------------------,
+| Energy estimates |
+'------------------'
+
+leftint/rightint (short for left integral, right integral) are the energy estimates of each alpha based on the reconstructed vertex. They're basically just found by using histspline() to look up the track length of the alpha in the bragghist histogram, which contains an experimentally determined energy-tracklength curve.
+
+leftint2/rightint2 use the true vertex, which is known from the simulation, in order to determine how much error in Delta-E is a result of the vertex-finding and how much is from other sources.
 
 ------------------------------------------/
 *****************************************{
@@ -185,12 +270,12 @@ VII. Misc. Notes |------------------------\
 -----------------'
 
 * The low-pass Gaussian filter is a simple trick I just came up with and did not intend as a long-term solution (although it works well enough for now). Other methods, such as Fourier analysis, may be better, but I have not tried them.
-A
+
 * Electron attenuation is currently disabled in the simulation and not accounted for in the reconstruction.
 
 * The deconvolution uses a single, constant standard deviation; ideally, it should be based on how far the alpha is from the mesh, which can change significantly during an event.
 
-* There are quite a vew hard-coded variables. The most worrying is the limits of histograms, from 0 to 16384. Using a substantially different timestep or drift velocity could break the code as a result.
+* There are quite a vew hard-coded variables that I haven't moved yet. The most worrying is the limits of histograms, from 0 to 16384, with many algorithms using an arbitrary subset of this range. (This was originally done for efficency reasons but is no longer needed.) Using a substantially different timestep or drift velocity could break the code as a result.
 
 * The reconstruction (as well as the simulation) spends most of its CPU time computing Gaussian blurs for various functions. Therefore it runs in roughly O(f^2 * z^.5) time, where f is the frequency of the scope and z is the average height of the alphas. Extremely high-frequency scopes will give better results with this algorithm, but they will also take a very long time to analyze.
 
@@ -199,3 +284,5 @@ A
 ------------------------------------------/
 **************** E N D ******************/
 ----------------------------------------/
+
+(c) 2016 Dank ASCII Art Industries

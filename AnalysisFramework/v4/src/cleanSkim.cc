@@ -797,6 +797,7 @@ int cleanSkim(DmtpcDataset & d, TString & key, TTree * rawtree, int runnum,
 		clusti = new MaxCamClusterImage(clustimg,d.event()->UTCtimeStamp());
 		if(!strcmp(conf->getClusterFindingAlgorithm(algo_index),"seed"))
 		  {
+		    cout << endl << endl << conf->getClusterJoinSpacerWidth() << " | @@@@@@" << endl << endl << endl;
 		    ntracks[u] = MaxCamImageTools::findClustersGMSeed(clustimg, 
 								      clusti,
 								      conf->getClusterSeedThreshold(), 

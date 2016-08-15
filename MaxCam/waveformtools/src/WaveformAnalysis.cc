@@ -278,7 +278,7 @@ void TurnKnobs(int runnum)
       tmpstr << s << runnum << ".root";
       rootfile = tmpstr.str();
 
-      cout << endl << endl << endl << rootfile << endl << endl << endl;
+      //cout << endl << endl << endl << rootfile << endl << endl << endl;
     }
     else if (name == "TermDerFac"){
       linestr >> d;

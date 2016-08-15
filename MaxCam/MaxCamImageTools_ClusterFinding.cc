@@ -1170,7 +1170,9 @@ int MaxCamImageTools::findClustersGMSeed(const TH2 * image, MaxCamClusterImage *
   while(true)
   {
     cluster.clear(); 
+    //cout << endl << "IF YOU SEE THIS MESSAGE, THIS PART IS BROKEN.";
     double blurred_binval = values[niter].first; 
+    //cout << " JUST KIDDING IT'S WORKING." << endl;
     if (blurred_binval < min_seed) break; 
     int bin = values[niter++].second;      
     if (used[bin]) continue; 
@@ -1223,7 +1225,7 @@ int MaxCamImageTools::findClustersGMSeed(const TH2 * image, MaxCamClusterImage *
       if (nadded == 0) break; 
       current_min -= current_min_increment;
       blurred_current_min -= reproduce_bug ? current_min_increment : blurred_current_min_increment;
- //     blurred_current_min -= blurred_current_min_increment;  // Is this a bug?
+      //blurred_current_min -= blurred_current_min_increment;  // Is this a bug?
     }
 
     if (cluster.size() < minsize) 

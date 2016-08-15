@@ -1072,6 +1072,6 @@ if (fUseDoubleAlpha)
   fRecoilZ.clear();
   fRecoilEn.clear();
 
-  cout << endl << "End of EventGenerator." << endl;
+  //cout << endl << "End of EventGenerator." << endl;
 
 }

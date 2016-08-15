@@ -1,5 +1,5 @@
 Run Parameter===================================
-NumberOfEvents		180
+NumberOfEvents		5
 RunType			LittleDCTPC_far
 Config	      	      	normal
 EventType		doublealpha

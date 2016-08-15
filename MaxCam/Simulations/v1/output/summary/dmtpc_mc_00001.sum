@@ -3,7 +3,7 @@ output/data/dmtpc_mc_00001.root
 #===================================
 
 Run Parameter===================================
-NumberOfEvents		180
+NumberOfEvents		5
 RunType			LittleDCTPC_far
 Config	      	      	normal
 EventType		doublealpha
