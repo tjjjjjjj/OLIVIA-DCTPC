@@ -58,6 +58,13 @@
 #include "cleanSkimConfig.hh"
 #include "cleanSkimProcessor.hh"
 
+#include <algorithm>
+#include <cmath>
+#include <iterator>
+#include <limits>
+#include <typeinfo>
+#include <ctime>
+
 using namespace std;
 
 /********* Global Variables ******/ 
@@ -74,7 +81,7 @@ static const u_int32_t dbg_config    =  64;    //Config printout
 
 static u_int32_t dbg_level = dbg_progress | dbg_error | dbg_warning; 
 
-
+int nev;
 
 
 /******** Prototypes **********/
@@ -91,6 +98,460 @@ int fillCspWfVector(DmtpcDataset & d, CspWfVector *cspwv, int ich, int nch);
 int fillPMTWfVector(DmtpcDataset & d, PMTWfVector *cspwv, int ich, int nch);
 int fillFastWfVector(DmtpcDataset & d, FastWfVector *fastwv, int ich, int nch, int i);
 /******** end waveform analysis prototypes ******/
+
+/******** Cam vertex finder *********/
+vector<double> cam_vertices;
+string origfile;
+string skimfile;
+
+void lowess(const vector<double> &x, const vector<double> &y, double f, long nsteps, double delta, vector<double> &ys, vector<double> &rw, vector<double> &res);
+void lowess_smoothing_filter(const vector<double> &x, const vector<double> &y, double f, long nsteps, vector<double> &ys);
+void lowest(const vector<double> &x, const vector<double> &y, double xs, double &ys, long nleft, long nright, vector<double> &w,bool userw,  vector<double> &rw, bool &ok);
+
+// Smoothing filter
+void lowess_smoothing_filter(const vector<double> &x, const vector<double> &y, double f, long nsteps, vector<double> &ys)
+{
+  vector<double> rw,res;
+  lowess(x,y,f,nsteps,0.,ys,rw,res);
+}
+
+// Smoothing filter
+void lowess(const vector<double> &x, const vector<double> &y, double f, long nsteps, double delta, vector<double> &ys, vector<double> &rw, vector<double>&res)
+{
+  long n=(long)x.size();
+  bool ok=false;
+  long nleft,nright, i, j, iter, last, m1, m2, ns;
+  double cut, cmad, r, d1, d2, c1, c9, alpha, denom;
+  
+  if((n==0)||((long)y.size()!=n))
+    return;
+  
+  ys.resize(n);
+  rw.resize(n);
+  res.resize(n);
+  
+  if(n==1)
+    {
+      ys[0]=y[0];
+      return;
+    }
+  
+  // ns - at least 2, at most n
+  ns = max(min((long)(f*n),n),(long)2);
+  for(iter=0;iter<nsteps+1; iter++)
+    {
+      // robustnes iterations
+      nleft = 0;
+      nright = ns-1;
+      // index of last estimated point
+      last = -1;
+      // index of current point
+      i=0;
+      do
+	{
+	  while(nright<n-1)
+	    {
+	      // move <nleft,nright> right, while radius decreases
+	      d1 = x[i]-x[nleft];
+	      d2 = x[nright+1] - x[i];
+	      if(d1<=d2)break;
+	      nleft++;
+	      nright++;
+	    }
+	  // fit value at x[i]
+	  lowest(x,y,x[i],ys[i],nleft,nright,res,iter>0,rw,ok);
+	  if(!ok) 
+	    ys[i]=y[i];
+	  if(last<i-1)
+	    {
+	      // interpolate skipped points
+	      denom = x[i] - x[last];
+	      for(j=last+1;j<i;j++)
+		{
+		  alpha = (x[j]-x[last])/denom;
+		  ys[j] = alpha * ys[i] + (1.0-alpha)*ys[last];
+		}
+	    }
+	  last = i;
+	  cut = x[last]+delta;
+	  for(i=last+1;i<n;i++)
+	    {
+	      if(x[i]>cut)
+		break;
+	      if(x[i]==x[last])
+		{
+		  ys[i]=ys[last];
+		  last=i;
+		}
+	    }
+	  i=max(last+1,i-1);
+	}
+      while(last<n-1);
+      for(i=0;i<n;i++)
+	res[i] = y[i]-ys[i];
+      if(iter==nsteps)
+	break;
+      for(i=0;i<n;i++)
+	rw[i]=abs(res[i]);
+      sort(rw.begin(),rw.end());
+      m1 = n/2+1;
+      m2 = n-m1;
+      m1 --;
+      cmad = 3.0 *(rw[m1]+rw[m2]);
+      c9 = .999*cmad;
+      c1 = .001*cmad;
+      for(i=0;i<n;i++)
+	{
+	  r = abs(res[i]);
+	  if(r<=c1) 
+	    rw[i]=1;
+	  else if(r>c9) 
+	    rw[i]=0;
+	  else 
+	    rw[i] = (1.0-(r/cmad)*(r/cmad))*(1.0-(r/cmad)*(r/cmad));
+	}
+    }
+}
+
+//Smoothing filter
+void lowest(const vector<double> &x, const vector<double> &y, double xs, double &ys, long nleft, long nright, vector<double> &w, bool userw,  vector<double> &rw, bool &ok)
+{
+  long n = (long)x.size();
+  long nrt, j;
+  double a, b, c, h, r, h1, h9, range;
+  range = x[n-1]-x[0];
+  h = max(xs-x[nleft],x[nright]-xs);
+  h9 = 0.999*h;
+  h1 = 0.001*h;
+  // sum of weights
+  a = 0; 
+  for(j=nleft;j<n;j++)
+    {
+      // compute weights (pick up all ties on right)
+      w[j]=0.;
+      r = abs(x[j]-xs);
+      if(r<=h9)
+	{
+	  // small enough for non-zero weight
+	  if(r>h1) 
+	    w[j] = (1.0-(r/h)*(r/h)*(r/h))*(1.0-(r/h)*(r/h)*(r/h))*(1.0-(r/h)*(r/h)*(r/h));
+	  else 
+	    w[j] = 1.;
+	  if(userw)
+	    w[j] *= rw[j];
+	  a += w[j];
+	}
+      else if(x[j]>xs)
+	break; // get out at first zero wt on right
+    }
+  nrt = j-1;
+  // rightmost pt (may be greater than nright because of ties)
+  if(a<=0.) 
+    ok = false;
+  else
+    {
+      // weighted least squares
+      ok = true;
+      // normalize weights
+      for(j=nleft;j<=nrt;j++)
+	w[j] /= a;
+      if(h>0.)
+	{
+	  // use linear fit
+	  a = 0.;
+	  for(j=nleft;j<=nrt;j++)
+	    a += w[j]*x[j]; // weighted centre of values
+	  b = xs-a;
+	  c = 0;
+	  for(j=nleft;j<=nrt;j++)
+	    c += w[j]*(x[j]-a)*(x[j]-a);
+	  if(sqrt(c)>0.001*range)
+	    {
+	      // points are spread enough to compute slope
+	      b /= c;
+	      for(j=nleft;j<=nrt;j++)
+		w[j] *= (1.0+b*(x[j]-a));
+	    }
+	}
+      ys = 0;
+      for(j=nleft;j<=nrt;j++)
+	ys += w[j]*y[j];
+    }
+}
+
+// Find peak in smoothed data
+void peak_detect(vector<double> &v, double delta, const vector<double> &x,vector<double> &mintab,vector<double> &maxtab)
+{
+  double mn = numeric_limits<float>::infinity();
+  double mx = -numeric_limits<float>::infinity();
+  
+  double mnpos;
+  double mxpos;
+  
+  double here;
+  
+  bool lookformax = true;
+  
+  for(int i=0;i<v.size();i++)
+    {
+      here = v[i];
+      
+      if(here > mx)
+	{
+	  mx = here;
+	  mxpos = x[i];
+	}
+      
+      if(here < mn)
+	{
+	  mn = here;
+	  mnpos = x[i];
+	}
+      
+      if(lookformax==true)
+	{
+	  if(here < (mx-delta))
+	    {
+	      maxtab.push_back(mx);
+	      mn = here;
+	      mnpos = x[i];
+	      lookformax = false;
+	    }
+	}
+      else
+	{
+	  if(here > (mn+delta))
+	    {
+	      mintab.push_back( mn);
+	      mx = here;
+	      mxpos = x[i];
+			    lookformax = true;
+	    }
+	}
+    }
+}
+
+// Track analysis that smoothes intensity and finds maximums/minimums for vertex ID
+double track_analysis(vector<double> &Vx,vector<double> &Vy)
+{
+  cout << "Vx.size()-1: " << Vx.size()-1 << endl;
+  if(Vx[0] > Vx[Vx.size()-1])
+    {
+      reverse(Vx.begin(),Vx.end());
+      reverse(Vy.begin(),Vy.end());
+    }
+  
+  // Smoothed intensity values
+  vector<double> VY;
+  
+  // F specifies smoothing (frac of pts used to compute each fitted value)
+  double F=0.3;
+  // Number of iterations in robust fit, setting N=2 should serve most purposes
+  long NSTEPS = 0;
+  // Used to save computations
+  double DELTA = 0.;
+  
+  // Returns smoothed values of Y
+  lowess_smoothing_filter(Vx,Vy,F,NSTEPS,VY);
+  
+  // implement peak detection
+  vector<double> maxtab;
+  vector<double> mintab;
+  
+  peak_detect(VY,0.5,Vx,mintab,maxtab);
+  
+  double est_vertex = 0.;
+  
+  if(maxtab.size()>0)
+    {
+      // Quadratic profile
+      if(maxtab.size()==1 && mintab.size()==0)
+	{
+	  est_vertex = maxtab[0];
+	}
+      // Quartic profile
+      else if(maxtab.size()==2 && mintab.size()==1)
+	est_vertex = mintab[0];
+    }
+  
+  cout << "Est Vertex: " << est_vertex << endl << endl;
+  
+  return est_vertex;
+}
+
+
+// Creates track out of skim root file by creating box around the track and binning intensity
+void create_track(DmtpcSkimEvent* ev, vector<double> &len_pos, vector<double> &i_pos)
+{
+  double x, trackslope, tracklength, deltaxtrack, sign, theta;
+  double firstxslice, firstyslice, lastxslice;
+  double sliceslope, currx, curry, firstx, firsty, deltaxslice, lastx;
+  double real_vertex_x, real_vertex_y, real_length;
+  int maxi, maxj, currbinx, currbiny, currbin, lastbinx, lastbiny, bincount, CCDsum;  
+  double phi,TrackX, TrackY,range_ccd,TrackXStart,TrackYStart,TrackXEnd,TrackYEnd,Trackrms; 
+
+  TH2F* hImage = (TH2F*)(ev->cluster(0)->getImage());// access ccd
+  phi = ev->phi(0,0);
+  phi = atan2(sin(phi),cos(phi)) * 180./ 3.1416; 
+  TrackX = ev->x(0,0);
+  TrackY = ev->y(0,0);
+  range_ccd=ev->range(0,0); 
+  
+  TrackXStart = ev->xbegin(0,0);
+  TrackYStart = ev->ybegin(0,0);
+  TrackXEnd = ev->xend(0,0);
+  TrackYEnd = ev->yend(0,0);
+  
+  // Saves only tracks that are completely in the FOV of the camera
+
+  //^^^Commented out for now since compiler doesn't seem to like it
+
+  /* if (abs(TrackXStart-0.)<50 || abs(TrackXStart-1024.)<50)
+    {    
+      continue;
+    }
+  else if (abs(TrackXEnd-0.)<50 || abs(TrackXEnd-1024.)<50)
+    {
+      continue;
+    }
+  else if (abs(TrackYStart-0.)<50 || abs(TrackYStart-1024.)<50)
+    {
+      continue;
+    }
+  else if (abs(TrackYEnd-0.)<50. || abs(TrackYEnd-1024.)<50)
+    {
+      continue;
+    }
+  */
+
+  Trackrms=4.*ev->npixel(0,0)/ev->range(0,0);
+  
+  double deltax=2.*Trackrms*cos(1.5708+phi*TMath::Pi()/180.);
+  double deltay=2.*Trackrms*sin(1.5708+phi*TMath::Pi()/180.);
+  double xstart1=TrackXStart+2*deltax+(deltax*cos(1.5708+phi*TMath::Pi()/180.));
+  double ystart1=TrackYStart+2*deltay+(deltay*sin(1.5708+phi*TMath::Pi()/180.));
+  double xstart2=TrackXStart-2*deltax-(deltax*cos(1.5708+phi*TMath::Pi()/180.));
+  double ystart2=TrackYStart-2*deltay-(deltay*sin(1.5708+phi*TMath::Pi()/180.));
+  double xend1=TrackXEnd+deltax+(.5*deltax*cos(1.5708+phi*TMath::Pi()/180.));
+  double yend1=TrackYEnd+deltay+(.5*deltay*sin(1.5708+phi*TMath::Pi()/180.));
+  double xend2=TrackXEnd-deltax-(.5*deltax*cos(1.5708+phi*TMath::Pi()/180.));
+  double yend2=TrackYEnd-deltay-(.5*deltay*sin(1.5708+phi*TMath::Pi()/180.));
+  
+  if (xstart1 < xstart2)
+    {
+      firstx = xstart1;
+      firsty = ystart1;
+      lastx = xstart2;
+    }
+  else if (xstart1 > xstart2)
+    {
+      firstx = xstart2;
+      firsty = ystart2;
+      lastx = xstart1;
+    }
+  else
+    {
+      xstart1 = xstart2 + 1;
+      //^^^compiler doesn't seem to like this use of "continue", so this is a quick/dirty fix to avoid division-by-zero
+      //continue;
+    }
+  tracklength = pow(pow(TrackXStart-TrackXEnd,2)+pow(TrackYStart-TrackYEnd,2),0.5);
+  theta = atan((TrackYStart-TrackYEnd)/(TrackXStart-TrackXEnd));
+  if(TrackXStart + tracklength*cos(theta) - TrackXEnd < 10)
+    {
+      sign = 1.0;
+    }
+  else
+    {
+      sign = -1.0;
+    }
+  sliceslope = (ystart1 - ystart2)/(xstart1 - xstart2);
+  trackslope = (TrackYStart-TrackYEnd)/(TrackXStart-TrackXEnd);
+  
+  deltaxslice = 2*cos(atan(sliceslope)); 
+  deltaxtrack = 2*cos(atan(trackslope));
+  
+  maxj = 100;
+  maxi = 500;
+  
+  int choice = 45;
+  
+  for (int i = 0; i<maxi; i++)
+    {
+      firstxslice = firstx + sign*deltaxtrack*i;
+      firstyslice = trackslope*(firstxslice - firstx) + firsty;
+      lastxslice = lastx + sign*deltaxtrack*i;
+      
+      x = pow(pow(firstxslice - firstx,2)+pow(firstyslice - firsty,2),0.5);
+      
+      if(x>tracklength)
+	{
+	  i=maxi;
+	  continue;
+	} 
+      
+      
+      for(int j = 0; j<maxj; j++)
+	{
+	  currx = firstxslice + j*deltaxslice;
+	  curry = sliceslope*(currx - firstxslice)+firstyslice;
+	  
+	  if(currx>lastxslice)
+	    {
+	      j=maxj;
+	      continue;
+	    }
+	  
+	  currbinx = hImage->GetXaxis()->FindBin(currx);
+	  currbiny = hImage->GetYaxis()->FindBin(curry);
+	  
+	  if((currbinx == lastbinx) && (currbiny == lastbiny))
+	    {
+	      continue;
+	    }
+	  //^^^ Should real_vertex_* be initialized before this?
+	  if( pow(pow(currx-512.,2) + pow(curry-512.,2) , 0.5) < pow(pow(real_vertex_x-512.,2) + pow(real_vertex_y-512.,2) , 0.5))
+	    {
+	      real_vertex_x = currx;
+	      real_vertex_y = curry;
+	      real_length = tracklength-x;
+	    }
+	  CCDsum += hImage->GetBinContent(currbinx,currbiny);
+	  bincount++;
+	  lastbinx = currbinx;
+	  lastbiny = currbiny;
+	}
+      
+      if (x >2*tracklength)
+	{
+	  i = 100; continue;
+	}
+      if (bincount ==0)
+	{  
+	  continue;
+	}          
+      len_pos.push_back(tracklength-x);
+      i_pos.push_back(CCDsum);
+      
+      CCDsum = 0;
+      bincount = 0;
+    }       
+}
+
+double vertex_ID(DmtpcSkimEvent* dse)
+{ 
+  vector<double> len_pos;
+  vector<double> i_pos;
+
+  create_track(dse,len_pos,i_pos);
+  
+  double vertex = track_analysis(len_pos,i_pos);
+ 
+  len_pos.clear();
+  i_pos.clear();
+  return vertex;
+}
+/******** end cam vertex finder *****/
 
 /******** cleanSkim *********/
 int cleanSkim(DmtpcDataset & d, TString & key, TTree * rawtree, int runnum, 
@@ -302,7 +763,7 @@ int cleanSkim(DmtpcDataset & d, TString & key, TTree * rawtree, int runnum,
     }
 
   
-  const int nev = rawtree->GetEntries();
+  nev = rawtree->GetEntries();
   
   /* Bias frame stuff */
   for(int u=0; u<ncamera; u++)
@@ -1208,7 +1669,21 @@ int cleanSkim(DmtpcDataset & d, TString & key, TTree * rawtree, int runnum,
       if (dbg_level & dbg_progress) std::cout << "Deleting " << tmpoutfilename << std::endl;
       unlink(tmpoutfilename.Data());
     }
-  
+
+  /* Efrain's stuff should probably go here *//*or nah
+  sd.openRootFile("/net/hisrv0001/home/spitzj/tj/DCTPC_soft/MaxCam/Simulations/v1/skim/dmtpc_mc_00001skim.root");
+  sd.loadDmtpcEvent(true,"/net/hisrv0001/home/spitzj/tj/DCTPC_soft/MaxCam/Simulations/v1/skim/dmtpc_mc_00001.root");
+  //sd.openRootFile(skimfile.c_str());
+  //sd.loadDmtpcEvent(true,origfile.c_str());
+  for (int eventnum = 0; eventnum < nev; eventnum++)
+    {
+      sd.getEvent(eventnum);
+      cout << "Run number: " << eventnum << endl << "DMTPC Skim Event pointer address: " << (DmtpcSkimEvent*) sd.event() << endl;
+      cam_vertices.push_back(vertex_ID(sd.event()));
+    }
+  /* End Efrain's stuff  */
+
+
   return 0;
 }
 
@@ -1254,7 +1729,7 @@ int main(int argn, char ** argv)
       /* Create DMTPC Database and draw out tree */
       DmtpcDataset d; 
       d.openRootFile(k.getRootDirName() + k.getFile(f)); 
-        
+      origfile = k.getRootDirName() + k.getFile(f);
       TTree * rawtree = k.getBaseTree(f); 
         
       //Extract run number from file 
@@ -1269,7 +1744,7 @@ int main(int argn, char ** argv)
       DmtpcSkimDataset sd; 
       
       sd.newRootFile(outdir + outfilename); 
-
+      skimfile = outdir + outfilename;
       /* Now ready to process this file */
       CleanSkimConfig * conf = skim::preprocess(&d,config); 
       
@@ -1279,7 +1754,22 @@ int main(int argn, char ** argv)
 
         return_val += cleanSkim(d,key,rawtree,runnum,sd,true,conf,nprocess); 
       }
+      /* Efrain's stuff should probably go here */
+
+      sd.openRootFile("/net/hisrv0001/home/spitzj/tj/DCTPC_soft/MaxCam/Simulations/v1/skim/dmtpc_mc_00001skim.root");
+      sd.loadDmtpcEvent(true,"/net/hisrv0001/home/spitzj/tj/DCTPC_soft/MaxCam/Simulations/v1/skim/dmtpc_mc_00001.root");
+      int eventnum;
+      for (int eventnum_ = 0; eventnum_ < 3*nev; eventnum_++)
+	{
+	  eventnum = (97*eventnum_)%nev;
+	  sd.getEvent(eventnum); //Source of the bytecount error (actually occurs in one of DmtpcEvent's functions)
+	  cout << "Run number: " << eventnum << endl << "DMTPC Skim Event pointer address: " << (DmtpcSkimEvent*) sd.event() << endl;
+	  cam_vertices.push_back(vertex_ID(sd.event()));
+	}
+      /* End Efrain's stuff  */
+
    }
+
    return return_val;
 }
 

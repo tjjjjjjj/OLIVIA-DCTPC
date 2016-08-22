@@ -85,7 +85,8 @@ void
 DmtpcDataset::getEvent(int i) {
   // this looks like a typo
   // should be || instead of &&... (jb 10/28/09)
-    if (i<0 && i>=tree()->GetEntries()) {
+  // going ahead and changing it because I'm getting weird bugs from this function (probably unrelated though) (tj 08/20/16)
+    if (i<0 || i>=tree()->GetEntries()) {
         cout << GetName() << ": event number incorrect! " << i << endl;
         return;
     }

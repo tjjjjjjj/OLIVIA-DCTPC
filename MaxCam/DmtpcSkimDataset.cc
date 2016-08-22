@@ -126,7 +126,6 @@ void DmtpcSkimDataset::loadDmtpcEvent(bool load , const char * orig)
 
 void
 DmtpcSkimDataset::getEvent(int i) {
-
   for (unsigned j = 0; j < ntrees; j++)
   {
     TChain * t =  _trees[j]; 
@@ -137,7 +136,6 @@ DmtpcSkimDataset::getEvent(int i) {
      
     t->GetEntry(i);
   }
-
   if (orig_loaded) d->getEvent(i); 
   current_index = i; 
 }

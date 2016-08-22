@@ -69,7 +69,7 @@ void DmtpcSkimEvent::copySparkRef(vector<pair<int,int> > * this_sparkref)
     _s4+=_nsparkref[c];
   }
 
-  _sparkref = (UInt_t*) malloc(_s4*sizeof(UInt_t)); 
+zx  _sparkref = (UInt_t*) malloc(_s4*sizeof(UInt_t)); 
 
   int j = 0; 
   for (int c = 0; c < _ncamera; c++)
